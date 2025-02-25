@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.apicatalog.rdf.lang;
+package com.apicatalog.rdf.nquads;
 
 import java.util.function.IntPredicate;
 

@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.apicatalog.rdf.io.nquad;
+package com.apicatalog.rdf.nquads;
 
 import java.io.IOException;
 import java.io.Writer;
 
 import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
-import com.apicatalog.rdf.lang.XsdConstants;
 
 /**
  *
@@ -67,7 +66,7 @@ public class NQuadsWriter implements RdfQuadConsumer {
 
         } else if (datatype != null) {
 
-            if (XsdConstants.STRING.equals(datatype)) {
+            if (NQuadsReader.XSD_STRING.equals(datatype)) {
                 return;
             }
 

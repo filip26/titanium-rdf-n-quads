@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.apicatalog.rdf.io.nquad;
+package com.apicatalog.rdf.nquads;
 
 import java.io.Reader;
 import java.net.URI;
@@ -23,10 +23,8 @@ import java.util.function.BiConsumer;
 import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 import com.apicatalog.rdf.io.error.RdfReaderException;
-import com.apicatalog.rdf.io.nquad.Tokenizer.Token;
-import com.apicatalog.rdf.io.nquad.Tokenizer.TokenType;
-import com.apicatalog.rdf.lang.RdfConstants;
-import com.apicatalog.rdf.lang.XsdConstants;
+import com.apicatalog.rdf.nquads.Tokenizer.Token;
+import com.apicatalog.rdf.nquads.Tokenizer.TokenType;
 
 /**
  *
@@ -34,6 +32,10 @@ import com.apicatalog.rdf.lang.XsdConstants;
  *
  */
 public class NQuadsReader {
+
+    static final String I18N_BASE = "https://www.w3.org/ns/i18n#";
+    static final String LANG_STRING = "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString";
+    static final String XSD_STRING = "http://www.w3.org/2001/XMLSchema#string";
 
     protected final Tokenizer tokenizer;
 
@@ -185,15 +187,9 @@ public class NQuadsReader {
             return;
         }
 
-        readLiteral();
-    }
-
-    protected void readLiteral() throws RdfReaderException {
-
-        Token value = tokenizer.token();
-
-        if (TokenType.STRING_LITERAL_QUOTE != value.getType()) {
-            unexpected(value);
+        // read literal
+        if (TokenType.STRING_LITERAL_QUOTE != token.getType()) {
+            unexpected(token);
         }
 
         tokenizer.next();
@@ -206,7 +202,8 @@ public class NQuadsReader {
 
             tokenizer.next();
 
-            this.ltObject = value.getValue();
+            this.ltDatatype = LANG_STRING;
+            this.ltObject = token.getValue();
             this.ltLangTag = langTag;
 
             return;
@@ -226,7 +223,7 @@ public class NQuadsReader {
 
                 assertAbsoluteIri(datatype, "DataType");
 
-                this.ltObject = value.getValue();
+                this.ltObject = token.getValue();
 
                 readDatatype(datatype, (a, b) -> {
                     this.ltDatatype = a;
@@ -245,8 +242,8 @@ public class NQuadsReader {
             unexpected(attr);
         }
 
-        this.ltObject = value.getValue();
-        this.ltDatatype = XsdConstants.STRING;
+        this.ltObject = token.getValue();
+        this.ltDatatype = XSD_STRING;
     }
 
     protected static final <T> T unexpected(Token token, TokenType... types) throws RdfReaderException {
@@ -290,11 +287,11 @@ public class NQuadsReader {
     }
 
     protected static final void readDatatype(String datatype, BiConsumer<String, String[]> result) {
-        if (datatype.startsWith(RdfConstants.I18N_BASE)) {
+        if (datatype.startsWith(I18N_BASE)) {
 
-            String[] langDir = datatype.substring(RdfConstants.I18N_BASE.length()).split("_");
+            String[] langDir = datatype.substring(I18N_BASE.length()).split("_");
 
-            result.accept(RdfConstants.I18N_BASE, langDir);
+            result.accept(I18N_BASE, langDir);
 
             return;
         }

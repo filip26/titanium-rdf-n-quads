@@ -1,9 +1,10 @@
 package com.apicatalog.rdf.api;
 
-import com.apicatalog.rdf.lang.RdfConstants;
-
 public class RdfNQuadEmitter implements RdfQuadConsumer {
 
+    static final String I18N_BASE = "https://www.w3.org/ns/i18n#";
+    static final String LANG_STRING = "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString";
+    
     protected final RdfNQuadConsumer consumer;
 
     protected RdfNQuadEmitter(RdfNQuadConsumer consumer) {
@@ -33,14 +34,14 @@ public class RdfNQuadEmitter implements RdfQuadConsumer {
                     subject,
                     predicate,
                     literal,
-                    RdfConstants.I18N_BASE
+                    I18N_BASE
                             .concat(language)
                             .concat("_")
                             .concat(direction),
                     null,
                     graph);
         } else {
-            consumer.nquad(subject, predicate, literal, RdfConstants.LANG_STRING, language, graph);
+            consumer.nquad(subject, predicate, literal, LANG_STRING, language, graph);
         }
 
         return this;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.apicatalog.rdf.io.nquad;
+package com.apicatalog.rdf.nquads;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +21,6 @@ import java.io.Reader;
 import java.util.Arrays;
 
 import com.apicatalog.rdf.io.error.RdfReaderException;
-import com.apicatalog.rdf.lang.RdfAlphabet;
 
 /**
  *
