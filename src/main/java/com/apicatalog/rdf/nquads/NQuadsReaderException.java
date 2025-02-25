@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.apicatalog.rdf.io.error;
+package com.apicatalog.rdf.nquads;
 
-public class RdfReaderException extends Exception {
+public class NQuadsReaderException extends Exception {
 
-    private static final long serialVersionUID = -5357042008536435090L;
+    private static final long serialVersionUID = -2963636611090854528L;
 
-    public RdfReaderException(String message) {
+    public NQuadsReaderException(String message) {
         super(message);
     }
 
-    public RdfReaderException(Throwable cause) {
+    public NQuadsReaderException(Throwable cause) {
         super(cause);
     }
 
-    public RdfReaderException(String message, Throwable cause) {
+    public NQuadsReaderException(String message, Throwable cause) {
         super(message, cause);
     }
 }

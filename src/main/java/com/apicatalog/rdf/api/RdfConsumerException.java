@@ -12,7 +12,7 @@ public class RdfConsumerException extends Exception {
     String direction;
     String graph;
     
-    public RdfConsumerException(Exception e, String subject, String predicate, String object, String graph) {
+    public RdfConsumerException(String subject, String predicate, String object, String graph, Exception e) {
         super(e);
         this.subject = subject;
         this.predicate = predicate;
@@ -20,7 +20,7 @@ public class RdfConsumerException extends Exception {
         this.graph = graph;
     }
 
-    public RdfConsumerException(Exception e, String subject, String predicate, String object, String datatype, String graph) {
+    public RdfConsumerException(String subject, String predicate, String object, String datatype, String graph, Exception e) {
         super(e);
         this.subject = subject;
         this.predicate = predicate;
@@ -29,7 +29,7 @@ public class RdfConsumerException extends Exception {
         this.graph = graph;
     }
 
-    public RdfConsumerException(Exception e, String subject, String predicate, String object, String langTag, String direction, String graph) {
+    public RdfConsumerException(String subject, String predicate, String object, String langTag, String direction, String graph, Exception e) {
         super(e);
         this.subject = subject;
         this.predicate = predicate;

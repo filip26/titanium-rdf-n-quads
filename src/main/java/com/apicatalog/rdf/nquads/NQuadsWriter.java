@@ -28,7 +28,7 @@ import com.apicatalog.rdf.api.RdfQuadConsumer;
  */
 public class NQuadsWriter implements RdfQuadConsumer {
 
-    private final Writer writer;
+    protected final Writer writer;
 
     public NQuadsWriter(Writer writer) {
         this.writer = writer;
@@ -54,11 +54,11 @@ public class NQuadsWriter implements RdfQuadConsumer {
         }
 
         writer.write('"');
-        writer.write(escape(literal));
+        writer.write(NQuadsAlphabet.escape(literal));
         writer.write('"');
 
         if (direction != null) {
-            
+
         } else if (langTag != null) {
 
             writer.write("@");
@@ -73,45 +73,6 @@ public class NQuadsWriter implements RdfQuadConsumer {
             writer.write("^^");
             writeIri(datatype);
         }
-    }
-
-    public static final String escape(String value) {
-
-        final StringBuilder escaped = new StringBuilder();
-
-        int[] codePoints = value.codePoints().toArray();
-
-        for (int ch : codePoints) {
-
-            if (ch == 0x9) {
-                escaped.append("\\t");
-
-            } else if (ch == 0x8) {
-                escaped.append("\\b");
-
-            } else if (ch == 0xa) {
-                escaped.append("\\n");
-
-            } else if (ch == 0xd) {
-                escaped.append("\\r");
-
-            } else if (ch == 0xc) {
-                escaped.append("\\f");
-
-            } else if (ch == '"') {
-                escaped.append("\\\"");
-
-            } else if (ch == '\\') {
-                escaped.append("\\\\");
-
-            } else if (ch >= 0x0 && ch <= 0x1f || ch == 0x7f) {
-                escaped.append(String.format("\\u%04x", ch));
-
-            } else {
-                escaped.appendCodePoint(ch);
-            }
-        }
-        return escaped.toString();
     }
 
     protected void writeIri(String iri) throws IOException {
@@ -144,7 +105,7 @@ public class NQuadsWriter implements RdfQuadConsumer {
 
             writer.write(".\n");
         } catch (IOException e) {
-            throw new RdfConsumerException(e, subject, predicate, object, graph);
+            throw new RdfConsumerException(subject, predicate, object, graph, e);
         }
         return this;
     }
@@ -168,7 +129,7 @@ public class NQuadsWriter implements RdfQuadConsumer {
 
             writer.write(".\n");
         } catch (IOException e) {
-            throw new RdfConsumerException(e, subject, predicate, literal, datatype, graph);
+            throw new RdfConsumerException(subject, predicate, literal, datatype, graph, e);
         }
         return this;
     }
@@ -192,7 +153,7 @@ public class NQuadsWriter implements RdfQuadConsumer {
 
             writer.write(".\n");
         } catch (IOException e) {
-            throw new RdfConsumerException(e, subject, predicate, literal, langTag, direction, graph);
+            throw new RdfConsumerException(subject, predicate, literal, langTag, direction, graph, e);
         }
         return this;
     }
