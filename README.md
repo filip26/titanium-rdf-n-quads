@@ -1,6 +1,6 @@
 # Titanium RDF N-QUADS
 
-A Java implementation of an RDF N-Quads stream reader and writer, designed for efficient parsing and serialization of RDF data.
+A Java implementation of an RDF N-Quads stream reader and writer, designed for efficient parsing and serialization of RDF statements.
 
 [![Java 8 CI](https://github.com/filip26/titanium-rdf-n-quads/actions/workflows/java8-build.yml/badge.svg)](https://github.com/filip26/titanium-rdf-n-quads/actions/workflows/java8-build.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/af8879b14a3f45bd8205c7720a24612f)](https://app.codacy.com/gh/filip26/titanium-rdf-n-quads/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
