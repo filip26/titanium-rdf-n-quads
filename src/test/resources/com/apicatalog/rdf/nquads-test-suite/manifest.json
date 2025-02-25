@@ -1,0 +1,2212 @@
+[
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#comment_following_triple",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "comment_following_triple"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Tests comments after a triple"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/comment_following_triple.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#langtagged_string",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "langtagged_string"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "langtagged string \"x\"@en"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/langtagged_string.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#lantag_with_subtag",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "lantag_with_subtag"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "lantag with subtag \"x\"@en-us"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/lantag_with_subtag.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal \"\"\"x\"\"\""
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_all_controls",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_all_controls"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal_all_controls '\\\\x00\\\\x01\\\\x02\\\\x03\\\\x04...'"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_all_controls.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_all_punctuation",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_all_punctuation"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal_all_punctuation '!\"#$%&()...'"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_all_punctuation.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_ascii_boundaries",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_ascii_boundaries"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal_ascii_boundaries '\\\\x00\\\\x26\\\\x28...'"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_ascii_boundaries.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_with_2_dquotes",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_with_2_dquotes"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal with 2 squotes \"\"\"a\"\"b\"\"\""
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_with_2_dquotes.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_with_2_squotes",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_with_2_squotes"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal with 2 squotes \"x''y\""
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_with_2_squotes.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_with_BACKSPACE",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_with_BACKSPACE"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal with BACKSPACE"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_with_BACKSPACE.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_with_CARRIAGE_RETURN",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_with_CARRIAGE_RETURN"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal with CARRIAGE RETURN"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_with_CARRIAGE_RETURN.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_with_CHARACTER_TABULATION",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_with_CHARACTER_TABULATION"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal with CHARACTER TABULATION"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_with_CHARACTER_TABULATION.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_with_FORM_FEED",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_with_FORM_FEED"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal with FORM FEED"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_with_FORM_FEED.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_with_LINE_FEED",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_with_LINE_FEED"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal with LINE FEED"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_with_LINE_FEED.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_with_REVERSE_SOLIDUS",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_with_REVERSE_SOLIDUS"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal with REVERSE SOLIDUS"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_with_REVERSE_SOLIDUS.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_with_REVERSE_SOLIDUS2",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_with_REVERSE_SOLIDUS2"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "REVERSE SOLIDUS at end of literal"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_with_REVERSE_SOLIDUS2.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_with_UTF8_boundaries",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_with_UTF8_boundaries"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal_with_UTF8_boundaries '\\\\x80\\\\x7ff\\\\x800\\\\xfff...'"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_with_UTF8_boundaries.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_with_dquote",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_with_dquote"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal with dquote \"x\"y\""
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_with_dquote.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_with_numeric_escape4",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_with_numeric_escape4"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal with numeric escape4 \\\\u"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_with_numeric_escape4.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_with_numeric_escape8",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_with_numeric_escape8"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal with numeric escape8 \\\\U"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_with_numeric_escape8.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#literal_with_squote",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "literal_with_squote"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "literal with squote \"x'y\""
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/literal_with_squote.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#minimal_whitespace",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "minimal_whitespace"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "tests absense of whitespace between subject, predicate, object and end-of-statement"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/minimal_whitespace.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-bad-literal-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-bad-literal-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Graph name may not be a simple literal (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-bad-literal-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-bad-literal-02",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-bad-literal-02"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Graph name may not be a language tagged literal (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-bad-literal-02.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-bad-literal-03",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-bad-literal-03"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Graph name may not be a datatyped literal (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-bad-literal-03.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-bad-quint-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-bad-quint-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "N-Quads does not have a fifth element (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-bad-quint-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-bad-uri-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-bad-uri-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Graph name URI must be absolute (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-bad-uri-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-bnode-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-bnode-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "BNode graph with URI triple"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-bnode-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-bnode-02",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-bnode-02"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "BNode graph with BNode subject"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-bnode-02.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-bnode-03",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-bnode-03"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "BNode graph with BNode object"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-bnode-03.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-bnode-04",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-bnode-04"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "BNode graph with simple literal"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-bnode-04.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-bnode-05",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-bnode-05"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "BNode graph with language tagged literal"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-bnode-05.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-bnode-06",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-bnode-06"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "BNode graph with datatyped literal"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-bnode-06.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-uri-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-uri-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "URI graph with URI triple"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-uri-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-uri-02",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-uri-02"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "URI graph with BNode subject"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-uri-02.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-uri-03",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-uri-03"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "URI graph with BNode object"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-uri-03.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-uri-04",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-uri-04"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "URI graph with simple literal"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-uri-04.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-uri-05",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-uri-05"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "URI graph with language tagged literal"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-uri-05.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nq-syntax-uri-06",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nq-syntax-uri-06"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "URI graph with datatyped literal"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nq-syntax-uri-06.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-base-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-base-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "@base not allowed in N-Triples (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-base-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-esc-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-esc-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Bad string escape (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-esc-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-esc-02",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-esc-02"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Bad string escape (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-esc-02.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-esc-03",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-esc-03"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Bad string escape (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-esc-03.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-lang-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-lang-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "langString with bad lang (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-lang-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-num-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-num-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "no numbers in N-Triples (integer) (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-num-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-num-02",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-num-02"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "no numbers in N-Triples (decimal) (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-num-02.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-num-03",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-num-03"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "no numbers in N-Triples (float) (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-num-03.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-prefix-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-prefix-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "@prefix not allowed in n-triples (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-prefix-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-string-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-string-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "mismatching string literal open/close (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-string-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-string-02",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-string-02"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "mismatching string literal open/close (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-string-02.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-string-03",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-string-03"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "single quotes (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-string-03.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-string-04",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-string-04"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "long single string literal (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-string-04.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-string-05",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-string-05"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "long double string literal (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-string-05.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-string-06",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-string-06"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "string literal with no end (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-string-06.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-string-07",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-string-07"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "string literal with no start (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-string-07.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-struct-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-struct-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "N-Triples does not have objectList (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-struct-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-struct-02",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-struct-02"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "N-Triples does not have predicateObjectList (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-struct-02.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-uri-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-uri-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Bad IRI : space (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-uri-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-uri-02",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-uri-02"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Bad IRI : bad escape (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-uri-02.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-uri-03",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-uri-03"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Bad IRI : bad long escape (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-uri-03.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-uri-04",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-uri-04"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Bad IRI : character escapes not allowed (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-uri-04.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-uri-05",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-uri-05"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Bad IRI : character escapes not allowed (2) (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-uri-05.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-uri-06",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-uri-06"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Bad IRI : relative IRI not allowed in subject (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-uri-06.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-uri-07",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-uri-07"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Bad IRI : relative IRI not allowed in predicate (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-uri-07.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-uri-08",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-uri-08"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Bad IRI : relative IRI not allowed in object (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-uri-08.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bad-uri-09",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bad-uri-09"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Bad IRI : relative IRI not allowed in datatype (negative test)"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bad-uri-09.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bnode-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bnode-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "bnode subject"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bnode-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bnode-02",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bnode-02"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "bnode object"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bnode-02.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-bnode-03",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-bnode-03"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Blank node labels may start with a digit"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-bnode-03.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-datatypes-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-datatypes-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "xsd:byte literal"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-datatypes-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-datatypes-02",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-datatypes-02"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "integer as xsd:string"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-datatypes-02.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-file-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-file-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Empty file"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-file-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-file-02",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-file-02"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Only comment"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-file-02.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-file-03",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-file-03"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "One comment, one empty line"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-file-03.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-str-esc-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-str-esc-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "string literal with escaped newline"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-str-esc-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-str-esc-02",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-str-esc-02"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "string literal with Unicode escape"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-str-esc-02.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-str-esc-03",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-str-esc-03"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "string literal with long Unicode escape"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-str-esc-03.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-string-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-string-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "string literal"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-string-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-string-02",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-string-02"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "langString literal"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-string-02.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-string-03",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-string-03"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "langString literal with region"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-string-03.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-subm-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-subm-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Submission test from Original RDF Test Cases"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-subm-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-uri-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-uri-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Only IRIs"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-uri-01.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-uri-02",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-uri-02"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "IRIs with Unicode escape"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-uri-02.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-uri-03",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-uri-03"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "IRIs with long Unicode escape"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-uri-03.nq"
+      }
+    ]
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#nt-syntax-uri-04",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "nt-syntax-uri-04"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "Legal IRIs"
+      }
+    ],
+    "http://www.w3.org/ns/rdftest#approval": [
+      {
+        "@id": "http://www.w3.org/ns/rdftest#Approved"
+      }
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+      {
+        "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-uri-04.nq"
+      }
+    ]
+  }
+]
