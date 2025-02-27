@@ -21,18 +21,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <argLine>-Dfile.encoding=UTF-8</argLine>
-        
-        <jakarta.json.version>2.0.1</jakarta.json.version>
-
-        
+                
         <!--  test resources -->
+        <jakarta.json.version>2.0.1</jakarta.json.version>        
         <junit.version>5.12.0</junit.version>
     </properties>
 
     <name>Titanium RDF N-QUADS</name>
 
     <description>
-	A Java implementation of an RDF N-Quads stream reader and writer, designed for efficient parsing and serialization of RDF data. Formerly a part of Titanium JSON-LD.
+	A Java implementation of an RDF N-Quads stream reader and writer, designed for efficient parsing and serialization of RDF statements. Formerly a part of Titanium JSON-LD.
     </description>
 
     <licenses>
@@ -74,6 +72,12 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.json</artifactId>
+            <version>${jakarta.json.version}</version>
+            <scope>test</scope>
+        </dependency>        
     </dependencies>
 
     <build>

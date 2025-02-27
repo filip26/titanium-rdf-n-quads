@@ -45,10 +45,18 @@ public class NQuadsReader {
     protected String ltDirection;
 
     public NQuadsReader(final Reader reader) {
-        this.tokenizer = new NQuadsTokenizer(reader);
+        this(new NQuadsTokenizer(reader));
     }
 
-    public void read(RdfQuadConsumer consumer) throws NQuadsReaderException, RdfConsumerException {
+    public NQuadsReader(final Reader reader, int bufferSize) {
+        this(new NQuadsTokenizer(reader, bufferSize));
+    }
+
+    protected NQuadsReader(final NQuadsTokenizer tokenizer) {
+        this.tokenizer = tokenizer;
+    }
+
+    public void provide(RdfQuadConsumer consumer) throws NQuadsReaderException, RdfConsumerException {
         while (tokenizer.hasNext()) {
 
             // skip EOL and whitespace
@@ -59,21 +67,21 @@ public class NQuadsReader {
                 continue;
             }
 
-            reaStatement(consumer);
+            statement(consumer);
         }
     }
 
-    protected void reaStatement(RdfQuadConsumer consumer) throws NQuadsReaderException, RdfConsumerException {
+    protected void statement(RdfQuadConsumer consumer) throws NQuadsReaderException, RdfConsumerException {
 
-        String subject = readResource("Subject");
-
-        skipWhitespace(0);
-
-        String predicate = readResource("Predicate");
+        String subject = resource("Subject");
 
         skipWhitespace(0);
 
-        readObject();
+        String predicate = resource("Predicate");
+
+        skipWhitespace(0);
+
+        object();
 
         String graphName = null;
 
@@ -126,7 +134,7 @@ public class NQuadsReader {
         }
     }
 
-    protected String readResource(String name) throws NQuadsReaderException {
+    protected String resource(String name) throws NQuadsReaderException {
 
         final Token token = tokenizer.token();
 
@@ -151,7 +159,7 @@ public class NQuadsReader {
         return unexpected(token);
     }
 
-    protected void readObject() throws NQuadsReaderException {
+    protected void object() throws NQuadsReaderException {
 
         ltObject = null;
         ltDatatype = null;
@@ -217,7 +225,7 @@ public class NQuadsReader {
 
                 this.ltObject = token.getValue();
 
-                readDatatype(datatype, (a, b) -> {
+                datatype(datatype, (a, b) -> {
                     this.ltDatatype = a;
                     if (b != null) {
                         if (b.length > 1) {
@@ -277,7 +285,7 @@ public class NQuadsReader {
         return false;
     }
 
-    protected static final void readDatatype(final String datatype, final BiConsumer<String, String[]> result) {
+    protected static final void datatype(final String datatype, final BiConsumer<String, String[]> result) {
         if (datatype.startsWith(I18N_BASE)) {
 
             String[] langDir = datatype.substring(I18N_BASE.length()).split("_");

@@ -27,15 +27,27 @@ import java.util.Arrays;
  */
 public class NQuadsTokenizer {
 
-    protected static final int BUFFER_SIZE = 8192*2;
+    public static final int DEFAULT_BUFFER_SIZE = 8192*2;
 
     protected final Reader reader;
 
     protected Token next;
 
-    protected NQuadsTokenizer(Reader reader) {
-        this.reader = new BufferedReader(reader, BUFFER_SIZE);
+    public NQuadsTokenizer(Reader reader) {
+        this.reader = new BufferedReader(reader, DEFAULT_BUFFER_SIZE);
         this.next = null;
+    }
+
+    public NQuadsTokenizer(Reader reader, int bufferSize) {
+        this.reader = new BufferedReader(reader, bufferSize);
+        this.next = null;
+    }
+
+    public boolean hasNext() throws NQuadsReaderException {
+        if (next == null) {
+            next = doRead();
+        }
+        return TokenType.END_OF_INPUT != next.getType();
     }
 
     public Token next() throws NQuadsReaderException {
@@ -468,35 +480,28 @@ public class NQuadsTokenizer {
         }
     }
 
-    public boolean hasNext() throws NQuadsReaderException {
-        if (next == null) {
-            next = doRead();
-        }
-        return TokenType.END_OF_INPUT != next.getType();
-    }
+    public static class Token {
 
-    protected static class Token {
+        static final Token EOI = new Token(TokenType.END_OF_INPUT, null);
+        static final Token EOS = new Token(TokenType.END_OF_STATEMENT, null);
+        static final Token EOL = new Token(TokenType.END_OF_LINE, null);
+        static final Token WS = new Token(TokenType.WHITE_SPACE, null);
 
-        protected static final Token EOI = new Token(TokenType.END_OF_INPUT, null);
-        protected static final Token EOS = new Token(TokenType.END_OF_STATEMENT, null);
-        protected static final Token EOL = new Token(TokenType.END_OF_LINE, null);
-        protected static final Token WS = new Token(TokenType.WHITE_SPACE, null);
+        static final Token LITERAL_DATA_TYPE = new Token(TokenType.LITERAL_DATA_TYPE, null);
 
-        protected static final Token LITERAL_DATA_TYPE = new Token(TokenType.LITERAL_DATA_TYPE, null);
+        final TokenType type;
+        final String value;
 
-        private final TokenType type;
-        private final String value;
-
-        protected Token(TokenType type, String value) {
+        public Token(TokenType type, String value) {
             this.type = type;
             this.value = value;
         }
 
-        protected TokenType getType() {
+        public TokenType getType() {
             return type;
         }
 
-        protected String getValue() {
+        public String getValue() {
             return value;
         }
 
@@ -506,7 +511,7 @@ public class NQuadsTokenizer {
         }
     }
 
-    protected enum TokenType {
+    public enum TokenType {
         LANGTAG,
         IRI_REF,
         STRING_LITERAL_QUOTE,

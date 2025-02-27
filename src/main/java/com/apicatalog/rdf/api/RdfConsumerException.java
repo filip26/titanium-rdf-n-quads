@@ -11,7 +11,19 @@ public class RdfConsumerException extends Exception {
     String lanTag;
     String direction;
     String graph;
-    
+
+    public RdfConsumerException(String message) {
+        super(message);
+    }
+
+    public RdfConsumerException(Throwable e) {
+        super(e);
+    }
+
+    public RdfConsumerException(String message, Throwable e) {
+        super(message, e);
+    }
+
     public RdfConsumerException(String subject, String predicate, String object, String graph, Exception e) {
         super(e);
         this.subject = subject;
@@ -42,24 +54,28 @@ public class RdfConsumerException extends Exception {
     public String getGraph() {
         return graph;
     }
-    
+
     public String getObject() {
         return object;
     }
-    
+
     public String getPredicate() {
         return predicate;
     }
-    
+
     public String getSubject() {
         return subject;
     }
-    
+
     public String getDirection() {
         return direction;
     }
-    
+
     public String getLanTag() {
         return lanTag;
+    }
+
+    public String getDatatype() {
+        return datatype;
     }
 }

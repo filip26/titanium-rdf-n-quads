@@ -89,7 +89,7 @@ public class NQuadsAlphabet {
         }
         return escaped.toString();
     }
-    
+
     protected NQuadsAlphabet() {
     }
 }
