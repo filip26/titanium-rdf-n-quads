@@ -17,16 +17,14 @@ package com.apicatalog.rdf.nquads;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URISyntaxException;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipException;
 
@@ -53,9 +51,9 @@ class NQuadsTest {
         assertNotNull(testCase.getName());
         assertNotNull(testCase.getType());
 
-        try (final Reader reader = new InputStreamReader(NQuadsTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq"))) {
-            
-            final String input = new BufferedReader(reader).lines().collect(Collectors.joining("\n"));
+        try (final InputStream is = NQuadsTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
+
+            final String input = isToString(is);
             assertNotNull(input);
 
             final StringWriter writer = new StringWriter();
@@ -65,8 +63,26 @@ class NQuadsTest {
             assertNotNull(result);
 
             assertEquals(Type.POSITIVE, testCase.getType());
+
+            String expected = input;
+
+            try (final InputStream out = NQuadsTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
+                if (out != null) {
+                    expected = isToString(out);  
+                }
+            }
             
-            assertEquals(input, result);
+            final boolean match = expected.equals(result);
+
+            if (!match) {
+                System.out.println(testCase.getName());
+                System.out.println("Expected:");
+                System.out.println(expected);
+                System.out.println("Result:");
+                System.out.println(result);
+            }
+
+            assertTrue(match);
 
         } catch (IllegalArgumentException | NQuadsReaderException | RdfConsumerException e) {
             assertEquals(Type.NEGATIVE, testCase.getType());
@@ -76,19 +92,28 @@ class NQuadsTest {
     static final Stream<NQuadsReaderTestCase> data() throws ZipException, IOException, URISyntaxException {
         return load(TEST_CASE_BASE_PATH, "manifest.json");
     }
-    
+
     static final Stream<NQuadsReaderTestCase> load(String path, String name) throws ZipException, IOException, URISyntaxException {
-        try (final InputStream is  =  NQuadsTest.class.getResourceAsStream(path + name)) {
+        try (final InputStream is = NQuadsTest.class.getResourceAsStream(path + name)) {
             final JsonParser parser = Json.createParser(is);
 
             parser.next();
 
             return parser
-                        .getArray()
-                        .stream()
-                        .filter(v -> ValueType.OBJECT.equals(v.getValueType())) 
-                        .map(JsonObject.class::cast)
-                        .map(NQuadsReaderTestCase::of);
+                    .getArray()
+                    .stream()
+                    .filter(v -> ValueType.OBJECT.equals(v.getValueType()))
+                    .map(JsonObject.class::cast)
+                    .map(NQuadsReaderTestCase::of);
         }
+    }
+
+    static final String isToString(InputStream is) throws IOException {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        for (int length; (length = is.read(buffer)) != -1;) {
+            result.write(buffer, 0, length);
+        }
+        return result.toString("UTF-8");
     }
 }
