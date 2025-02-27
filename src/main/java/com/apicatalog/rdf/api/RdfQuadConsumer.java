@@ -21,7 +21,9 @@ public interface RdfQuadConsumer {
      *                  or {@code null} for the default graph.
      * 
      * @return An instance enabling fluent programming; never {@code null}.
-     * @throws RdfConsumerException
+     * 
+     * @throws RdfConsumerException if an error occurs while processing the N-Quad
+     *                              statement
      */
     RdfQuadConsumer quad(
             String subject,
@@ -42,7 +44,9 @@ public interface RdfQuadConsumer {
      *                  or {@code null} for the default graph.
      * 
      * @return An instance enabling fluent programming; never {@code null}.
-     * @throws RdfConsumerException
+     * 
+     * @throws RdfConsumerException if an error occurs while processing the N-Quad
+     *                              statement
      */
     RdfQuadConsumer quad(
             String subject,
@@ -66,7 +70,9 @@ public interface RdfQuadConsumer {
      *                  or {@code null} for the default graph.
      * 
      * @return An instance enabling fluent programming; never {@code null}.
-     * @throws RdfConsumerException
+     * 
+     * @throws RdfConsumerException if an error occurs while processing the N-Quad
+     *                              statement
      */
     RdfQuadConsumer quad(
             String subject,

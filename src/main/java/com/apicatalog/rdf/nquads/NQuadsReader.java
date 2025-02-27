@@ -26,15 +26,20 @@ import com.apicatalog.rdf.nquads.NQuadsTokenizer.Token;
 import com.apicatalog.rdf.nquads.NQuadsTokenizer.TokenType;
 
 /**
- *
- * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1. N-Quads</a>
- *
+ * A simple and efficient streaming N-Quads reader.
+ * <p>
+ * Use the {@link #provide(RdfQuadConsumer)} method to parse input and process
+ * N-Quads statements.
+ * </p>
+ * 
+ * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads
+ *      Specification</a>
  */
 public class NQuadsReader {
 
-    static final String I18N_BASE = "https://www.w3.org/ns/i18n#";
-    static final String LANG_STRING = "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString";
-    static final String XSD_STRING = "http://www.w3.org/2001/XMLSchema#string";
+    public static final String I18N_BASE = "https://www.w3.org/ns/i18n#";
+    public static final String LANG_STRING = "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString";
+    public static final String XSD_STRING = "http://www.w3.org/2001/XMLSchema#string";
 
     protected final NQuadsTokenizer tokenizer;
 
@@ -44,10 +49,24 @@ public class NQuadsReader {
     protected String ltLangTag;
     protected String ltDirection;
 
+    /**
+     * Creates a new {@code NQuadsReader} instance with the specified character
+     * stream.
+     *
+     * @param reader the {@link Reader} to read N-Quads data from
+     */
     public NQuadsReader(final Reader reader) {
         this(new NQuadsTokenizer(reader));
     }
 
+    /**
+     * Creates a new {@code NQuadsReader} instance with the specified character
+     * stream and buffer size for optimized reading.
+     *
+     * @param reader     the {@link Reader} to read N-Quads data from
+     * @param bufferSize the size of the buffer used for reading &gt; 0 (bytes)
+     * @throws IllegalArgumentException if {@code bufferSize} is non-positive number
+     */
     public NQuadsReader(final Reader reader, int bufferSize) {
         this(new NQuadsTokenizer(reader, bufferSize));
     }
@@ -56,6 +75,17 @@ public class NQuadsReader {
         this.tokenizer = tokenizer;
     }
 
+    /**
+     * Reads and processes N-Quads, invoking the provided consumer immediately after
+     * each N-Quad statement is deserialized.
+     *
+     * @param consumer the {@link RdfQuadConsumer} that processes each deserialized
+     *                 N-Quad statement
+     * 
+     * @throws NQuadsReaderException if an error occurs while reading the N-Quads
+     * @throws RdfConsumerException  if an error occurs while processing the N-Quad
+     *                               statement
+     */
     public void provide(RdfQuadConsumer consumer) throws NQuadsReaderException, RdfConsumerException {
         while (tokenizer.hasNext()) {
 
