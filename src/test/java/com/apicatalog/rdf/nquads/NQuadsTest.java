@@ -32,7 +32,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.apicatalog.rdf.api.RdfConsumerException;
-import com.apicatalog.rdf.nquads.NQuadsReaderTestCase.Type;
+import com.apicatalog.rdf.nquads.NQuadsTestCase.Type;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -45,7 +45,7 @@ class NQuadsTest {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("data")
-    void testReadWrite(NQuadsReaderTestCase testCase) throws IOException, URISyntaxException {
+    void testReadWrite(NQuadsTestCase testCase) throws IOException, URISyntaxException {
 
         assertNotNull(testCase);
         assertNotNull(testCase.getName());
@@ -89,11 +89,11 @@ class NQuadsTest {
         }
     }
 
-    static final Stream<NQuadsReaderTestCase> data() throws ZipException, IOException, URISyntaxException {
+    static final Stream<NQuadsTestCase> data() throws ZipException, IOException, URISyntaxException {
         return load(TEST_CASE_BASE_PATH, "manifest.json");
     }
 
-    static final Stream<NQuadsReaderTestCase> load(String path, String name) throws ZipException, IOException, URISyntaxException {
+    static final Stream<NQuadsTestCase> load(String path, String name) throws ZipException, IOException, URISyntaxException {
         try (final InputStream is = NQuadsTest.class.getResourceAsStream(path + name)) {
             final JsonParser parser = Json.createParser(is);
 
@@ -104,7 +104,7 @@ class NQuadsTest {
                     .stream()
                     .filter(v -> ValueType.OBJECT.equals(v.getValueType()))
                     .map(JsonObject.class::cast)
-                    .map(NQuadsReaderTestCase::of);
+                    .map(NQuadsTestCase::of);
         }
     }
 

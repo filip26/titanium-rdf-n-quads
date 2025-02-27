@@ -17,7 +17,7 @@ package com.apicatalog.rdf.nquads;
 
 import jakarta.json.JsonObject;
 
-class NQuadsReaderTestCase {
+class NQuadsTestCase {
 
     public enum Type { POSITIVE, NEGATIVE }
 
@@ -25,7 +25,7 @@ class NQuadsReaderTestCase {
     private final String comment;
     private final Type type;
 
-    public NQuadsReaderTestCase(final String name, final String comment, final Type type) {
+    public NQuadsTestCase(final String name, final String comment, final Type type) {
         this.name = name;
         this.comment = comment;
         this.type = type;
@@ -43,7 +43,7 @@ class NQuadsReaderTestCase {
         return type;
     }
 
-    public static final NQuadsReaderTestCase of(JsonObject json) {
+    public static final NQuadsTestCase of(JsonObject json) {
 
         Type type = null;
 
@@ -60,7 +60,7 @@ class NQuadsReaderTestCase {
 
         final String comment = json.getJsonArray("http://www.w3.org/2000/01/rdf-schema#comment").getJsonObject(0).getString("@value");
 
-        return new NQuadsReaderTestCase(name, comment, type);
+        return new NQuadsTestCase(name, comment, type);
     }
 
     @Override
