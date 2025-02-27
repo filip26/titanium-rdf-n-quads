@@ -53,17 +53,148 @@ public class NQuadsWriter implements RdfQuadConsumer {
         this.writer = writer;
     }
 
-    protected void writeIriOrBlank(String value) throws IOException {
+    /**
+     * Converts an IRI or a blank node identifier into an N-Quads compliant
+     * representation.
+     *
+     * @param value the IRI or blank node identifier to process
+     * @return the formatted IRI in angle brackets or the blank node identifier
+     * @throws IllegalArgumentException if the input value is {@code null}
+     */
+    public static final String resourceOrBlank(String value) {
         if (value == null) {
             throw new IllegalArgumentException();
         }
 
         if (value.startsWith("_:")) {
-            writer.write(value);
-            return;
+            return value;
+        }
+        return resource(value);
+    }
+
+    /**
+     * Formats an IRI for use in N-Quads by enclosing it in angle brackets.
+     *
+     * @param iri the IRI to format
+     * @return the IRI wrapped in angle brackets
+     * @throws IllegalArgumentException if the input IRI is {@code null}
+     */
+    public static final String resource(String iri) {
+
+        if (iri == null) {
+            throw new IllegalArgumentException();
+        }
+        return "<" + iri + ">";
+    }
+
+    /**
+     * Formats an RDF literal with optional datatype, language tag, or direction.
+     *
+     * @param literal   the literal value
+     * @param datatype  the optional datatype IRI (may be {@code null})
+     * @param langTag   the optional language tag (may be {@code null})
+     * @param direction the optional text direction (may be {@code null})
+     * @return the formatted N-Quads literal representation
+     * @throws IllegalArgumentException if the literal value is {@code null}
+     */
+    public static final String literal(String literal, String datatype, String langTag, String direction) {
+
+        if (literal == null) {
+            throw new IllegalArgumentException();
         }
 
-        writeIri(value);
+        StringBuilder builder = new StringBuilder();
+
+        builder.append('"').append(NQuadsAlphabet.escape(literal)).append('"');
+
+        if (direction != null) {
+
+        } else if (langTag != null) {
+
+            builder.append("@").append(langTag);
+
+        } else if (datatype != null) {
+
+            if (NQuadsReader.XSD_STRING.equals(datatype)) {
+                return builder.toString();
+            }
+
+            builder.append("^^").append(resource(datatype));
+        }
+
+        return builder.toString();
+    }
+
+    @Override
+    public RdfQuadConsumer quad(String subject, String predicate, String object, String graph) throws RdfConsumerException {
+        try {
+            writer.write(resourceOrBlank(subject));
+            writer.write(' ');
+
+            writer.write(resourceOrBlank(predicate));
+            writer.write(' ');
+
+            writer.write(resourceOrBlank(object));
+            writer.write(' ');
+
+            if (graph != null) {
+                writer.write(resourceOrBlank(graph));
+                writer.write(' ');
+            }
+
+            writer.write(".\n");
+        } catch (IOException e) {
+            throw new RdfConsumerException(subject, predicate, object, graph, e);
+        }
+        return this;
+    }
+
+    @Override
+    public RdfQuadConsumer quad(String subject, String predicate, String literal, String datatype, String graph) throws RdfConsumerException {
+        try {
+            writer.write(resourceOrBlank(subject));
+            writer.write(' ');
+
+            writer.write(resourceOrBlank(predicate));
+            writer.write(' ');
+
+            writeLiteral(literal, datatype, null, null);
+            writer.write(' ');
+
+            if (graph != null) {
+                writer.write(resourceOrBlank(graph));
+                writer.write(' ');
+            }
+
+            writer.write(".\n");
+        } catch (IOException e) {
+            throw new RdfConsumerException(subject, predicate, literal, datatype, graph, e);
+        }
+        return this;
+    }
+
+    @Override
+    public RdfQuadConsumer quad(String subject, String predicate, String literal, String langTag, String direction, String graph) throws RdfConsumerException {
+        try {
+            writer.write(resourceOrBlank(subject));
+            writer.write(' ');
+
+            writer.write(resourceOrBlank(predicate));
+            writer.write(' ');
+
+            writeLiteral(literal, null, langTag, direction);
+            writer.write(' ');
+
+            if (graph != null) {
+                writer.write(resourceOrBlank(graph));
+                writer.write(' ');
+            }
+
+            writer.write(".\n");
+        } catch (IOException e) {
+            throw new RdfConsumerException(subject, predicate, literal, langTag, direction, graph, e);
+        }
+        return this;
     }
 
     protected void writeLiteral(String literal, String datatype, String langTag, String direction) throws IOException {
@@ -90,90 +221,7 @@ public class NQuadsWriter implements RdfQuadConsumer {
             }
 
             writer.write("^^");
-            writeIri(datatype);
+            writer.write(resource(datatype));
         }
-    }
-
-    protected void writeIri(String iri) throws IOException {
-
-        if (iri == null) {
-            throw new IllegalArgumentException();
-        }
-
-        writer.write('<');
-        writer.write(iri);
-        writer.write('>');
-    }
-
-    @Override
-    public RdfQuadConsumer quad(String subject, String predicate, String object, String graph) throws RdfConsumerException {
-        try {
-            writeIriOrBlank(subject);
-            writer.write(' ');
-
-            writeIriOrBlank(predicate);
-            writer.write(' ');
-
-            writeIriOrBlank(object);
-            writer.write(' ');
-
-            if (graph != null) {
-                writeIriOrBlank(graph);
-                writer.write(' ');
-            }
-
-            writer.write(".\n");
-        } catch (IOException e) {
-            throw new RdfConsumerException(subject, predicate, object, graph, e);
-        }
-        return this;
-    }
-
-    @Override
-    public RdfQuadConsumer quad(String subject, String predicate, String literal, String datatype, String graph) throws RdfConsumerException {
-        try {
-            writeIriOrBlank(subject);
-            writer.write(' ');
-
-            writeIriOrBlank(predicate);
-            writer.write(' ');
-
-            writeLiteral(literal, datatype, null, null);
-            writer.write(' ');
-
-            if (graph != null) {
-                writeIriOrBlank(graph);
-                writer.write(' ');
-            }
-
-            writer.write(".\n");
-        } catch (IOException e) {
-            throw new RdfConsumerException(subject, predicate, literal, datatype, graph, e);
-        }
-        return this;
-    }
-
-    @Override
-    public RdfQuadConsumer quad(String subject, String predicate, String literal, String langTag, String direction, String graph) throws RdfConsumerException {
-        try {
-            writeIriOrBlank(subject);
-            writer.write(' ');
-
-            writeIriOrBlank(predicate);
-            writer.write(' ');
-
-            writeLiteral(literal, null, langTag, direction);
-            writer.write(' ');
-
-            if (graph != null) {
-                writeIriOrBlank(graph);
-                writer.write(' ');
-            }
-
-            writer.write(".\n");
-        } catch (IOException e) {
-            throw new RdfConsumerException(subject, predicate, literal, langTag, direction, graph, e);
-        }
-        return this;
     }
 }
