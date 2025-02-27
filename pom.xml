@@ -30,7 +30,7 @@
     <name>Titanium RDF N-QUADS</name>
 
     <description>
-	A Java implementation of an RDF N-Quads stream reader and writer, designed for efficient parsing and serialization of RDF statements. Formerly a part of Titanium JSON-LD.
+	A Java implementation of a streaming RDF N-Quads reader and writer, optimized for efficient parsing, serialization, and handling of large RDF datasets. It enables scalable processing of RDF statements in a memory-efficient, streaming fashion. Formerly a part of Titanium JSON-LD.
     </description>
 
     <licenses>
