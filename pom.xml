@@ -22,6 +22,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <argLine>-Dfile.encoding=UTF-8</argLine>
                 
+        <titanium.rdf.api.version>1.0.0-SNAPSHOT</titanium.rdf.api.version>
+                
         <!--  test resources -->
         <jakarta.json.version>2.0.1</jakarta.json.version>        
         <junit.version>5.12.0</junit.version>
@@ -59,6 +61,11 @@
     <inceptionYear>2020</inceptionYear>
 
     <dependencies>
+        <dependency>
+            <groupId>com.apicatalog</groupId>
+            <artifactId>titanium-rdf-api</artifactId>
+            <version>${titanium.rdf.api.version}</version>
+        </dependency>    
         <!--  Tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
