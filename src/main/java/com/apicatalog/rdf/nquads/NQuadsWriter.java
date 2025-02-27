@@ -257,7 +257,7 @@ public class NQuadsWriter implements RdfQuadConsumer {
         writer.append('"').append(NQuadsAlphabet.escape(literal)).append('"');
 
         if (direction != null) {
-            writer.append(NQuadsReader.I18N_BASE)
+            writer.append(NQuadsAlphabet.I18N_BASE)
                     .append(langTag)
                     .append("_")
                     .append(direction);
@@ -268,7 +268,7 @@ public class NQuadsWriter implements RdfQuadConsumer {
 
         } else if (datatype != null) {
 
-            if (NQuadsReader.XSD_STRING.equals(datatype)) {
+            if (NQuadsAlphabet.XSD_STRING.equals(datatype)) {
                 return;
             }
 

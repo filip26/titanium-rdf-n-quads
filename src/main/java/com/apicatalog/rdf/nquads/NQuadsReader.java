@@ -37,10 +37,6 @@ import com.apicatalog.rdf.nquads.NQuadsTokenizer.TokenType;
  */
 public class NQuadsReader {
 
-    public static final String I18N_BASE = "https://www.w3.org/ns/i18n#";
-    public static final String LANG_STRING = "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString";
-    public static final String XSD_STRING = "http://www.w3.org/2001/XMLSchema#string";
-
     protected final NQuadsTokenizer tokenizer;
 
     // runtime state
@@ -232,7 +228,7 @@ public class NQuadsReader {
 
             tokenizer.next();
 
-            this.ltDatatype = LANG_STRING;
+            this.ltDatatype = NQuadsAlphabet.LANG_STRING;
             this.ltObject = token.getValue();
             this.ltLangTag = langTag;
 
@@ -273,7 +269,7 @@ public class NQuadsReader {
         }
 
         this.ltObject = token.getValue();
-        this.ltDatatype = XSD_STRING;
+        this.ltDatatype = NQuadsAlphabet.XSD_STRING;
     }
 
     protected static final <T> T unexpected(Token token, TokenType... types) throws NQuadsReaderException {
@@ -316,11 +312,11 @@ public class NQuadsReader {
     }
 
     protected static final void datatype(final String datatype, final BiConsumer<String, String[]> result) {
-        if (datatype.startsWith(I18N_BASE)) {
+        if (datatype.startsWith(NQuadsAlphabet.I18N_BASE)) {
 
-            String[] langDir = datatype.substring(I18N_BASE.length()).split("_");
+            String[] langDir = datatype.substring(NQuadsAlphabet.I18N_BASE.length()).split("_");
 
-            result.accept(I18N_BASE, langDir);
+            result.accept(NQuadsAlphabet.I18N_BASE, langDir);
 
             return;
         }
