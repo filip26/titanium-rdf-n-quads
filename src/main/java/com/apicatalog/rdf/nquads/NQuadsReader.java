@@ -64,7 +64,7 @@ public class NQuadsReader {
      * stream and buffer size for optimized reading.
      *
      * @param reader     the {@link Reader} to read N-Quads data from
-     * @param bufferSize the size of the buffer used for reading > 0 (bytes)
+     * @param bufferSize the size of the buffer used for reading &gt; 0 (bytes)
      * @throws IllegalArgumentException if {@code bufferSize} is non-positive number
      */
     public NQuadsReader(final Reader reader, int bufferSize) {

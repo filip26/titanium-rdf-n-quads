@@ -5,8 +5,8 @@ package com.apicatalog.rdf.api;
  * seamless integration with third-party libraries.
  * 
  * Intended to be used in cases where triples are emitted in bulk as a set
- * belonging to the same graph, and where a producer keeps triple sets associated
- * with graphs.
+ * belonging to the same graph, and where a producer keeps triple sets
+ * associated with graphs.
  * 
  * This interface minimizes unnecessary object instantiation, enhancing
  * efficiency in RDF data processing.
@@ -18,8 +18,11 @@ public interface RdfTripleConsumer {
      * triples belong to the unnamed default graph.
      * 
      * @return An instance enabling fluent programming; never {@code null}.
+     * 
+     * @throws RdfConsumerException if an error occurs while processing the N-Quad
+     *                              statement
      */
-    RdfTripleConsumer defaultGraph();
+    RdfTripleConsumer defaultGraph() throws RdfConsumerException;
 
     /**
      * Sets a named graph as the active scope. Ensures that subsequent triples are
@@ -29,8 +32,11 @@ public interface RdfTripleConsumer {
      *              with "_:"); never {@code null}.
      * 
      * @return An instance enabling fluent programming; never {@code null}.
+     * 
+     * @throws RdfConsumerException if an error occurs while processing the N-Quad
+     *                              statement
      */
-    RdfTripleConsumer namedGraph(String graph);
+    RdfTripleConsumer namedGraph(String graph) throws RdfConsumerException;
 
     /**
      * Accepts an RDF triple where the object is an IRI or a blank node. The triple
@@ -43,7 +49,9 @@ public interface RdfTripleConsumer {
      *                  prefixed with "_:"); never {@code null}.
      * 
      * @return An instance enabling fluent programming; never {@code null}.
-     * @throws RdfConsumerException 
+     * 
+     * @throws RdfConsumerException if an error occurs while processing the N-Quad
+     *                              statement
      */
     RdfTripleConsumer triple(
             String subject,
@@ -62,7 +70,9 @@ public interface RdfTripleConsumer {
      * @param datatype  The datatype IRI of the literal; never {@code null}.
      * 
      * @return An instance enabling fluent programming; never {@code null}.
-     * @throws RdfConsumerException 
+     * 
+     * @throws RdfConsumerException if an error occurs while processing the N-Quad
+     *                              statement
      */
     RdfTripleConsumer triple(
             String subject,
@@ -84,7 +94,9 @@ public interface RdfTripleConsumer {
      *                  {@code null}).
      * 
      * @return An instance enabling fluent programming; never {@code null}.
-     * @throws RdfConsumerException 
+     * 
+     * @throws RdfConsumerException if an error occurs while processing the N-Quad
+     *                              statement
      */
     RdfTripleConsumer triple(
             String subject,
