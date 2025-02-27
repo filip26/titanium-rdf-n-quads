@@ -3,7 +3,7 @@
 A Java implementation of an RDF N-Quads stream reader and writer, designed for efficient parsing and serialization of RDF statements.
 
 [![Java 8 CI](https://github.com/filip26/titanium-rdf-n-quads/actions/workflows/java8-build.yml/badge.svg)](https://github.com/filip26/titanium-rdf-n-quads/actions/workflows/java8-build.yml)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/af8879b14a3f45bd8205c7720a24612f)](https://app.codacy.com/gh/filip26/titanium-rdf-n-quads/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9b9b6b24ae1e468f93428c3d70fd59f2)](https://app.codacy.com/gh/filip26/titanium-rdf-n-quads/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/af8879b14a3f45bd8205c7720a24612f)](https://app.codacy.com/gh/filip26/titanium-rdf-n-quads/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 [![Maven Central](https://img.shields.io/maven-central/v/com.apicatalog/titanium-rdf-n-quads.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:com.apicatalog%20AND%20a:titanium-rdf-n-quads)
 [![javadoc](https://javadoc.io/badge2/com.apicatalog/titanium-rdf-n-quads/javadoc.svg)](https://javadoc.io/doc/com.apicatalog/titanium-rdf-n-quads)
@@ -25,6 +25,10 @@ new NQuadsWriter(writer).quad(...).quad(...).quad(...);
 // Since NQuadsWriter implements the RdfQuadConsumer interface,
 // it can be directly used as a consumer, e.g. with JsonLd.toRdf.
 new NQuadsReader(reader).provide(new NQuadsWriter(writer));
+
+// Static access to NQuadsWriter methods
+var encoded = NQuadsWriter.nquad(...);
+var encodedLiteral = NQuadsWriter.literal(...);
 
 ```
 
