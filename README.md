@@ -16,7 +16,7 @@ Formerly part of [Titanium JSON-LD](https://github.com/filip26/titanium-json-ld)
 ```javascript
 
 // Reading N-Quads
-new NQuadsReader(reader).read(RdfQuadConsumer);
+new NQuadsReader(reader).provide(RdfQuadConsumer);
 
 // Writing N-Quads
 new NQuadsWriter(writer).quad(...).quad(...).quad(...);
@@ -24,7 +24,7 @@ new NQuadsWriter(writer).quad(...).quad(...).quad(...);
 // Demonstrating RdfQuadConsumer usage by reading and writing in one step
 // Since NQuadsWriter implements the RdfQuadConsumer interface,
 // it can be directly used as a consumer, e.g. with JsonLd.toRdf.
-new NQuadsReader(reader).read(new NQuadsWriter(writer));
+new NQuadsReader(reader).provide(new NQuadsWriter(writer));
 
 ```
 
