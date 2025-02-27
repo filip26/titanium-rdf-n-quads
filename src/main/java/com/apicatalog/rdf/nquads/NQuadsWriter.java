@@ -22,9 +22,28 @@ import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 
 /**
+ * A writer for serializing RDF data in the
+ * <a href="https://www.w3.org/TR/n-quads/">N-Quads format</a>.
+ * <p>
+ * This class implements the {@link RdfQuadConsumer} interface, allowing RDF
+ * quads to be written to an output stream in the standard N-Quads
+ * serialization. It supports writing IRIs, blank nodes, literals, and
+ * language-tagged literals.
+ * </p>
  *
- * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1. N-Quads</a>
+ * <p>
+ * Usage example:
+ * </p>
+ * 
+ * <pre>
+ * Writer writer = new FileWriter("output.nq");
+ * NQuadsWriter nQuadsWriter = new NQuadsWriter(writer);
+ * nQuadsWriter.quad("<http://example.com/subject>", "<http://example.com/predicate>", "\"Object\"", null, null);
+ * writer.close();
+ * </pre>
  *
+ * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads
+ *      Specification</a>
  */
 public class NQuadsWriter implements RdfQuadConsumer {
 

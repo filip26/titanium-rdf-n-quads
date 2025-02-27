@@ -21,13 +21,33 @@ import java.io.Reader;
 import java.util.Arrays;
 
 /**
+ * A tokenizer for parsing N-Quads data streams according to the
+ * <a href="https://www.w3.org/TR/n-quads/#sec-grammar">N-Quads Grammar</a>.
+ * <p>
+ * This class reads an input stream character by character and extracts tokens
+ * representing RDF terms, literals, and syntax elements in the N-Quads format.
+ * It supports whitespace handling, comments, and various escape sequences.
+ * </p>
+ * 
+ * <p>
+ * Usage example:
+ * </p>
+ * 
+ * <pre>
+ * Reader reader = new FileReader("data.nq");
+ * NQuadsTokenizer tokenizer = new NQuadsTokenizer(reader);
+ * while (tokenizer.hasNext()) {
+ *     Token token = tokenizer.next();
+ *     System.out.println(token);
+ * }
+ * </pre>
  *
- * @see <a href="https://www.w3.org/TR/n-quads/#sec-grammar">N-Quads Grammar</a>
- *
+ * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads
+ *      Specification</a>
  */
 public class NQuadsTokenizer {
 
-    public static final int DEFAULT_BUFFER_SIZE = 8192*2;
+    public static final int DEFAULT_BUFFER_SIZE = 8192 * 2;
 
     protected final Reader reader;
 
@@ -135,12 +155,11 @@ public class NQuadsTokenizer {
         throw new IllegalStateException();
     }
 
-    protected static final void unexpected(int actual, String ...expected) throws NQuadsReaderException {
+    protected static final void unexpected(int actual, String... expected) throws NQuadsReaderException {
         throw new NQuadsReaderException(
-                        actual != -1
-                            ? "Unexpected character [" + (char)actual  + "] expected " +  Arrays.toString(expected) + "."
-                            : "Unexpected end of input, expected " + Arrays.toString(expected) + "."
-                            );
+                actual != -1
+                        ? "Unexpected character [" + (char) actual + "] expected " + Arrays.toString(expected) + "."
+                        : "Unexpected end of input, expected " + Arrays.toString(expected) + ".");
     }
 
     protected Token skipWhitespaces() throws NQuadsReaderException {
@@ -191,17 +210,16 @@ public class NQuadsTokenizer {
 
             int ch = reader.read();
 
-            while (ch != '>'  && ch != -1) {
+            while (ch != '>' && ch != -1) {
 
                 if ((0x00 <= ch && ch <= 0x20)
-                     || ch == '<'
-                     || ch == '"'
-                     || ch == '{'
-                     || ch == '}'
-                     || ch == '|'
-                     || ch == '^'
-                     || ch == '`'
-                        ) {
+                        || ch == '<'
+                        || ch == '"'
+                        || ch == '{'
+                        || ch == '}'
+                        || ch == '|'
+                        || ch == '^'
+                        || ch == '`') {
                     unexpected(ch, ">");
                 }
 
@@ -210,7 +228,7 @@ public class NQuadsTokenizer {
                     readIriEscape(value);
 
                 } else {
-                    value.append((char)ch);
+                    value.append((char) ch);
                 }
                 ch = reader.read();
             }
@@ -270,14 +288,14 @@ public class NQuadsTokenizer {
             if (!NQuadsAlphabet.ASCII_ALPHA.test(ch) || ch == -1) {
                 unexpected(ch);
             }
-            value.append((char)ch);
+            value.append((char) ch);
 
             reader.mark(1);
             ch = reader.read();
 
             while (NQuadsAlphabet.ASCII_ALPHA.test(ch)) {
 
-                value.append((char)ch);
+                value.append((char) ch);
 
                 reader.mark(1);
                 ch = reader.read();
@@ -291,7 +309,7 @@ public class NQuadsTokenizer {
 
             while (NQuadsAlphabet.ASCII_ALPHA_NUM.test(ch) || ch == '-') {
 
-                value.append((char)ch);
+                value.append((char) ch);
 
                 reader.mark(1);
                 ch = reader.read();
@@ -331,7 +349,7 @@ public class NQuadsTokenizer {
     protected void readEscape(final StringBuilder value) throws NQuadsReaderException, IOException {
         int ch = reader.read();
 
-        if (ch == 't' || ch == 'b' || ch == 'n' || ch == 'r' || ch == 'f' || ch == '\'' || ch == '\\' || ch =='"') {
+        if (ch == 't' || ch == 'b' || ch == 'n' || ch == 'r' || ch == 'f' || ch == '\'' || ch == '\\' || ch == '"') {
 
             value.appendCodePoint(unescape(ch));
 
@@ -366,7 +384,7 @@ public class NQuadsTokenizer {
                 unexpected(ch);
             }
 
-            value.append((char)ch);
+            value.append((char) ch);
 
             reader.mark(1);
             ch = reader.read();
@@ -377,7 +395,7 @@ public class NQuadsTokenizer {
 
                 delim = ch == '.';
 
-                value.append((char)ch);
+                value.append((char) ch);
 
                 if (delim) {
                     reader.reset();
@@ -420,21 +438,21 @@ public class NQuadsTokenizer {
         return Character.toChars(Integer.parseInt(String.valueOf(code), 16));
     }
 
-    protected char readHex8()  throws IOException, NQuadsReaderException {
+    protected char readHex8() throws IOException, NQuadsReaderException {
 
         int hex = reader.read();
 
         if (NQuadsAlphabet.HEX.negate().test(hex)) {
             unexpected(hex, "0-9", "a-f", "A-F");
         }
-        return (char)hex;
+        return (char) hex;
     }
 
-    protected char[] readUnicode64()  throws IOException, NQuadsReaderException {
+    protected char[] readUnicode64() throws IOException, NQuadsReaderException {
 
         char[] code = new char[8];
 
-        for (int i=0; i < code.length; i++) {
+        for (int i = 0; i < code.length; i++) {
             code[i] = readHex8();
         }
 
@@ -524,4 +542,3 @@ public class NQuadsTokenizer {
         END_OF_INPUT,
     }
 }
-

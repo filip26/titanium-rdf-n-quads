@@ -15,6 +15,9 @@
  */
 package com.apicatalog.rdf.nquads;
 
+/**
+ * Exception indicating an error occurred while reading or parsing N-Quads data.
+ */
 public class NQuadsReaderException extends Exception {
 
     private static final long serialVersionUID = -2963636611090854528L;
