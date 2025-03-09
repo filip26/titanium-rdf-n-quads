@@ -16,9 +16,9 @@
 package com.apicatalog.rdf.nquads;
 
 import java.io.Reader;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 
 import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
@@ -37,11 +37,8 @@ import com.apicatalog.rdf.nquads.NQuadsTokenizer.TokenType;
  */
 public class NQuadsReader {
 
-    public static final String I18N_BASE = "https://www.w3.org/ns/i18n#";
-    public static final String LANG_STRING = "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString";
-    public static final String XSD_STRING = "http://www.w3.org/2001/XMLSchema#string";
-
     protected final NQuadsTokenizer tokenizer;
+    protected final Predicate<String> testAbsoluteIRI;
 
     // runtime state
     protected String ltObject;
@@ -56,7 +53,18 @@ public class NQuadsReader {
      * @param reader the {@link Reader} to read N-Quads data from
      */
     public NQuadsReader(final Reader reader) {
-        this(new NQuadsTokenizer(reader));
+        this(new NQuadsTokenizer(reader), NQuadsReader::startsWithScheme);
+    }
+
+    /**
+     * Creates a new {@code NQuadsReader} instance with the specified character
+     * stream.
+     *
+     * @param reader          the {@link Reader} to read N-Quads data from
+     * @param testAbsoluteIRI a function to test if an IRI is absolute or not
+     */
+    public NQuadsReader(final Reader reader, Predicate<String> testAbsoluteIRI) {
+        this(new NQuadsTokenizer(reader), testAbsoluteIRI);
     }
 
     /**
@@ -68,11 +76,25 @@ public class NQuadsReader {
      * @throws IllegalArgumentException if {@code bufferSize} is non-positive number
      */
     public NQuadsReader(final Reader reader, int bufferSize) {
-        this(new NQuadsTokenizer(reader, bufferSize));
+        this(new NQuadsTokenizer(reader, bufferSize), NQuadsReader::startsWithScheme);
     }
 
-    protected NQuadsReader(final NQuadsTokenizer tokenizer) {
+    /**
+     * Creates a new {@code NQuadsReader} instance with the specified character
+     * stream and buffer size for optimized reading.
+     *
+     * @param reader          the {@link Reader} to read N-Quads data from
+     * @param bufferSize      the size of the buffer used for reading &gt; 0 (bytes)
+     * @param testAbsoluteIRI a function to test if an IRI is absolute or not
+     * @throws IllegalArgumentException if {@code bufferSize} is non-positive number
+     */
+    public NQuadsReader(final Reader reader, int bufferSize, final Predicate<String> testAbsoluteIRI) {
+        this(new NQuadsTokenizer(reader, bufferSize), testAbsoluteIRI);
+    }
+
+    protected NQuadsReader(final NQuadsTokenizer tokenizer, final Predicate<String> testAbsoluteIRI) {
         this.tokenizer = tokenizer;
+        this.testAbsoluteIRI = testAbsoluteIRI;
     }
 
     /**
@@ -153,15 +175,14 @@ public class NQuadsReader {
             tokenizer.next();
         }
 
-        if (ltDirection != null || ltLangTag != null) {
-            consumer.quad(subject, predicate, ltObject, ltLangTag, ltDirection, graphName);
-
-        } else if (ltDatatype != null) {
-            consumer.quad(subject, predicate, ltObject, ltDatatype, graphName);
-
-        } else {
-            consumer.quad(subject, predicate, ltObject, graphName);
-        }
+        consumer.quad(
+                subject,
+                predicate,
+                ltObject,
+                ltDatatype,
+                ltLangTag,
+                ltDirection,
+                graphName);
     }
 
     protected String resource(String name) throws NQuadsReaderException {
@@ -232,7 +253,7 @@ public class NQuadsReader {
 
             tokenizer.next();
 
-            this.ltDatatype = LANG_STRING;
+            this.ltDatatype = NQuadsAlphabet.LANG_STRING;
             this.ltObject = token.getValue();
             this.ltLangTag = langTag;
 
@@ -273,7 +294,7 @@ public class NQuadsReader {
         }
 
         this.ltObject = token.getValue();
-        this.ltDatatype = XSD_STRING;
+        this.ltDatatype = NQuadsAlphabet.XSD_STRING;
     }
 
     protected static final <T> T unexpected(Token token, TokenType... types) throws NQuadsReaderException {
@@ -295,35 +316,45 @@ public class NQuadsReader {
         }
     }
 
-    protected static final void assertAbsoluteIri(final String uri, final String what) throws NQuadsReaderException {
-        if (!isAbsoluteUri(uri)) {
+    protected final void assertAbsoluteIri(final String uri, final String what) throws NQuadsReaderException {
+        if (!testAbsoluteIRI.test(uri)) {
             throw new NQuadsReaderException(what + " must be an absolute URI [" + uri + "]. ");
         }
     }
 
-    protected static final boolean isAbsoluteUri(final String uri) {
-        // minimal form s(1):ssp(1)
-        if (uri == null || uri.length() < 3) {
-            return false;
-        }
-
-        try {
-            return URI.create(uri).isAbsolute();
-        } catch (IllegalArgumentException e) {
-            /* ignore */
-        }
-        return false;
-    }
-
     protected static final void datatype(final String datatype, final BiConsumer<String, String[]> result) {
-        if (datatype.startsWith(I18N_BASE)) {
+        if (datatype.startsWith(NQuadsAlphabet.I18N_BASE)) {
 
-            String[] langDir = datatype.substring(I18N_BASE.length()).split("_");
+            String[] langDir = datatype.substring(NQuadsAlphabet.I18N_BASE.length()).split("_");
 
-            result.accept(I18N_BASE, langDir);
+            result.accept(NQuadsAlphabet.I18N_BASE, langDir);
 
             return;
         }
         result.accept(datatype, null);
+    }
+
+    protected static final boolean startsWithScheme(final String uri) {
+
+        if (uri == null
+                || uri.length() < 2 // a scheme must have at least one letter followed by ':'
+                || !Character.isLetter(uri.codePointAt(0)) // a scheme name must start with a letter
+        ) {
+            return false;
+        }
+
+        for (int i = 1; i < uri.length(); i++) {
+
+            if (
+            // a scheme name must start with a letter followed by a letter/digit/+/-/.
+            Character.isLetterOrDigit(uri.codePointAt(i))
+                    || uri.charAt(i) == '-' || uri.charAt(i) == '+' || uri.charAt(i) == '.') {
+                continue;
+            }
+
+            // a scheme name must be terminated by ':'
+            return uri.charAt(i) == ':';
+        }
+        return false;
     }
 }

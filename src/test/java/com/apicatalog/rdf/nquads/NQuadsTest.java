@@ -26,7 +26,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URISyntaxException;
 import java.util.stream.Stream;
-import java.util.zip.ZipException;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -89,11 +88,11 @@ class NQuadsTest {
         }
     }
 
-    static final Stream<NQuadsTestCase> data() throws ZipException, IOException, URISyntaxException {
+    static final Stream<NQuadsTestCase> data() throws IOException {
         return load(TEST_CASE_BASE_PATH, "manifest.json");
     }
 
-    static final Stream<NQuadsTestCase> load(String path, String name) throws ZipException, IOException, URISyntaxException {
+    static final Stream<NQuadsTestCase> load(String path, String name) throws IOException {
         try (final InputStream is = NQuadsTest.class.getResourceAsStream(path + name)) {
             final JsonParser parser = Json.createParser(is);
 

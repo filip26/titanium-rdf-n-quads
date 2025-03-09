@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.apicatalog</groupId>
     <artifactId>titanium-rdf-n-quads</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <url>https://github.com/filip26/titanium-rdf-n-quads</url>
     <scm>
@@ -21,6 +21,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <argLine>-Dfile.encoding=UTF-8</argLine>
+                
+        <titanium.rdf.api.version>1.0.0</titanium.rdf.api.version>
                 
         <!--  test resources -->
         <jakarta.json.version>2.0.1</jakarta.json.version>        
@@ -59,6 +61,11 @@
     <inceptionYear>2020</inceptionYear>
 
     <dependencies>
+        <dependency>
+            <groupId>com.apicatalog</groupId>
+            <artifactId>titanium-rdf-api</artifactId>
+            <version>${titanium.rdf.api.version}</version>
+        </dependency>    
         <!--  Tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

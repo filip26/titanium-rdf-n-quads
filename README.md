@@ -67,3 +67,4 @@ Fork and clone the project repository.
 
 ## Resources
 
+* [W3C RDF 1.1 N-Quads](https://www.w3.org/TR/n-quads/)

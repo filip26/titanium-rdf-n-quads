@@ -51,6 +51,14 @@ import java.util.function.IntPredicate;
  */
 public class NQuadsAlphabet {
 
+    public static final String I18N_BASE = "https://www.w3.org/ns/i18n#";
+
+    public static final String LANG_STRING = "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString";
+
+    public static final String DIR_LANG_STRING = "http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString";
+
+    public static final String XSD_STRING = "http://www.w3.org/2001/XMLSchema#string";
+
     public static final IntPredicate ASCII_ALPHA = ch -> 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z';
 
     public static final IntPredicate ASCII_DIGIT = ch -> '0' <= ch && ch <= '9';
@@ -121,7 +129,7 @@ public class NQuadsAlphabet {
                 escaped.append("\\\\");
 
             } else if (ch >= 0x0 && ch <= 0x1f || ch == 0x7f) {
-                escaped.append(String.format("\\u%04x", ch));
+                escaped.append(String.format("\\u%04X", ch));
 
             } else {
                 escaped.appendCodePoint(ch);
