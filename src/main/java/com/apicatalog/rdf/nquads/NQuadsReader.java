@@ -175,7 +175,14 @@ public class NQuadsReader {
             tokenizer.next();
         }
 
-        consumer.quad(subject, predicate, ltObject, ltDatatype, ltLangTag, ltDirection, graphName);
+        consumer.quad(
+                subject,
+                predicate,
+                ltObject,
+                ltDatatype,
+                ltLangTag,
+                ltDirection,
+                graphName);
     }
 
     protected String resource(String name) throws NQuadsReaderException {

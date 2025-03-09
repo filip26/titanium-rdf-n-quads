@@ -157,16 +157,25 @@ public class NQuadsWriter implements RdfQuadConsumer {
      *                  blank node.
      * @param predicate The predicate of the triple, which must be an IRI.
      * @param literal   The literal value for the object in the triple.
-     * @param langTag   The language tag for the literal.
+     * @param language  The language tag for the literal.
      * @param direction The direction of the literal, or null if not applicable.
      * @param graph     The named graph for the triple, or null if no graph is
      *                  specified.
      * @return The N-Quad representation of the triple as a string.
      */
-    public static final String nquad(String subject, String predicate, String literal, String langTag, String direction, String graph) {
+    public static final String nquad(String subject, String predicate, String literal, String language, String direction, String graph) {
         final StringWriter writer = new StringWriter();
         try {
-            nquad(writer, subject, predicate, literal, NQuadsAlphabet.LANG_STRING, langTag, direction, graph);
+            nquad(writer,
+                    subject,
+                    predicate,
+                    literal,
+                    direction != null
+                            ? NQuadsAlphabet.DIR_LANG_STRING
+                            : NQuadsAlphabet.LANG_STRING,
+                    language,
+                    direction,
+                    graph);
 
         } catch (IOException e) {
             /* ignore */
