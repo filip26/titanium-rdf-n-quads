@@ -22,7 +22,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <argLine>-Dfile.encoding=UTF-8</argLine>
                 
-        <titanium.rdf.api.version>1.0.0-SNAPSHOT</titanium.rdf.api.version>
+        <titanium.rdf.api.version>1.0.0</titanium.rdf.api.version>
                 
         <!--  test resources -->
         <jakarta.json.version>2.0.1</jakarta.json.version>        
