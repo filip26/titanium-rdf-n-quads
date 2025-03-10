@@ -44,12 +44,9 @@ import java.util.function.IntPredicate;
  * The {@link #escape(String)} method provides a way to escape special
  * characters in string values according to N-Quads formatting rules.
  *
- * <p>
- * This class is not meant to be instantiated.
- *
  * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads</a>
  */
-public class NQuadsAlphabet {
+public final class NQuadsAlphabet {
 
     public static final String I18N_BASE = "https://www.w3.org/ns/i18n#";
 
@@ -138,6 +135,6 @@ public class NQuadsAlphabet {
         return escaped.toString();
     }
 
-    protected NQuadsAlphabet() {
+    private NQuadsAlphabet() {
     }
 }
