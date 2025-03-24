@@ -92,7 +92,7 @@ public class NQuadsWriter implements RdfQuadConsumer {
         }
         final StringWriter writer = new StringWriter();
         try {
-            literal(new StringWriter(), literal, datatype, langTag, direction);
+            literal(writer, literal, datatype, langTag, direction);
 
         } catch (IOException e) {
             /* ignore */

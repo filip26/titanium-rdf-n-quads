@@ -40,14 +40,14 @@ var encodedLiteral = NQuadsWriter.literal(...);
 <dependency>
     <groupId>com.apicatalog</groupId>
     <artifactId>titanium-rdf-n-quads</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```gradle
-implementation("com.apicatalog:titanium-rdf-n-quads:1.0.0")
+implementation("com.apicatalog:titanium-rdf-n-quads:1.0.1")
 ```
 
 ## Contributing
