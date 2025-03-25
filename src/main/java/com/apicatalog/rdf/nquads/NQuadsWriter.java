@@ -247,10 +247,11 @@ public class NQuadsWriter implements RdfQuadConsumer {
         writer.append('"').append(NQuadsAlphabet.escape(object)).append('"');
 
         if (direction != null) {
-            writer.append(NQuadsAlphabet.I18N_BASE)
-                    .append(langTag)
-                    .append("_")
-                    .append(direction);
+            writer.append(NQuadsAlphabet.I18N_BASE);
+            if (langTag != null) {
+                writer.append(langTag);
+            }
+            writer.append("_").append(direction);
 
         } else if (langTag != null) {
 
