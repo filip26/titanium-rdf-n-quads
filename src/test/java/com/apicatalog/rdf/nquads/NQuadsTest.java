@@ -67,10 +67,10 @@ class NQuadsTest {
 
             try (final InputStream out = NQuadsTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
                 if (out != null) {
-                    expected = isToString(out);  
+                    expected = isToString(out);
                 }
             }
-            
+
             final boolean match = expected.equals(result);
 
             if (!match) {

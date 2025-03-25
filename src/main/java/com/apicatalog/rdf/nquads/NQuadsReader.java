@@ -279,10 +279,10 @@ public class NQuadsReader {
                 datatype(datatype, (a, b) -> {
                     this.ltDatatype = a;
                     if (b != null) {
-                        if (b.length > 1) {
+                        if (b.length > 1 && b[1] != null && !b[1].trim().isEmpty()) {
                             this.ltDirection = b[1];
                         }
-                        if (b.length > 0) {
+                        if (b.length > 0 && b[0] != null && !b[0].trim().isEmpty()) {
                             this.ltLangTag = b[0];
                         }
                     }
