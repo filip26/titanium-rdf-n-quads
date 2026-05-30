@@ -1,0 +1,434 @@
+[
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads-langdir-1",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads-langdir-1.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads literal with base direction ltr"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads-langdir-2",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads-langdir-2.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads literal with base direction rtl"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads-langdir-bad-1",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads-langdir-bad-1.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads literal- Bad - undefined base direction"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads-langdir-bad-2",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads-langdir-bad-2.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads literal- Bad - upper case LTR"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-01",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-syntax-01.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - object triple term"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-02",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-syntax-02.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - object triple term, no whitespace"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-03",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-syntax-03.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Nested, no whitespace"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bad-01",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bad-syntax-01.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - reified triple as predicate"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bad-02",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bad-syntax-02.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - reified triple, literal subject"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bad-03",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bad-syntax-03.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - reified triple, literal predicate"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bad-04",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bad-syntax-04.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - reified triple, blank node predicate"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bad-05",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bad-syntax-05.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - triple term as predicate"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bad-06",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bad-syntax-06.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - triple term, literal subject"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bad-07",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bad-syntax-07.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - triple term, literal predicate"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bad-08",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bad-syntax-08.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - triple term, blank node predicate"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bad-09",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bad-syntax-09.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - reified triple object"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bad-10",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bad-syntax-10.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - triple term as subject"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bad-reified-1",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bad-reified-syntax-1.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - subject reified triple"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bad-reified-2",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bad-reified-syntax-2.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - object reified triple"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bad-reified-3",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bad-reified-syntax-3.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - subject and object reified triples"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bad-reified-4",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bad-reified-syntax-4.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - predicate reified triple"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bnode-1",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bnode-1.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Blank node subject"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bnode-bad-annotated-syntax-1",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bnode-bad-annotated-syntax-1.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - annotated triple, blank node subject"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-bnode-bad-annotated-syntax-2",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-bnode-bad-annotated-syntax-2.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - annotated triple, blank node object"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-nested-1",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-nested-1.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Nested object term"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-nested-bad-annotated-syntax-1",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-nested-bad-annotated-syntax-1.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - annotated triple, nested subject term"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3c.github.io/rdf-tests/rdf/rdf12/rdf-n-quads/syntax#nquads12-nested-bad-annotated-syntax-2",
+        "@type": [
+            "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action": [
+            {
+                "@id": "nquads12-nested-bad-annotated-syntax-2.nq"
+            }
+        ],
+        "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+            {
+                "@value": "N-Quads-12 - Bad - annotated triple, nested object term"
+            }
+        ]
+    }
+]

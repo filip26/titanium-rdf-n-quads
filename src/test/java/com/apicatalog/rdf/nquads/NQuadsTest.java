@@ -27,6 +27,7 @@ import java.io.StringWriter;
 import java.net.URISyntaxException;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -40,17 +41,30 @@ import jakarta.json.stream.JsonParser;
 
 class NQuadsTest {
 
-    private final static String TEST_CASE_BASE_PATH = "nquads-test-suite/";
+    private final static String RDF11_TEST_CASE_BASE_PATH = "nquads-test-suite/";
+    private final static String RDF12_TEST_CASE_BASE_PATH = "rdf12/syntax/";
 
+    @DisplayName("RDF 1.1")
     @ParameterizedTest(name = "{0}")
-    @MethodSource("data")
-    void testReadWrite(NQuadsTestCase testCase) throws IOException, URISyntaxException {
+    @MethodSource("rdf11")
+    void testRdf11(NQuadsTestCase testCase) throws IOException, URISyntaxException {
+    	execute(testCase);
+    }
+
+    @DisplayName("RDF 1.2")
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("rdf12")
+    void testRdf12(NQuadsTestCase testCase) throws IOException, URISyntaxException {
+    	execute(testCase);
+    }
+
+    final static void execute(NQuadsTestCase testCase) throws IOException, URISyntaxException {
 
         assertNotNull(testCase);
         assertNotNull(testCase.getName());
         assertNotNull(testCase.getType());
 
-        try (final InputStream is = NQuadsTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
+        try (final InputStream is = NQuadsTest.class.getResourceAsStream(testCase.getBasePath() + testCase.getAction())) {
 
             final String input = isToString(is);
             assertNotNull(input);
@@ -65,7 +79,7 @@ class NQuadsTest {
 
             String expected = input;
 
-            try (final InputStream out = NQuadsTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
+            try (final InputStream out = NQuadsTest.class.getResourceAsStream(testCase.getBasePath() + testCase.getAction().substring(0, testCase.getAction().length() - 3) + ".out.nq")) {
                 if (out != null) {
                     expected = isToString(out);
                 }
@@ -88,8 +102,12 @@ class NQuadsTest {
         }
     }
 
-    static final Stream<NQuadsTestCase> data() throws IOException {
-        return load(TEST_CASE_BASE_PATH, "manifest.json");
+    static final Stream<NQuadsTestCase> rdf11() throws IOException {
+        return load(RDF11_TEST_CASE_BASE_PATH, "manifest.json");
+    }
+
+    static final Stream<NQuadsTestCase> rdf12() throws IOException {
+        return load(RDF12_TEST_CASE_BASE_PATH, "manifest.json");
     }
 
     static final Stream<NQuadsTestCase> load(String path, String name) throws IOException {
@@ -103,7 +121,8 @@ class NQuadsTest {
                     .stream()
                     .filter(v -> ValueType.OBJECT.equals(v.getValueType()))
                     .map(JsonObject.class::cast)
-                    .map(NQuadsTestCase::of);
+                    .map(NQuadsTestCase::of)
+                    .map(testCase -> { testCase.basePath = path; return testCase; });
         }
     }
 

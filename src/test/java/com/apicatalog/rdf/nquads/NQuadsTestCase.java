@@ -19,52 +19,83 @@ import jakarta.json.JsonObject;
 
 class NQuadsTestCase {
 
-    public enum Type { POSITIVE, NEGATIVE }
+	public enum Type {
+		POSITIVE, NEGATIVE
+	}
 
-    private final String name;
-    private final String comment;
-    private final Type type;
+	final String action;
+	final String name;
+	final String comment;
+	final Type type;
 
-    public NQuadsTestCase(final String name, final String comment, final Type type) {
-        this.name = name;
-        this.comment = comment;
-        this.type = type;
-    }
+	String basePath;
 
-    public String getName() {
-        return name;
-    }
+	public NQuadsTestCase(final String name, final String comment, final Type type, final String action) {
+		this.name = name;
+		this.comment = comment;
+		this.type = type;
+		this.action = action;
+	}
 
-    public String getComment() {
-        return comment;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Type getType() {
-        return type;
-    }
+	public String getComment() {
+		return comment;
+	}
 
-    public static final NQuadsTestCase of(JsonObject json) {
+	public Type getType() {
+		return type;
+	}
 
-        Type type = null;
+	public String getBasePath() {
+		return basePath;
+	}
+	
+	public String getAction() {
+		return action;
+	}
 
-        if ("http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax".equals(json.getJsonArray("@type").getString(0))) {
+	public static final NQuadsTestCase of(JsonObject json) {
 
-            type = Type.POSITIVE;
+		Type type = null;
 
-        } else if ("http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax".equals(json.getJsonArray("@type").getString(0))) {
+		if ("http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax".equals(json.getJsonArray("@type").getString(0))) {
 
-            type = Type.NEGATIVE;
-        }
+			type = Type.POSITIVE;
 
-        final String name = json.getJsonArray("http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name").getJsonObject(0).getString("@value");
+		} else if ("http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+				.equals(json.getJsonArray("@type").getString(0))) {
 
-        final String comment = json.getJsonArray("http://www.w3.org/2000/01/rdf-schema#comment").getJsonObject(0).getString("@value");
+			type = Type.NEGATIVE;
+		}
 
-        return new NQuadsTestCase(name, comment, type);
-    }
+		final String name = json.getJsonArray("http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name")
+				.getJsonObject(0).getString("@value");
 
-    @Override
-    public String toString() {
-        return type.name().toLowerCase() + ": " + comment;
-    }
+		String comment = null;
+
+		if (json.getJsonArray("http://www.w3.org/2000/01/rdf-schema#comment") != null) {
+			comment = json.getJsonArray("http://www.w3.org/2000/01/rdf-schema#comment").getJsonObject(0)
+					.getString("@value");
+		}
+		
+		String action = json.getJsonArray("http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action").getJsonObject(0)
+				.getString("@id");
+		
+		if (action.startsWith("https://www.w3.org/2013/N-QuadsTests/")) {
+			action = action.substring("https://www.w3.org/2013/N-QuadsTests/".length());
+		}
+
+		return new NQuadsTestCase(name, comment, type, action);
+	}
+
+	@Override
+	public String toString() {
+		if (comment != null) {
+			return type.name().toLowerCase() + ": " + comment;
+		}
+		return type.name().toLowerCase() + ": " + name;
+	}
 }
