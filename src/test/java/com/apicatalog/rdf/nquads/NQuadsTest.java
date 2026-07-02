@@ -30,7 +30,6 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.nquads.NQuadsTestCase.Type;
 
 import jakarta.json.Json;
@@ -83,7 +82,7 @@ class NQuadsTest {
 
             assertTrue(match);
 
-        } catch (IllegalArgumentException | NQuadsReaderException | RdfConsumerException e) {
+        } catch (IllegalArgumentException | NQuadsReaderException e) {
             assertEquals(Type.NEGATIVE, testCase.getType());
         }
     }

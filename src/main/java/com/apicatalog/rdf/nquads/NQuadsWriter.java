@@ -17,9 +17,10 @@ package com.apicatalog.rdf.nquads;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
 import java.io.Writer;
 
-import com.apicatalog.rdf.api.RdfConsumerException;
+import com.apicatalog.rdf.api.Rdf11QuadConsumer;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 
 /**
@@ -35,7 +36,7 @@ import com.apicatalog.rdf.api.RdfQuadConsumer;
  * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads
  *      Specification</a>
  */
-public class NQuadsWriter implements RdfQuadConsumer {
+public class NQuadsWriter implements Rdf11QuadConsumer {
 
     protected final Writer writer;
 
@@ -86,7 +87,8 @@ public class NQuadsWriter implements RdfQuadConsumer {
      * @return the formatted N-Quads literal representation
      * @throws IllegalArgumentException if the literal value is {@code null}
      */
-    public static final String literal(final String literal, final String datatype, final String langTag, final String direction) {
+    public static final String literal(final String literal, final String datatype, final String langTag,
+            final String direction) {
         if (literal == null) {
             throw new IllegalArgumentException();
         }
@@ -114,7 +116,8 @@ public class NQuadsWriter implements RdfQuadConsumer {
      * 
      * @return The N-Quad representation of the triple as a string.
      */
-    public static final String nquad(final String subject, final String predicate, final String object, final String graph) {
+    public static final String nquad(final String subject, final String predicate, final String object,
+            final String graph) {
         final StringWriter writer = new StringWriter();
         try {
             nquad(writer, subject, predicate, object, graph);
@@ -163,7 +166,8 @@ public class NQuadsWriter implements RdfQuadConsumer {
      *                  specified.
      * @return The N-Quad representation of the triple as a string.
      */
-    public static final String nquad(String subject, String predicate, String literal, String language, String direction, String graph) {
+    public static final String nquad(String subject, String predicate, String literal, String language,
+            String direction, String graph) {
         final StringWriter writer = new StringWriter();
         try {
             nquad(writer,
@@ -183,7 +187,8 @@ public class NQuadsWriter implements RdfQuadConsumer {
         return writer.toString();
     }
 
-    public static final String nquad(String subject, String predicate, String object, String datatype, String language, String direction, String graph) {
+    public static final String nquad(String subject, String predicate, String object, String datatype, String language,
+            String direction, String graph) {
         final StringWriter writer = new StringWriter();
         try {
             nquad(writer, subject, predicate, object, datatype, language, direction, graph);
@@ -194,18 +199,23 @@ public class NQuadsWriter implements RdfQuadConsumer {
         return writer.toString();
     }
 
+    /**
+     * 
+     * @throws UncheckedIOException
+     */
     @Override
-    public RdfQuadConsumer quad(String subject, String predicate, String object, String datatype, String language, String direction, String graph) throws RdfConsumerException {
+    public void quad(String subject, String predicate, String object, String datatype, String language,
+            String direction, String graph) {
         try {
             nquad(writer, subject, predicate, object, datatype, language, direction, graph);
-            return this;
 
         } catch (IOException e) {
-            throw new RdfConsumerException(subject, predicate, object, datatype, language, direction, graph, e);
+            throw new UncheckedIOException(e);
         }
     }
 
-    protected static void nquad(Writer writer, String subject, String predicate, String object, String graph) throws IOException {
+    protected static void nquad(Writer writer, String subject, String predicate, String object, String graph)
+            throws IOException {
         writer.append(resourceOrBlank(subject))
                 .append(' ')
                 .append(resourceOrBlank(predicate))
@@ -221,13 +231,14 @@ public class NQuadsWriter implements RdfQuadConsumer {
         writer.append(".\n");
     }
 
-    protected static void nquad(Writer writer, String subject, String predicate, String object, String datatype, String language, String direction, String graph) throws IOException {
+    protected static void nquad(Writer writer, String subject, String predicate, String object, String datatype,
+            String language, String direction, String graph) throws IOException {
         writer.append(resourceOrBlank(subject))
                 .append(' ')
                 .append(resourceOrBlank(predicate))
                 .append(' ');
 
-        if (RdfQuadConsumer.isLiteral(datatype, language, direction)) {
+        if (Rdf11QuadConsumer.isLiteral(datatype)) {
             literal(writer, object, datatype, language, direction);
         } else {
             writer.append(resourceOrBlank(object));
@@ -242,16 +253,35 @@ public class NQuadsWriter implements RdfQuadConsumer {
         writer.append(".\n");
     }
 
-    protected static final void literal(Writer writer, String object, String datatype, String langTag, String direction) throws IOException {
+    protected static final void literal(Writer writer, String object, String datatype, String langTag, String direction)
+            throws IOException {
 
-        writer.append('"').append(NQuadsAlphabet.escape(object)).append('"');
+        writer
+                .append('"')
+                .append(NQuadsAlphabet.escape(object))
+                .append('"');
 
         if (direction != null) {
-            writer.append(NQuadsAlphabet.I18N_BASE);
-            if (langTag != null) {
-                writer.append(langTag);
+            if (NQuadsAlphabet.DIR_LANG_STRING.equals(datatype)) {
+                writer
+                        .append(langTag != null ? langTag : "und")
+                        .append("--")
+                        .append(direction);
+
+            } else if (NQuadsAlphabet.I18N_BASE.equals(datatype)) {
+                writer
+                        .append("^^<")
+                        .append(datatype);
+                if (langTag != null) {
+                    writer.append(langTag);
+                }
+                writer.append('_')
+                        .append(direction)
+                        .append('>');
+
+            } else {
+                throw new IllegalArgumentException();
             }
-            writer.append("_").append(direction);
 
         } else if (langTag != null) {
 
@@ -263,7 +293,7 @@ public class NQuadsWriter implements RdfQuadConsumer {
                 return;
             }
 
-            writer.append("^^").append(resource(datatype));
+            writer.append("^^<").append(datatype).append('>');
         }
     }
 }

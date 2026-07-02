@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
+import com.apicatalog.rdf.api.Rdf11QuadConsumer;
 import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 import com.apicatalog.rdf.nquads.NQuadsTokenizer.Token;
@@ -101,14 +102,14 @@ public class NQuadsReader {
      * Reads and processes N-Quads, invoking the provided consumer immediately after
      * each N-Quad statement is deserialized.
      *
-     * @param consumer the {@link RdfQuadConsumer} that processes each deserialized
+     * @param consumer the {@link Rdf11QuadConsumer} that processes each deserialized
      *                 N-Quad statement
      * 
      * @throws NQuadsReaderException if an error occurs while reading the N-Quads
      * @throws RdfConsumerException  if an error occurs while processing the N-Quad
      *                               statement
      */
-    public void provide(RdfQuadConsumer consumer) throws NQuadsReaderException, RdfConsumerException {
+    public void provide(Rdf11QuadConsumer consumer) throws NQuadsReaderException {
         while (tokenizer.hasNext()) {
 
             // skip EOL and whitespace
@@ -123,7 +124,7 @@ public class NQuadsReader {
         }
     }
 
-    protected void statement(RdfQuadConsumer consumer) throws NQuadsReaderException, RdfConsumerException {
+    protected void statement(Rdf11QuadConsumer consumer) throws NQuadsReaderException {
 
         String subject = resource("Subject");
 
