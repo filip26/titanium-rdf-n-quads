@@ -252,7 +252,7 @@ public class NQuadsReader implements Closeable {
 
         skipWhitespace(0);
 
-        if (TokenType.LANGUAGE_TAG == tokenizer.token().type()) {
+        if (TokenType.LANGUAGE == tokenizer.token().type()) {
 
             String langTag = tokenizer.token().value();
 

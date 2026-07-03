@@ -127,7 +127,7 @@ public class NQuadsTokenizer implements Closeable {
 
             yield Token.LITERAL_DATA_TYPE;
         }
-        case '@' -> readLanguageTag();
+        case '@' -> readLanguage();
         case '-' -> {
             ch = reader.read();
             if ('-' != ch) {
@@ -242,7 +242,7 @@ public class NQuadsTokenizer implements Closeable {
         return new Token(TokenType.STRING_LITERAL_QUOTE, builder.toString());
     }
 
-    protected Token readLanguageTag() throws NQuadsReaderException, IOException {
+    protected Token readLanguage() throws NQuadsReaderException, IOException {
         builder.setLength(0);
 
         int ch = reader.read();
@@ -296,7 +296,7 @@ public class NQuadsTokenizer implements Closeable {
 
         reader.reset();
 
-        return new Token(TokenType.LANGUAGE_TAG, builder.toString());
+        return new Token(TokenType.LANGUAGE, builder.toString());
     }
 
     // ('--' [a-zA-Z]+)?
@@ -321,13 +321,15 @@ public class NQuadsTokenizer implements Closeable {
             unexpected(ch);
         }
 
-        if (!"ltr".equals(builder.toString()) && "rtl".equals(builder.toString())) {
-            unexpected(ch, "ltr|rtl");
+        var ltDirection = builder.toString();
+
+        if (!"ltr".equals(ltDirection) && !"rtl".equals(ltDirection)) {
+            unexpected(ch, "ltr", "rtl");
         }
 
         reader.reset();
 
-        return new Token(TokenType.DIRECTION, builder.toString());
+        return new Token(TokenType.DIRECTION, ltDirection);
     }
 
     protected void readIriEscape(final StringBuilder value) throws NQuadsReaderException, IOException {
@@ -498,7 +500,7 @@ public class NQuadsTokenizer implements Closeable {
     }
 
     public enum TokenType {
-        LANGUAGE_TAG,
+        LANGUAGE,
         DIRECTION,
         IRI_REF,
         STRING_LITERAL_QUOTE,

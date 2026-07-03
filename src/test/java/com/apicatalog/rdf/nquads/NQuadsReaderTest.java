@@ -128,9 +128,9 @@ class NQuadsReaderTest {
             });
         }
     }
-    
+
     @Test
-    void testDirLangTag2() throws NQuadsReaderException, IOException {
+    void testComplexDirLangTag() throws NQuadsReaderException, IOException {
         try (var reader = new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"@en-GB--ltr."))) {
             reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
                 assertEquals("c", object);
@@ -142,6 +142,16 @@ class NQuadsReaderTest {
         }
     }
 
+    @Test
+    void testInvalidDirection() {
+        assertThrows(NQuadsReaderException.class, () -> {
+            try (var reader = new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"@cs--xtr."))) {
+                reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
+                });
+            }
+            ;
+        });
+    }
 
     @Test
     void testXsdString() throws NQuadsReaderException, IOException {
