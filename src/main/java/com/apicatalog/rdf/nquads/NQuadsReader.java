@@ -15,6 +15,8 @@
  */
 package com.apicatalog.rdf.nquads;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.Reader;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
@@ -36,7 +38,7 @@ import com.apicatalog.rdf.nquads.NQuadsTokenizer.TokenType;
  * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads
  *      Specification</a>
  */
-public class NQuadsReader {
+public class NQuadsReader implements Closeable {
 
     protected final NQuadsTokenizer tokenizer;
     protected final Predicate<String> testAbsoluteIRI;
@@ -357,5 +359,10 @@ public class NQuadsReader {
             return uri.charAt(i) == ':';
         }
         return false;
+    }
+
+    @Override
+    public void close() throws IOException {
+        tokenizer.close();
     }
 }

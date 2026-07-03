@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class NQuadsReaderTest {
 
     @Test
-    void testI18NLang() throws NQuadsReaderException {
+    void testI18NLang() {
         assertThrows(NQuadsReaderException.class, () -> {
             new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#de> ."))
                     .provide((subject, predicate, object, datatype, language, direction, graph) -> {
@@ -32,9 +32,9 @@ class NQuadsReaderTest {
     }
 
     @Test
-    void testI18NEmptyDirection() throws NQuadsReaderException {
+    void testI18NEmptyDirection() {
         assertThrows(NQuadsReaderException.class, () -> {
-            new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#cz_> ."))
+            new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#cs_> ."))
                     .provide((subject, predicate, object, datatype, language, direction, graph) -> {
                     });
         });
@@ -62,7 +62,7 @@ class NQuadsReaderTest {
     }
 
     @Test
-    void testI18NEmpty() throws NQuadsReaderException {
+    void testI18NEmpty() {
         assertThrows(NQuadsReaderException.class, () -> {
             new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#_> ."))
                     .provide((subject, predicate, object, datatype, language, direction, graph) -> {
@@ -72,23 +72,35 @@ class NQuadsReaderTest {
 
     @Test
     void testI18NDirLangTag() throws NQuadsReaderException {
-        new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#cz_ltr> ."))
+        new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#cs_ltr> ."))
                 .provide((subject, predicate, object, datatype, language, direction, graph) -> {
                     assertEquals("c", object);
                     assertEquals("https://www.w3.org/ns/i18n#", datatype);
-                    assertEquals("cz", language);
+                    assertEquals("cs", language);
                     assertEquals("ltr", direction);
                     assertNull(graph);
                 });
     }
 
     @Test
-    void testDirLangTag() throws NQuadsReaderException {
-        new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"@cz--ltr ."))
+    void testLangTag() throws NQuadsReaderException {
+        new NQuadsReader(new StringReader("_:a <test:b> \"c\"@cs ."))
                 .provide((subject, predicate, object, datatype, language, direction, graph) -> {
                     assertEquals("c", object);
-                    assertEquals("https://www.w3.org/ns/i18n#", datatype);
-                    assertEquals("cz", language);
+                    assertEquals("http://www.w3.org/1999/02/22-rdf-syntax-ns#langString", datatype);
+                    assertEquals("cs", language);
+                    assertNull(direction);
+                    assertNull(graph);
+                });
+    }
+    
+    @Test
+    void testDirLangTag() throws NQuadsReaderException {
+        new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"@cs--ltr ."))
+                .provide((subject, predicate, object, datatype, language, direction, graph) -> {
+                    assertEquals("c", object);
+                    assertEquals("http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString", datatype);
+                    assertEquals("cs", language);
                     assertEquals("ltr", direction);
                     assertNull(graph);
                 });

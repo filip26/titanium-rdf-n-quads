@@ -16,6 +16,7 @@
 package com.apicatalog.rdf.nquads;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Arrays;
@@ -45,7 +46,7 @@ import java.util.Arrays;
  * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads
  *      Specification</a>
  */
-public class NQuadsTokenizer {
+public class NQuadsTokenizer implements Closeable {
 
     public static final int DEFAULT_BUFFER_SIZE = 8192 * 2;
 
@@ -540,5 +541,10 @@ public class NQuadsTokenizer {
         END_OF_STATEMENT,
         END_OF_LINE,
         END_OF_INPUT,
+    }
+
+    @Override
+    public void close() throws IOException {
+        reader.close();
     }
 }
