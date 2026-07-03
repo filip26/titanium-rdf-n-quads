@@ -88,6 +88,16 @@ public final class NQuadsAlphabet {
             || (0x0300 <= ch && ch <= 0x036F)
             || (0x203F <= ch && ch <= 0x2040));
 
+    public static final IntPredicate IRIREF_FORBIDDEN =
+            ch -> (ch >= 0x00 && ch <= 0x20)
+                    || ch == '<'
+                    || ch == '"'
+                    || ch == '{'
+                    || ch == '}'
+                    || ch == '|'
+                    || ch == '^'
+                    || ch == '`';
+    
     /**
      * Escapes special characters in the given string according to N-Quads syntax.
      * This method replaces control characters, backslashes, and quotes with their

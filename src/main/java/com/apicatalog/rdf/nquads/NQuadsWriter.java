@@ -38,9 +38,9 @@ import com.apicatalog.rdf.api.RdfQuadConsumer;
  * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads
  *      Specification</a>
  */
-public class NQuadsWriter implements Rdf11QuadConsumer, Flushable, Closeable {
+public final class NQuadsWriter implements Rdf11QuadConsumer, Flushable, Closeable {
 
-    protected final Writer writer;
+    private final Writer writer;
 
     public NQuadsWriter(Writer writer) {
         this.writer = writer;
@@ -167,24 +167,7 @@ public class NQuadsWriter implements Rdf11QuadConsumer, Flushable, Closeable {
         }
     }
 
-    protected static void nquad(Writer writer, String subject, String predicate, String object, String graph)
-            throws IOException {
-        writer.append(resourceOrBlank(subject))
-                .append(' ')
-                .append(resourceOrBlank(predicate))
-                .append(' ')
-                .append(resourceOrBlank(object))
-                .append(' ');
-
-        if (graph != null) {
-            writer.append(resourceOrBlank(graph))
-                    .append(' ');
-        }
-
-        writer.append(".\n");
-    }
-
-    protected static void nquad(Writer writer, String subject, String predicate, String object, String datatype,
+    private static void nquad(Writer writer, String subject, String predicate, String object, String datatype,
             String language, String direction, String graph) throws IOException {
         writer.append(resourceOrBlank(subject))
                 .append(' ')
@@ -206,7 +189,7 @@ public class NQuadsWriter implements Rdf11QuadConsumer, Flushable, Closeable {
         writer.append(".\n");
     }
 
-    protected static final void literal(Writer writer, String object, String datatype, String language, String direction)
+    private static void literal(Writer writer, String object, String datatype, String language, String direction)
             throws IOException {
 
         writer

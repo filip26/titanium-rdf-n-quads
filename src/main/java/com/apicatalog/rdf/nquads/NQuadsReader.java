@@ -23,7 +23,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 import com.apicatalog.rdf.api.Rdf11QuadConsumer;
-import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 import com.apicatalog.rdf.nquads.NQuadsTokenizer.Token;
 import com.apicatalog.rdf.nquads.NQuadsTokenizer.TokenType;
@@ -38,16 +37,16 @@ import com.apicatalog.rdf.nquads.NQuadsTokenizer.TokenType;
  * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads
  *      Specification</a>
  */
-public class NQuadsReader implements Closeable {
+public final class NQuadsReader implements Closeable {
 
-    protected final NQuadsTokenizer tokenizer;
-    protected final Predicate<String> testAbsoluteIRI;
+    private final NQuadsTokenizer tokenizer;
+    private final Predicate<String> testAbsoluteIRI;
 
     // runtime state
-    protected String ltObject;
-    protected String ltDatatype;
-    protected String ltLangTag;
-    protected String ltDirection;
+    private String ltObject;
+    private String ltDatatype;
+    private String ltLangTag;
+    private String ltDirection;
 
     /**
      * Creates a new {@code NQuadsReader} instance with the specified character
@@ -70,32 +69,7 @@ public class NQuadsReader implements Closeable {
         this(new NQuadsTokenizer(reader), testAbsoluteIRI);
     }
 
-    /**
-     * Creates a new {@code NQuadsReader} instance with the specified character
-     * stream and buffer size for optimized reading.
-     *
-     * @param reader     the {@link Reader} to read N-Quads data from
-     * @param bufferSize the size of the buffer used for reading &gt; 0 (bytes)
-     * @throws IllegalArgumentException if {@code bufferSize} is non-positive number
-     */
-    public NQuadsReader(final Reader reader, int bufferSize) {
-        this(new NQuadsTokenizer(reader, bufferSize), NQuadsReader::startsWithScheme);
-    }
-
-    /**
-     * Creates a new {@code NQuadsReader} instance with the specified character
-     * stream and buffer size for optimized reading.
-     *
-     * @param reader          the {@link Reader} to read N-Quads data from
-     * @param bufferSize      the size of the buffer used for reading &gt; 0 (bytes)
-     * @param testAbsoluteIRI a function to test if an IRI is absolute or not
-     * @throws IllegalArgumentException if {@code bufferSize} is non-positive number
-     */
-    public NQuadsReader(final Reader reader, int bufferSize, final Predicate<String> testAbsoluteIRI) {
-        this(new NQuadsTokenizer(reader, bufferSize), testAbsoluteIRI);
-    }
-
-    protected NQuadsReader(final NQuadsTokenizer tokenizer, final Predicate<String> testAbsoluteIRI) {
+    private NQuadsReader(final NQuadsTokenizer tokenizer, final Predicate<String> testAbsoluteIRI) {
         this.tokenizer = tokenizer;
         this.testAbsoluteIRI = testAbsoluteIRI;
     }
@@ -106,28 +80,24 @@ public class NQuadsReader implements Closeable {
      *
      * @param consumer the {@link Rdf11QuadConsumer} that processes each
      *                 deserialized N-Quad statement
-     * 
-     * @throws NQuadsReaderException if an error occurs while reading the N-Quads
-     * @throws IOException 
-     * @throws RdfConsumerException  if an error occurs while processing the N-Quad
-     *                               statement
+     * @throws NQuadsReaderException    if an error occurs while reading the N-Quads
+     * @throws IOException              if an I/O error occurs
+     * @throws IllegalArgumentException if the provided consumer encounters an
+     *                                  invalid argument
      */
     public void provide(Rdf11QuadConsumer consumer) throws NQuadsReaderException, IOException {
         while (tokenizer.hasNext()) {
-
             // skip EOL and whitespace
             if (tokenizer.accept(NQuadsTokenizer.TokenType.END_OF_LINE)
                     || tokenizer.accept(NQuadsTokenizer.TokenType.WHITE_SPACE)
                     || tokenizer.accept(NQuadsTokenizer.TokenType.COMMENT)) {
-
                 continue;
             }
-
             statement(consumer);
         }
     }
 
-    protected void statement(Rdf11QuadConsumer consumer) throws NQuadsReaderException, IOException {
+    private void statement(Rdf11QuadConsumer consumer) throws NQuadsReaderException, IOException {
 
         String subject = resource("Subject");
 
@@ -162,7 +132,7 @@ public class NQuadsReader implements Closeable {
         }
 
         if (TokenType.END_OF_STATEMENT != tokenizer.token().type()) {
-            unexpected(tokenizer.token(), TokenType.END_OF_STATEMENT);
+            throw error(tokenizer.token(), TokenType.END_OF_STATEMENT);
         }
 
         tokenizer.next();
@@ -176,8 +146,7 @@ public class NQuadsReader implements Closeable {
             // skip end of line
         } else if (TokenType.END_OF_LINE != tokenizer.token().type()
                 && TokenType.END_OF_INPUT != tokenizer.token().type()) {
-            unexpected(tokenizer.token(), TokenType.END_OF_LINE, TokenType.END_OF_INPUT);
-            tokenizer.next();
+            throw error(tokenizer.token(), TokenType.END_OF_LINE, TokenType.END_OF_INPUT);
         }
 
         consumer.quad(
@@ -190,7 +159,7 @@ public class NQuadsReader implements Closeable {
                 graphName);
     }
 
-    protected String resource(String name) throws NQuadsReaderException, IOException {
+    private String resource(String name) throws NQuadsReaderException, IOException {
 
         final Token token = tokenizer.token();
 
@@ -212,10 +181,10 @@ public class NQuadsReader implements Closeable {
             return "_:".concat(token.value());
         }
 
-        return unexpected(token);
+        throw error(token);
     }
 
-    protected void objectOrLiteral() throws NQuadsReaderException, IOException {
+    private void objectOrLiteral() throws NQuadsReaderException, IOException {
 
         ltObject = null;
         ltDatatype = null;
@@ -245,7 +214,7 @@ public class NQuadsReader implements Closeable {
 
         // read literal
         if (TokenType.STRING_LITERAL_QUOTE != token.type()) {
-            unexpected(token);
+            throw error(token);
         }
 
         tokenizer.next();
@@ -301,21 +270,21 @@ public class NQuadsReader implements Closeable {
                 return;
             }
 
-            unexpected(attr);
+            throw error(attr);
         }
 
         this.ltObject = token.value();
         this.ltDatatype = NQuadsAlphabet.XSD_STRING;
     }
 
-    protected static final <T> T unexpected(Token token, TokenType... types) throws NQuadsReaderException {
-        throw new NQuadsReaderException(
+    private static final NQuadsReaderException error(Token token, TokenType... types) throws NQuadsReaderException {
+        return new NQuadsReaderException(
                 "Unexpected token " + token.type() + (token.value() != null ? "[" + token.value() + "]" : "")
                         + ". "
                         + "Expected one of " + Arrays.toString(types) + ".");
     }
 
-    protected void skipWhitespace(int min) throws NQuadsReaderException, IOException {
+    private void skipWhitespace(int min) throws NQuadsReaderException, IOException {
 
         int count = 0;
 
@@ -324,17 +293,17 @@ public class NQuadsReader implements Closeable {
         }
 
         if (count < min) {
-            unexpected(tokenizer.token());
+            throw error(tokenizer.token());
         }
     }
 
-    protected final void assertAbsoluteIri(final String uri, final String what) throws NQuadsReaderException {
+    private final void assertAbsoluteIri(final String uri, final String what) throws NQuadsReaderException {
         if (!testAbsoluteIRI.test(uri)) {
             throw new NQuadsReaderException(what + " must be an absolute URI [" + uri + "]. ");
         }
     }
 
-    protected static final void datatype(final String datatype, final BiConsumer<String, String[]> result)
+    private static void datatype(final String datatype, final BiConsumer<String, String[]> result)
             throws NQuadsReaderException {
         if (datatype.startsWith(NQuadsAlphabet.I18N_BASE)) {
 
@@ -346,7 +315,7 @@ public class NQuadsReader implements Closeable {
             }
 
             var index = i18n.indexOf('_');
-            if (index == -1 || (index + 1) > i18n.length()) {
+            if (index == -1 || (index + 2) >= i18n.length()) {
                 throw new NQuadsReaderException("Malformed i18n datatype, got [" + datatype + "]. ");
             }
 
@@ -364,7 +333,7 @@ public class NQuadsReader implements Closeable {
         result.accept(datatype, null);
     }
 
-    protected static final boolean startsWithScheme(final String uri) {
+    private static boolean startsWithScheme(final String uri) {
 
         if (uri == null
                 || uri.length() < 2 // a scheme must have at least one letter followed by ':'
