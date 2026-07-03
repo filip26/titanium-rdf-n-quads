@@ -18,14 +18,14 @@ Formerly part of [Titanium JSON-LD](https://github.com/filip26/titanium-json-ld)
 // Reading N-Quads
 try (var reader = new NQuadsReader(input)) {
     reader.provide((...) -> {
-      // process n-quad
+      // N-Quad processing
     );
 }
 
 // Writing N-Quads
 try (var writer = new NQuadsWriter(output)) {
-  writer.quad(...)
-  writer.quad(...)
+  writer.quad(...);
+  writer.quad(...);
   writer.quad(...);
 }
   
@@ -44,39 +44,36 @@ var encodedLiteral = NQuadsWriter.literal(...);
 
 ```
 
-## Installation
-
-### Maven
+## 📦 Installation
 
 ```xml
 <dependency>
     <groupId>com.apicatalog</groupId>
     <artifactId>titanium-rdf-n-quads</artifactId>
-    <version>1.0.2</version>
+    <version>${nquads.version}</version>
 </dependency>
 ```
 
-### Gradle
+## 🤝 Contributing
 
-```gradle
-implementation("com.apicatalog:titanium-rdf-n-quads:1.0.2")
-```
-
-## Contributing
-
-All PR's welcome!
-
+Contributions are welcome! Please submit a pull request.
 
 ### Building
 
-Fork and clone the project repository.
+Fork and clone the repository, then build with Maven:
 
 ```bash
 > cd titanium-rdf-n-quads
 > mvn package
 ```
 
-
 ## Resources
 
 * [W3C RDF 1.1 N-Quads](https://www.w3.org/TR/n-quads/)
+* [W3C RDF 1.2 N-Quads](https://www.w3.org/TR/rdf12-n-quads/)
+
+## 💼 Commercial Support
+
+Commercial support and consulting are available.  
+For inquiries, please contact: filip26@gmail.com
+
