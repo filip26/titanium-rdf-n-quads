@@ -45,6 +45,8 @@ import java.util.function.IntPredicate;
  *
  * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads
  *      Specification</a>
+ * @see <a href="https://www.w3.org/TR/rdf12-n-quads/">RDF 1.2 N-Quads
+ *      Specification</a>
  */
 public final class NQuadsTokenizer implements Closeable {
 

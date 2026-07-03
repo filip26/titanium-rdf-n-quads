@@ -37,6 +37,8 @@ import com.apicatalog.rdf.api.RdfQuadConsumer;
  * 
  * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads
  *      Specification</a>
+ * @see <a href="https://www.w3.org/TR/rdf12-n-quads/">RDF 1.2 N-Quads
+ *      Specification</a>
  */
 public final class NQuadsWriter implements Rdf11QuadConsumer, Flushable, Closeable {
 
@@ -89,12 +91,23 @@ public final class NQuadsWriter implements Rdf11QuadConsumer, Flushable, Closeab
      * @return the formatted N-Quads literal representation
      * @throws IllegalArgumentException if the literal value is {@code null}
      */
-    public static final String literal(final String literal, final String datatype, final String language,
+    public static final String literal(
+            final String literal,
+            final String datatype,
+            final String language,
             final String direction) {
+
         if (literal == null) {
             throw new IllegalArgumentException();
         }
-        final StringWriter writer = new StringWriter();
+
+        final var writer = new StringWriter(
+                literal.length()
+                        + (datatype != null ? datatype.length() : 0)
+                        + (language != null ? language.length() : 0)
+                        + (direction != null ? direction.length() : 0)
+                        + 24);
+
         try {
             literal(writer, literal, datatype, language, direction);
 
@@ -172,7 +185,7 @@ public final class NQuadsWriter implements Rdf11QuadConsumer, Flushable, Closeab
 
         resourceOrBlank(writer, subject);
         writer.append(' ');
-        resource(writer, predicate);
+        resourceOrBlank(writer, predicate);
         writer.append(' ');
 
         if (Rdf11QuadConsumer.isLiteral(datatype)) {
@@ -203,6 +216,7 @@ public final class NQuadsWriter implements Rdf11QuadConsumer, Flushable, Closeab
         if (direction != null) {
             if (NQuadsAlphabet.DIR_LANG_STRING.equals(datatype)) {
                 writer
+                        .append('@')
                         .append(language != null ? language : "und")
                         .append("--")
                         .append(direction);

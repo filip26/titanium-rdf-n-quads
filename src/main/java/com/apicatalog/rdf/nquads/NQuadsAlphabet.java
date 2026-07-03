@@ -44,7 +44,10 @@ import java.util.function.IntPredicate;
  * The {@link #escape(String)} method provides a way to escape special
  * characters in string values according to N-Quads formatting rules.
  *
- * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads</a>
+ * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads
+ *      Specification</a>
+ * @see <a href="https://www.w3.org/TR/rdf12-n-quads/">RDF 1.2 N-Quads
+ *      Specification</a>
  */
 public final class NQuadsAlphabet {
 
@@ -88,16 +91,15 @@ public final class NQuadsAlphabet {
             || (0x0300 <= ch && ch <= 0x036F)
             || (0x203F <= ch && ch <= 0x2040));
 
-    public static final IntPredicate IRIREF_FORBIDDEN =
-            ch -> (ch >= 0x00 && ch <= 0x20)
-                    || ch == '<'
-                    || ch == '"'
-                    || ch == '{'
-                    || ch == '}'
-                    || ch == '|'
-                    || ch == '^'
-                    || ch == '`';
-    
+    public static final IntPredicate IRIREF_FORBIDDEN = ch -> (ch >= 0x00 && ch <= 0x20)
+            || ch == '<'
+            || ch == '"'
+            || ch == '{'
+            || ch == '}'
+            || ch == '|'
+            || ch == '^'
+            || ch == '`';
+
     /**
      * Escapes special characters in the given string according to N-Quads syntax.
      * This method replaces control characters, backslashes, and quotes with their
