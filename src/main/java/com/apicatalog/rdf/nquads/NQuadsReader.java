@@ -213,7 +213,7 @@ public final class NQuadsReader implements Closeable {
         }
 
         // read literal
-        if (TokenType.STRING_LITERAL_QUOTE != token.type()) {
+        if (TokenType.LITERAL_STRING_QUOTE != token.type()) {
             throw error(token);
         }
 
@@ -221,7 +221,8 @@ public final class NQuadsReader implements Closeable {
 
         skipWhitespace(0);
 
-        if (TokenType.LANGUAGE == tokenizer.token().type()) {
+        // @language--direction
+        if (TokenType.LITERAL_LANGUAGE == tokenizer.token().type()) {
 
             String langTag = tokenizer.token().value();
 
@@ -231,7 +232,8 @@ public final class NQuadsReader implements Closeable {
             this.ltObject = token.value();
             this.ltLangTag = langTag;
 
-            if (TokenType.DIRECTION == nextToken.type()) {
+            // --direction
+            if (TokenType.LITERAL_DIRECTION == nextToken.type()) {
                 this.ltDatatype = NQuadsAlphabet.DIR_LANG_STRING;
                 this.ltDirection = nextToken.value();
                 tokenizer.next();

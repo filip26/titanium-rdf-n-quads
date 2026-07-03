@@ -49,14 +49,14 @@ import java.util.function.IntPredicate;
 public final class NQuadsTokenizer implements Closeable {
 
     public enum TokenType {
-        LANGUAGE,
-        DIRECTION,
         IRI_REF,
-        STRING_LITERAL_QUOTE,
         BLANK_NODE_LABEL,
-        WHITE_SPACE,
+        LITERAL_STRING_QUOTE,
         LITERAL_DATA_TYPE,
+        LITERAL_LANGUAGE,
+        LITERAL_DIRECTION,
         COMMENT,
+        WHITE_SPACE,
         END_OF_STATEMENT,
         END_OF_LINE,
         END_OF_INPUT,
@@ -253,7 +253,7 @@ public final class NQuadsTokenizer implements Closeable {
 
         builder.appendCodePoint(currentChar);
 
-        while (NQuadsAlphabet.PN_CHARS.and(ch -> ch != '.').test(readChar())) {
+        while (NQuadsAlphabet.PN_CHARS.or(ch -> ch == '.').test(readChar())) {
             if (NQuadsAlphabet.PN_CHARS.negate().test(nextChar) && nextChar != '.') {
                 if (currentChar != '.') {
                     builder.appendCodePoint(currentChar);
@@ -297,7 +297,7 @@ public final class NQuadsTokenizer implements Closeable {
 
         readChar();
 
-        return new Token(TokenType.STRING_LITERAL_QUOTE, builder.toString());
+        return new Token(TokenType.LITERAL_STRING_QUOTE, builder.toString());
     }
 
     private Token readLanguage() throws NQuadsReaderException, IOException {
@@ -335,7 +335,7 @@ public final class NQuadsTokenizer implements Closeable {
             }
         }
 
-        return new Token(TokenType.LANGUAGE, builder.toString());
+        return new Token(TokenType.LITERAL_LANGUAGE, builder.toString());
     }
 
     // ('--' [a-zA-Z]+)?
@@ -364,7 +364,7 @@ public final class NQuadsTokenizer implements Closeable {
             throw error(currentChar, "ltr", "rtl");
         }
 
-        return new Token(TokenType.DIRECTION, ltDirection);
+        return new Token(TokenType.LITERAL_DIRECTION, ltDirection);
     }
 
     private void readIriEscape(final StringBuilder value) throws NQuadsReaderException, IOException {
