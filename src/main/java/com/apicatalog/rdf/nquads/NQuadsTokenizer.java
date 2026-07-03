@@ -130,7 +130,11 @@ public class NQuadsTokenizer implements Closeable {
             }
 
             if (ch == '@') {
-                return readLangTag();
+                return readLanguageTag();
+            }
+
+            if (ch == '-') {
+                return readDirection();
             }
 
             if (ch == '_') {
@@ -279,7 +283,7 @@ public class NQuadsTokenizer implements Closeable {
         }
     }
 
-    protected Token readLangTag() throws NQuadsReaderException {
+    protected Token readLanguageTag() throws NQuadsReaderException {
         try {
 
             StringBuilder value = new StringBuilder();
@@ -294,6 +298,7 @@ public class NQuadsTokenizer implements Closeable {
             reader.mark(1);
             ch = reader.read();
 
+            // language tag [a-zA-Z]+
             while (NQuadsAlphabet.ASCII_ALPHA.test(ch)) {
 
                 value.append((char) ch);
@@ -306,25 +311,79 @@ public class NQuadsTokenizer implements Closeable {
                 unexpected(ch);
             }
 
-            boolean delim = false;
+            // ('-' [a-zA-Z0-9]+)*
+            if (ch == '-') {
 
-            while (NQuadsAlphabet.ASCII_ALPHA_NUM.test(ch) || ch == '-') {
+                reader.reset();
+                reader.mark(2);
+                reader.read();
 
+                ch = reader.read();
+
+                if (NQuadsAlphabet.ASCII_ALPHA.test(ch)) {
+                    value.append('-');
+                    
+                    do {
+                        value.append((char) ch);
+
+                        reader.mark(1);
+                        ch = reader.read();
+
+                    } while (NQuadsAlphabet.ASCII_ALPHA_NUM.test(ch));
+
+                    if (ch == -1) {
+                        unexpected(ch);
+                    }
+                }
+            }
+
+            reader.reset();
+
+            return new Token(TokenType.LANGUAGE_TAG, value.toString());
+
+        } catch (IOException e) {
+            throw new NQuadsReaderException(e);
+        }
+    }
+
+    // ('--' [a-zA-Z]+)?
+    protected Token readDirection() throws NQuadsReaderException {
+
+        try {
+
+            int ch = reader.read();
+
+            if (ch != '-' || ch == -1) {
+                unexpected(ch, "'--' [a-zA-Z]+");
+            }
+
+            ch = reader.read();
+
+            if (!NQuadsAlphabet.ASCII_ALPHA.test(ch) || ch == -1) {
+                unexpected(ch, "[a-zA-Z]+");
+            }
+
+            StringBuilder value = new StringBuilder();
+
+            do {
                 value.append((char) ch);
 
                 reader.mark(1);
                 ch = reader.read();
 
-                delim = ch == '-';
+            } while (NQuadsAlphabet.ASCII_ALPHA.test(ch) || value.length() < 3);
+
+            if (ch == -1) {
+                unexpected(ch);
             }
 
-            if (ch == -1 || delim) {
-                unexpected(ch);
+            if (!"ltr".equals(value.toString()) && "rtl".equals(value.toString())) {
+                unexpected(ch, "ltr|rtl");
             }
 
             reader.reset();
 
-            return new Token(TokenType.LANGTAG, value.toString());
+            return new Token(TokenType.DIRECTION, value.toString());
 
         } catch (IOException e) {
             throw new NQuadsReaderException(e);
@@ -531,7 +590,8 @@ public class NQuadsTokenizer implements Closeable {
     }
 
     public enum TokenType {
-        LANGTAG,
+        LANGUAGE_TAG,
+        DIRECTION,
         IRI_REF,
         STRING_LITERAL_QUOTE,
         BLANK_NODE_LABEL,

@@ -251,15 +251,21 @@ public class NQuadsReader implements Closeable {
 
         skipWhitespace(0);
 
-        if (TokenType.LANGTAG == tokenizer.token().getType()) {
+        if (TokenType.LANGUAGE_TAG == tokenizer.token().getType()) {
 
             String langTag = tokenizer.token().getValue();
 
-            tokenizer.next();
+            var nextToken = tokenizer.next();
 
             this.ltDatatype = NQuadsAlphabet.LANG_STRING;
             this.ltObject = token.getValue();
             this.ltLangTag = langTag;
+
+            if (TokenType.DIRECTION == nextToken.getType()) {
+                this.ltDatatype = NQuadsAlphabet.DIR_LANG_STRING;
+                this.ltDirection = nextToken.getValue();
+                tokenizer.next();
+            }
 
             return;
 
