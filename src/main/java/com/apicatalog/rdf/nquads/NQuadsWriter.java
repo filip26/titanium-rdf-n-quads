@@ -72,7 +72,7 @@ public final class NQuadsWriter implements Rdf11QuadConsumer, Flushable, Closeab
      * @return the IRI wrapped in angle brackets
      * @throws IllegalArgumentException if the input IRI is {@code null}
      */
-    public static final String resource(final String iri) {
+    public static String resource(final String iri) {
         if (iri == null) {
             throw new IllegalArgumentException();
         }
@@ -169,21 +169,24 @@ public final class NQuadsWriter implements Rdf11QuadConsumer, Flushable, Closeab
 
     private static void nquad(Writer writer, String subject, String predicate, String object, String datatype,
             String language, String direction, String graph) throws IOException {
-        writer.append(resourceOrBlank(subject))
-                .append(' ')
-                .append(resourceOrBlank(predicate))
-                .append(' ');
+
+        resourceOrBlank(writer, subject);
+        writer.append(' ');
+        resource(writer, predicate);
+        writer.append(' ');
 
         if (Rdf11QuadConsumer.isLiteral(datatype)) {
             literal(writer, object, datatype, language, direction);
+
         } else {
-            writer.append(resourceOrBlank(object));
+            resourceOrBlank(writer, object);
         }
 
         writer.append(' ');
 
         if (graph != null) {
-            writer.append(resourceOrBlank(graph)).append(' ');
+            resourceOrBlank(writer, graph);
+            writer.append(' ');
         }
 
         writer.append(".\n");
@@ -231,6 +234,27 @@ public final class NQuadsWriter implements Rdf11QuadConsumer, Flushable, Closeab
 
             writer.append("^^<").append(datatype).append('>');
         }
+    }
+
+    private static void resource(Writer writer, final String iri) throws IOException {
+        if (iri == null) {
+            throw new IllegalArgumentException();
+        }
+        writer.append('<');
+        writer.append(iri);
+        writer.append('>');
+    }
+
+    private static void resourceOrBlank(Writer writer, String value) throws IOException {
+        if (value == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (value.startsWith("_:")) {
+            writer.write(value);
+            return;
+        }
+        resource(writer, value);
     }
 
     @Override
