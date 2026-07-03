@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.IOException;
 import java.io.StringReader;
 
 import org.junit.jupiter.api.Test;
@@ -93,7 +94,7 @@ class NQuadsReaderTest {
                     assertNull(graph);
                 });
     }
-    
+
     @Test
     void testDirLangTag() throws NQuadsReaderException {
         new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"@cs--ltr ."))
@@ -104,5 +105,18 @@ class NQuadsReaderTest {
                     assertEquals("ltr", direction);
                     assertNull(graph);
                 });
+    }
+
+    @Test
+    void testXsdString() throws NQuadsReaderException, IOException {
+        try (var reader = new NQuadsReader(new StringReader("<test:a> <test:b> \"abc\" ."))) {
+            reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
+                assertEquals("abc", object);
+                assertEquals("http://www.w3.org/2001/XMLSchema#string", datatype);
+                assertNull(language);
+                assertNull(direction);
+                assertNull(graph);
+            });
+        }
     }
 }
