@@ -49,26 +49,27 @@ class NQuadsTest {
         assertNotNull(testCase.getName());
         assertNotNull(testCase.getType());
 
-        try (final InputStream is = NQuadsTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
+        try (final InputStream is = NQuadsTest.class
+                .getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
 
             final String input = isToString(is);
             assertNotNull(input);
 
-            final StringWriter writer = new StringWriter();
-            try (var reader = new NQuadsReader(new StringReader(input))) {
-                try (var consumer = new NQuadsWriter(writer)) {
-                    reader.provide(consumer);   
-                }
+            final StringWriter output = new StringWriter();
+            try (var reader = new NQuadsReader(new StringReader(input));
+                    var writer = new NQuadsWriter(output)) {
+                reader.provide(writer);
             }
 
-            final String result = writer.toString();
+            final String result = output.toString();
             assertNotNull(result);
 
             assertEquals(Type.POSITIVE, testCase.getType());
 
             String expected = input;
 
-            try (final InputStream out = NQuadsTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
+            try (final InputStream out = NQuadsTest.class
+                    .getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
                 if (out != null) {
                     expected = isToString(out);
                 }
