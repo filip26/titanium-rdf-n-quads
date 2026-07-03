@@ -104,8 +104,8 @@ public class NQuadsReader implements Closeable {
      * Reads and processes N-Quads, invoking the provided consumer immediately after
      * each N-Quad statement is deserialized.
      *
-     * @param consumer the {@link Rdf11QuadConsumer} that processes each deserialized
-     *                 N-Quad statement
+     * @param consumer the {@link Rdf11QuadConsumer} that processes each
+     *                 deserialized N-Quad statement
      * 
      * @throws NQuadsReaderException if an error occurs while reading the N-Quads
      * @throws RdfConsumerException  if an error occurs while processing the N-Quad
@@ -136,7 +136,7 @@ public class NQuadsReader implements Closeable {
 
         skipWhitespace(0);
 
-        object();
+        objectOrLiteral();
 
         String graphName = null;
 
@@ -173,7 +173,8 @@ public class NQuadsReader implements Closeable {
             tokenizer.next();
 
             // skip end of line
-        } else if (TokenType.END_OF_LINE != tokenizer.token().getType() && TokenType.END_OF_INPUT != tokenizer.token().getType()) {
+        } else if (TokenType.END_OF_LINE != tokenizer.token().getType()
+                && TokenType.END_OF_INPUT != tokenizer.token().getType()) {
             unexpected(tokenizer.token(), TokenType.END_OF_LINE, TokenType.END_OF_INPUT);
             tokenizer.next();
         }
@@ -213,7 +214,7 @@ public class NQuadsReader implements Closeable {
         return unexpected(token);
     }
 
-    protected void object() throws NQuadsReaderException {
+    protected void objectOrLiteral() throws NQuadsReaderException {
 
         ltObject = null;
         ltDatatype = null;
@@ -302,7 +303,8 @@ public class NQuadsReader implements Closeable {
 
     protected static final <T> T unexpected(Token token, TokenType... types) throws NQuadsReaderException {
         throw new NQuadsReaderException(
-                "Unexpected token " + token.getType() + (token.getValue() != null ? "[" + token.getValue() + "]" : "") + ". "
+                "Unexpected token " + token.getType() + (token.getValue() != null ? "[" + token.getValue() + "]" : "")
+                        + ". "
                         + "Expected one of " + Arrays.toString(types) + ".");
     }
 
@@ -325,12 +327,30 @@ public class NQuadsReader implements Closeable {
         }
     }
 
-    protected static final void datatype(final String datatype, final BiConsumer<String, String[]> result) {
+    protected static final void datatype(final String datatype, final BiConsumer<String, String[]> result)
+            throws NQuadsReaderException {
         if (datatype.startsWith(NQuadsAlphabet.I18N_BASE)) {
 
-            String[] langDir = datatype.substring(NQuadsAlphabet.I18N_BASE.length()).split("_");
+            var i18n = datatype.substring(NQuadsAlphabet.I18N_BASE.length());
 
-            result.accept(NQuadsAlphabet.I18N_BASE, langDir);
+            if (i18n.startsWith("_") && i18n.length() > 1) {
+                result.accept(NQuadsAlphabet.I18N_BASE, new String[] { null, i18n.substring(1) });
+                return;
+            }
+
+            var index = i18n.indexOf('_');
+            if (index == -1 || (index + 1) > i18n.length()) {
+                throw new NQuadsReaderException("Malformed i18n datatype, got [" + datatype + "]. ");
+            }
+
+            var language = i18n.substring(0, index);
+            var direction = i18n.substring(index + 1);
+
+            if (direction.isBlank()) {
+                throw new NQuadsReaderException("Malformed i18n datatype, got [" + datatype + "]. ");
+            }
+
+            result.accept(NQuadsAlphabet.I18N_BASE, new String[] { language, direction });
 
             return;
         }
