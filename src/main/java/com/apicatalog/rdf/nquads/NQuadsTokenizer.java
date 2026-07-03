@@ -51,8 +51,9 @@ public class NQuadsTokenizer implements Closeable {
     public static final int DEFAULT_BUFFER_SIZE = 8192 * 2;
 
     protected final Reader reader;
-
     protected Token next;
+
+    protected final StringBuilder builder = new StringBuilder(256);
 
     public NQuadsTokenizer(Reader reader) {
         this.reader = new BufferedReader(reader, DEFAULT_BUFFER_SIZE);
@@ -64,14 +65,14 @@ public class NQuadsTokenizer implements Closeable {
         this.next = null;
     }
 
-    public boolean hasNext() throws NQuadsReaderException {
+    public boolean hasNext() throws NQuadsReaderException, IOException {
         if (next == null) {
             next = doRead();
         }
-        return TokenType.END_OF_INPUT != next.getType();
+        return TokenType.END_OF_INPUT != next.type();
     }
 
-    public Token next() throws NQuadsReaderException {
+    public Token next() throws NQuadsReaderException, IOException {
 
         if (!hasNext()) {
             return next;
@@ -81,83 +82,64 @@ public class NQuadsTokenizer implements Closeable {
         return next;
     }
 
-    public Token token() throws NQuadsReaderException {
+    public Token token() throws NQuadsReaderException, IOException {
         hasNext();
         return next;
     }
 
-    public boolean accept(TokenType type) throws NQuadsReaderException {
-        if (type == token().getType()) {
+    public boolean accept(TokenType type) throws NQuadsReaderException, IOException {
+        if (type == token().type()) {
             next();
             return true;
         }
         return false;
     }
 
-    protected Token doRead() throws NQuadsReaderException {
+    protected Token doRead() throws NQuadsReaderException, IOException {
 
-        try {
-            int ch = reader.read();
+        int ch = reader.read();
 
-            if (ch == -1) {
-                return Token.EOI;
-            }
-
-            // WS
-            if (NQuadsAlphabet.WHITESPACE.test(ch)) {
-                return skipWhitespaces();
-            }
-
-            // Comment
-            if (ch == '#') {
-                return readComment();
-            }
-
-            if (ch == '<') {
-                return readIriRef();
-            }
-
-            if (ch == '"') {
-                return readString();
-            }
-
-            if (ch == '.') {
-                return Token.EOS;
-            }
-
-            if (NQuadsAlphabet.EOL.test(ch)) {
-                return skipEol();
-            }
-
-            if (ch == '@') {
-                return readLanguageTag();
-            }
-
-            if (ch == '-') {
-                return readDirection();
-            }
-
-            if (ch == '_') {
-                return readBlankNode();
-            }
-
-            if (ch == '^') {
-
-                ch = reader.read();
-
-                if ('^' != ch) {
-                    unexpected(ch, "^");
-                }
-                return Token.LITERAL_DATA_TYPE;
-            }
-
-            unexpected(ch, "\\t", "\\n", "\\r", "^", "@", "SPACE", ".", "<", "_", "\"", "#");
-
-        } catch (IOException e) {
-            throw new NQuadsReaderException(e);
+        if (ch == -1) {
+            return Token.EOI;
         }
 
-        throw new IllegalStateException();
+        // WS
+        if (NQuadsAlphabet.WHITESPACE.test(ch)) {
+            return skipWhitespaces();
+        }
+
+        if (NQuadsAlphabet.EOL.test(ch)) {
+            return skipEol();
+        }
+
+        return switch (ch) {
+        case '#' -> readComment();
+        case '<' -> readIriRef();
+        case '"' -> readString();
+        case '.' -> Token.EOS;
+        case '_' -> readBlankNode();
+        case '^' -> {
+            ch = reader.read();
+
+            if ('^' != ch) {
+                unexpected(ch, "^^");
+            }
+
+            yield Token.LITERAL_DATA_TYPE;
+        }
+        case '@' -> readLanguageTag();
+        case '-' -> {
+            ch = reader.read();
+            if ('-' != ch) {
+                unexpected(ch, "--");
+            }
+            yield readDirection();
+        }
+        default -> {
+            unexpected(ch, "\\t", "\\n", "\\r", "^", "@", "SPACE", ".", "<", "_", "\"", "#");
+            yield null;
+        }
+        };
     }
 
     protected static final void unexpected(int actual, String... expected) throws NQuadsReaderException {
@@ -167,227 +149,185 @@ public class NQuadsTokenizer implements Closeable {
                         : "Unexpected end of input, expected " + Arrays.toString(expected) + ".");
     }
 
-    protected Token skipWhitespaces() throws NQuadsReaderException {
+    protected Token skipWhitespaces() throws NQuadsReaderException, IOException {
+        reader.mark(1);
+        int ch = reader.read();
 
-        try {
+        while (NQuadsAlphabet.WHITESPACE.test(ch)) {
             reader.mark(1);
-            int ch = reader.read();
-
-            while (NQuadsAlphabet.WHITESPACE.test(ch)) {
-                reader.mark(1);
-                ch = reader.read();
-            }
-
-            reader.reset();
-
-            return Token.WS;
-
-        } catch (IOException e) {
-            throw new NQuadsReaderException(e);
+            ch = reader.read();
         }
+
+        reader.reset();
+
+        return Token.WS;
     }
 
-    protected Token skipEol() throws NQuadsReaderException {
+    protected Token skipEol() throws NQuadsReaderException, IOException {
+        reader.mark(1);
+        int ch = reader.read();
 
-        try {
+        while (NQuadsAlphabet.EOL.test(ch)) {
             reader.mark(1);
-            int ch = reader.read();
-
-            while (NQuadsAlphabet.EOL.test(ch)) {
-                reader.mark(1);
-                ch = reader.read();
-            }
-
-            reader.reset();
-
-            return Token.EOL;
-
-        } catch (IOException e) {
-            throw new NQuadsReaderException(e);
+            ch = reader.read();
         }
+
+        reader.reset();
+
+        return Token.EOL;
     }
 
-    protected Token readIriRef() throws NQuadsReaderException {
+    protected Token readIriRef() throws NQuadsReaderException, IOException {
 
-        try {
+        builder.setLength(0);
 
-            StringBuilder value = new StringBuilder();
+        int ch = reader.read();
 
-            int ch = reader.read();
+        while (ch != '>' && ch != -1) {
 
-            while (ch != '>' && ch != -1) {
-
-                if ((0x00 <= ch && ch <= 0x20)
-                        || ch == '<'
-                        || ch == '"'
-                        || ch == '{'
-                        || ch == '}'
-                        || ch == '|'
-                        || ch == '^'
-                        || ch == '`') {
-                    unexpected(ch, ">");
-                }
-
-                if (ch == '\\') {
-
-                    readIriEscape(value);
-
-                } else {
-                    value.append((char) ch);
-                }
-                ch = reader.read();
+            if ((0x00 <= ch && ch <= 0x20)
+                    || ch == '<'
+                    || ch == '"'
+                    || ch == '{'
+                    || ch == '}'
+                    || ch == '|'
+                    || ch == '^'
+                    || ch == '`') {
+                unexpected(ch, ">");
             }
 
-            if (ch == -1) {
+            if (ch == '\\') {
+
+                readIriEscape(builder);
+
+            } else {
+                builder.append((char) ch);
+            }
+            ch = reader.read();
+        }
+
+        if (ch == -1) {
+            unexpected(ch);
+        }
+
+        return new Token(TokenType.IRI_REF, builder.toString());
+
+    }
+
+    protected Token readString() throws NQuadsReaderException, IOException {
+        builder.setLength(0);
+
+        int ch = reader.read();
+
+        while (ch != '"' && ch != -1) {
+
+            if (ch == 0xa || ch == 0xd) {
                 unexpected(ch);
             }
 
-            return new Token(TokenType.IRI_REF, value.toString());
+            if (ch == '\\') {
 
-        } catch (IOException e) {
-            throw new NQuadsReaderException(e);
+                readEscape(builder);
+
+            } else {
+                builder.appendCodePoint(ch);
+            }
+            ch = reader.read();
         }
+
+        if (ch == -1) {
+            unexpected(ch);
+        }
+
+        return new Token(TokenType.STRING_LITERAL_QUOTE, builder.toString());
     }
 
-    protected Token readString() throws NQuadsReaderException {
-        try {
+    protected Token readLanguageTag() throws NQuadsReaderException, IOException {
+        builder.setLength(0);
 
-            StringBuilder value = new StringBuilder();
+        int ch = reader.read();
 
-            int ch = reader.read();
-
-            while (ch != '"' && ch != -1) {
-
-                if (ch == 0xa || ch == 0xd) {
-                    unexpected(ch);
-                }
-
-                if (ch == '\\') {
-
-                    readEscape(value);
-
-                } else {
-                    value.appendCodePoint(ch);
-                }
-                ch = reader.read();
-            }
-
-            if (ch == -1) {
-                unexpected(ch);
-            }
-
-            return new Token(TokenType.STRING_LITERAL_QUOTE, value.toString());
-
-        } catch (IOException e) {
-            throw new NQuadsReaderException(e);
+        if (!NQuadsAlphabet.ASCII_ALPHA.test(ch) || ch == -1) {
+            unexpected(ch);
         }
-    }
+        builder.append((char) ch);
 
-    protected Token readLanguageTag() throws NQuadsReaderException {
-        try {
+        reader.mark(1);
+        ch = reader.read();
 
-            StringBuilder value = new StringBuilder();
+        // language tag [a-zA-Z]+
+        while (NQuadsAlphabet.ASCII_ALPHA.test(ch)) {
 
-            int ch = reader.read();
-
-            if (!NQuadsAlphabet.ASCII_ALPHA.test(ch) || ch == -1) {
-                unexpected(ch);
-            }
-            value.append((char) ch);
+            builder.append((char) ch);
 
             reader.mark(1);
             ch = reader.read();
+        }
 
-            // language tag [a-zA-Z]+
-            while (NQuadsAlphabet.ASCII_ALPHA.test(ch)) {
+        if (ch == -1) {
+            unexpected(ch);
+        }
 
-                value.append((char) ch);
-
-                reader.mark(1);
-                ch = reader.read();
-            }
-
-            if (ch == -1) {
-                unexpected(ch);
-            }
-
-            // ('-' [a-zA-Z0-9]+)*
-            if (ch == '-') {
-
-                reader.reset();
-                reader.mark(2);
-                reader.read();
-
-                ch = reader.read();
-
-                if (NQuadsAlphabet.ASCII_ALPHA.test(ch)) {
-                    value.append('-');
-                    
-                    do {
-                        value.append((char) ch);
-
-                        reader.mark(1);
-                        ch = reader.read();
-
-                    } while (NQuadsAlphabet.ASCII_ALPHA_NUM.test(ch));
-
-                    if (ch == -1) {
-                        unexpected(ch);
-                    }
-                }
-            }
+        // ('-' [a-zA-Z0-9]+)*
+        if (ch == '-') {
 
             reader.reset();
+            reader.mark(2);
+            reader.read();
 
-            return new Token(TokenType.LANGUAGE_TAG, value.toString());
+            ch = reader.read();
 
-        } catch (IOException e) {
-            throw new NQuadsReaderException(e);
+            if (NQuadsAlphabet.ASCII_ALPHA.test(ch)) {
+                builder.append('-');
+
+                do {
+                    builder.append((char) ch);
+
+                    reader.mark(1);
+                    ch = reader.read();
+
+                } while (NQuadsAlphabet.ASCII_ALPHA_NUM.test(ch));
+
+                if (ch == -1) {
+                    unexpected(ch);
+                }
+            }
         }
+
+        reader.reset();
+
+        return new Token(TokenType.LANGUAGE_TAG, builder.toString());
     }
 
     // ('--' [a-zA-Z]+)?
-    protected Token readDirection() throws NQuadsReaderException {
+    protected Token readDirection() throws NQuadsReaderException, IOException {
+        int ch = reader.read();
 
-        try {
+        if (!NQuadsAlphabet.ASCII_ALPHA.test(ch) || ch == -1) {
+            unexpected(ch, "[a-zA-Z]+");
+        }
 
-            int ch = reader.read();
+        builder.setLength(0);
 
-            if (ch != '-' || ch == -1) {
-                unexpected(ch, "'--' [a-zA-Z]+");
-            }
+        do {
+            builder.append((char) ch);
 
+            reader.mark(1);
             ch = reader.read();
 
-            if (!NQuadsAlphabet.ASCII_ALPHA.test(ch) || ch == -1) {
-                unexpected(ch, "[a-zA-Z]+");
-            }
+        } while (NQuadsAlphabet.ASCII_ALPHA.test(ch) || builder.length() < 3);
 
-            StringBuilder value = new StringBuilder();
-
-            do {
-                value.append((char) ch);
-
-                reader.mark(1);
-                ch = reader.read();
-
-            } while (NQuadsAlphabet.ASCII_ALPHA.test(ch) || value.length() < 3);
-
-            if (ch == -1) {
-                unexpected(ch);
-            }
-
-            if (!"ltr".equals(value.toString()) && "rtl".equals(value.toString())) {
-                unexpected(ch, "ltr|rtl");
-            }
-
-            reader.reset();
-
-            return new Token(TokenType.DIRECTION, value.toString());
-
-        } catch (IOException e) {
-            throw new NQuadsReaderException(e);
+        if (ch == -1) {
+            unexpected(ch);
         }
+
+        if (!"ltr".equals(builder.toString()) && "rtl".equals(builder.toString())) {
+            unexpected(ch, "ltr|rtl");
+        }
+
+        reader.reset();
+
+        return new Token(TokenType.DIRECTION, builder.toString());
     }
 
     protected void readIriEscape(final StringBuilder value) throws NQuadsReaderException, IOException {
@@ -426,79 +366,70 @@ public class NQuadsTokenizer implements Closeable {
         }
     }
 
-    protected Token readBlankNode() throws NQuadsReaderException {
+    protected Token readBlankNode() throws NQuadsReaderException, IOException {
+        builder.setLength(0);
 
-        try {
+        int ch = reader.read();
 
-            StringBuilder value = new StringBuilder();
-
-            int ch = reader.read();
-
-            if (ch != ':') {
-                unexpected(ch);
-            }
-
-            ch = reader.read();
-
-            if (NQuadsAlphabet.PN_CHARS_U.negate().and(NQuadsAlphabet.ASCII_DIGIT.negate()).test(ch) || ch == -1) {
-                unexpected(ch);
-            }
-
-            value.append((char) ch);
-
-            reader.mark(1);
-            ch = reader.read();
-
-            boolean delim = false;
-
-            while (NQuadsAlphabet.PN_CHARS.test(ch) || ch == '.') {
-
-                delim = ch == '.';
-
-                value.append((char) ch);
-
-                if (delim) {
-                    reader.reset();
-                    reader.mark(2);
-                    reader.skip(1);
-                } else {
-                    reader.mark(1);
-                }
-
-                ch = reader.read();
-
-            }
-
-            if (ch == -1) {
-                unexpected(ch);
-            }
-
-            reader.reset();
-
-            if (delim && value.length() > 0) {
-                value.setLength(value.length() - 1);
-            }
-
-            return new Token(TokenType.BLANK_NODE_LABEL, value.toString());
-
-        } catch (IOException e) {
-            throw new NQuadsReaderException(e);
+        if (ch != ':') {
+            unexpected(ch);
         }
+
+        ch = reader.read();
+
+        if (NQuadsAlphabet.PN_CHARS_U.negate().and(NQuadsAlphabet.ASCII_DIGIT.negate()).test(ch) || ch == -1) {
+            unexpected(ch);
+        }
+
+        builder.append((char) ch);
+
+        reader.mark(1);
+        ch = reader.read();
+
+        boolean delim = false;
+
+        while (NQuadsAlphabet.PN_CHARS.test(ch) || ch == '.') {
+
+            delim = ch == '.';
+
+            builder.append((char) ch);
+
+            if (delim) {
+                reader.reset();
+                reader.mark(2);
+                reader.skip(1);
+            } else {
+                reader.mark(1);
+            }
+
+            ch = reader.read();
+
+        }
+
+        if (ch == -1) {
+            unexpected(ch);
+        }
+
+        reader.reset();
+
+        if (delim && builder.length() > 0) {
+            builder.setLength(builder.length() - 1);
+        }
+
+        return new Token(TokenType.BLANK_NODE_LABEL, builder.toString());
     }
 
     protected char[] readUnicode() throws NQuadsReaderException, IOException {
-
-        char[] code = new char[4];
-
-        code[0] = readHex8();
-        code[1] = readHex8();
-        code[2] = readHex8();
-        code[3] = readHex8();
-
-        return Character.toChars(Integer.parseInt(String.valueOf(code), 16));
+        return Character.toChars(Integer.parseInt(String.valueOf(
+                new char[] {
+                        readHex8(),
+                        readHex8(),
+                        readHex8(),
+                        readHex8()
+                }), 16));
     }
 
-    protected char readHex8() throws IOException, NQuadsReaderException {
+    protected char readHex8() throws NQuadsReaderException, IOException {
 
         int hex = reader.read();
 
@@ -508,7 +439,7 @@ public class NQuadsTokenizer implements Closeable {
         return (char) hex;
     }
 
-    protected char[] readUnicode64() throws IOException, NQuadsReaderException {
+    protected char[] readUnicode64() throws NQuadsReaderException, IOException {
 
         char[] code = new char[8];
 
@@ -538,50 +469,27 @@ public class NQuadsTokenizer implements Closeable {
         return symbol;
     }
 
-    protected Token readComment() throws NQuadsReaderException {
-        try {
+    protected Token readComment() throws NQuadsReaderException, IOException {
+        builder.setLength(0);
 
-            StringBuilder value = new StringBuilder();
+        int ch = reader.read();
 
-            int ch = reader.read();
+        while (NQuadsAlphabet.EOL.negate().test(ch) && ch != -1) {
 
-            while (NQuadsAlphabet.EOL.negate().test(ch) && ch != -1) {
-
-                value.appendCodePoint(ch);
-                ch = reader.read();
-            }
-
-            return new Token(TokenType.COMMENT, value.toString());
-
-        } catch (IOException e) {
-            throw new NQuadsReaderException(e);
+            builder.appendCodePoint(ch);
+            ch = reader.read();
         }
+
+        return new Token(TokenType.COMMENT, builder.toString());
     }
 
-    public static class Token {
+    public record Token(TokenType type, String value) {
 
         static final Token EOI = new Token(TokenType.END_OF_INPUT, null);
         static final Token EOS = new Token(TokenType.END_OF_STATEMENT, null);
         static final Token EOL = new Token(TokenType.END_OF_LINE, null);
         static final Token WS = new Token(TokenType.WHITE_SPACE, null);
-
         static final Token LITERAL_DATA_TYPE = new Token(TokenType.LITERAL_DATA_TYPE, null);
-
-        final TokenType type;
-        final String value;
-
-        public Token(TokenType type, String value) {
-            this.type = type;
-            this.value = value;
-        }
-
-        public TokenType getType() {
-            return type;
-        }
-
-        public String getValue() {
-            return value;
-        }
 
         @Override
         public String toString() {

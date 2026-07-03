@@ -55,7 +55,11 @@ class NQuadsTest {
             assertNotNull(input);
 
             final StringWriter writer = new StringWriter();
-            new NQuadsReader(new StringReader(input)).provide((new NQuadsWriter(writer)));
+            try (var reader = new NQuadsReader(new StringReader(input))) {
+                try (var consumer = new NQuadsWriter(writer)) {
+                    reader.provide(consumer);   
+                }
+            }
 
             final String result = writer.toString();
             assertNotNull(result);

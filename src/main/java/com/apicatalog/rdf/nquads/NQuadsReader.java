@@ -108,10 +108,11 @@ public class NQuadsReader implements Closeable {
      *                 deserialized N-Quad statement
      * 
      * @throws NQuadsReaderException if an error occurs while reading the N-Quads
+     * @throws IOException 
      * @throws RdfConsumerException  if an error occurs while processing the N-Quad
      *                               statement
      */
-    public void provide(Rdf11QuadConsumer consumer) throws NQuadsReaderException {
+    public void provide(Rdf11QuadConsumer consumer) throws NQuadsReaderException, IOException {
         while (tokenizer.hasNext()) {
 
             // skip EOL and whitespace
@@ -126,7 +127,7 @@ public class NQuadsReader implements Closeable {
         }
     }
 
-    protected void statement(Rdf11QuadConsumer consumer) throws NQuadsReaderException {
+    protected void statement(Rdf11QuadConsumer consumer) throws NQuadsReaderException, IOException {
 
         String subject = resource("Subject");
 
@@ -142,9 +143,9 @@ public class NQuadsReader implements Closeable {
 
         skipWhitespace(0);
 
-        if (TokenType.IRI_REF == tokenizer.token().getType()) {
+        if (TokenType.IRI_REF == tokenizer.token().type()) {
 
-            final String graphNameIri = tokenizer.token().getValue();
+            final String graphNameIri = tokenizer.token().value();
 
             assertAbsoluteIri(graphNameIri, "Graph name");
 
@@ -153,14 +154,14 @@ public class NQuadsReader implements Closeable {
             skipWhitespace(0);
         }
 
-        if (TokenType.BLANK_NODE_LABEL == tokenizer.token().getType()) {
+        if (TokenType.BLANK_NODE_LABEL == tokenizer.token().type()) {
 
-            graphName = "_:".concat(tokenizer.token().getValue());
+            graphName = "_:".concat(tokenizer.token().value());
             tokenizer.next();
             skipWhitespace(0);
         }
 
-        if (TokenType.END_OF_STATEMENT != tokenizer.token().getType()) {
+        if (TokenType.END_OF_STATEMENT != tokenizer.token().type()) {
             unexpected(tokenizer.token(), TokenType.END_OF_STATEMENT);
         }
 
@@ -169,12 +170,12 @@ public class NQuadsReader implements Closeable {
         skipWhitespace(0);
 
         // skip comment
-        if (TokenType.COMMENT == tokenizer.token().getType()) {
+        if (TokenType.COMMENT == tokenizer.token().type()) {
             tokenizer.next();
 
             // skip end of line
-        } else if (TokenType.END_OF_LINE != tokenizer.token().getType()
-                && TokenType.END_OF_INPUT != tokenizer.token().getType()) {
+        } else if (TokenType.END_OF_LINE != tokenizer.token().type()
+                && TokenType.END_OF_INPUT != tokenizer.token().type()) {
             unexpected(tokenizer.token(), TokenType.END_OF_LINE, TokenType.END_OF_INPUT);
             tokenizer.next();
         }
@@ -189,32 +190,32 @@ public class NQuadsReader implements Closeable {
                 graphName);
     }
 
-    protected String resource(String name) throws NQuadsReaderException {
+    protected String resource(String name) throws NQuadsReaderException, IOException {
 
         final Token token = tokenizer.token();
 
-        if (TokenType.IRI_REF == token.getType()) {
+        if (TokenType.IRI_REF == token.type()) {
 
             tokenizer.next();
 
-            final String iri = token.getValue();
+            final String iri = token.value();
 
             assertAbsoluteIri(iri, name);
 
             return iri;
         }
 
-        if (TokenType.BLANK_NODE_LABEL == token.getType()) {
+        if (TokenType.BLANK_NODE_LABEL == token.type()) {
 
             tokenizer.next();
 
-            return "_:".concat(token.getValue());
+            return "_:".concat(token.value());
         }
 
         return unexpected(token);
     }
 
-    protected void objectOrLiteral() throws NQuadsReaderException {
+    protected void objectOrLiteral() throws NQuadsReaderException, IOException {
 
         ltObject = null;
         ltDatatype = null;
@@ -223,10 +224,10 @@ public class NQuadsReader implements Closeable {
 
         Token token = tokenizer.token();
 
-        if (TokenType.IRI_REF == token.getType()) {
+        if (TokenType.IRI_REF == token.type()) {
             tokenizer.next();
 
-            final String iri = token.getValue();
+            final String iri = token.value();
 
             assertAbsoluteIri(iri, "Object");
 
@@ -234,16 +235,16 @@ public class NQuadsReader implements Closeable {
             return;
         }
 
-        if (TokenType.BLANK_NODE_LABEL == token.getType()) {
+        if (TokenType.BLANK_NODE_LABEL == token.type()) {
 
             tokenizer.next();
 
-            ltObject = "_:".concat(token.getValue());
+            ltObject = "_:".concat(token.value());
             return;
         }
 
         // read literal
-        if (TokenType.STRING_LITERAL_QUOTE != token.getType()) {
+        if (TokenType.STRING_LITERAL_QUOTE != token.type()) {
             unexpected(token);
         }
 
@@ -251,40 +252,40 @@ public class NQuadsReader implements Closeable {
 
         skipWhitespace(0);
 
-        if (TokenType.LANGUAGE_TAG == tokenizer.token().getType()) {
+        if (TokenType.LANGUAGE_TAG == tokenizer.token().type()) {
 
-            String langTag = tokenizer.token().getValue();
+            String langTag = tokenizer.token().value();
 
             var nextToken = tokenizer.next();
 
             this.ltDatatype = NQuadsAlphabet.LANG_STRING;
-            this.ltObject = token.getValue();
+            this.ltObject = token.value();
             this.ltLangTag = langTag;
 
-            if (TokenType.DIRECTION == nextToken.getType()) {
+            if (TokenType.DIRECTION == nextToken.type()) {
                 this.ltDatatype = NQuadsAlphabet.DIR_LANG_STRING;
-                this.ltDirection = nextToken.getValue();
+                this.ltDirection = nextToken.value();
                 tokenizer.next();
             }
 
             return;
 
-        } else if (TokenType.LITERAL_DATA_TYPE == tokenizer.token().getType()) {
+        } else if (TokenType.LITERAL_DATA_TYPE == tokenizer.token().type()) {
 
             tokenizer.next();
             skipWhitespace(0);
 
             Token attr = tokenizer.token();
 
-            if (TokenType.IRI_REF == attr.getType()) {
+            if (TokenType.IRI_REF == attr.type()) {
 
                 tokenizer.next();
 
-                final String datatype = attr.getValue();
+                final String datatype = attr.value();
 
                 assertAbsoluteIri(datatype, "DataType");
 
-                this.ltObject = token.getValue();
+                this.ltObject = token.value();
 
                 datatype(datatype, (a, b) -> {
                     this.ltDatatype = a;
@@ -303,18 +304,18 @@ public class NQuadsReader implements Closeable {
             unexpected(attr);
         }
 
-        this.ltObject = token.getValue();
+        this.ltObject = token.value();
         this.ltDatatype = NQuadsAlphabet.XSD_STRING;
     }
 
     protected static final <T> T unexpected(Token token, TokenType... types) throws NQuadsReaderException {
         throw new NQuadsReaderException(
-                "Unexpected token " + token.getType() + (token.getValue() != null ? "[" + token.getValue() + "]" : "")
+                "Unexpected token " + token.type() + (token.value() != null ? "[" + token.value() + "]" : "")
                         + ". "
                         + "Expected one of " + Arrays.toString(types) + ".");
     }
 
-    protected void skipWhitespace(int min) throws NQuadsReaderException {
+    protected void skipWhitespace(int min) throws NQuadsReaderException, IOException {
 
         int count = 0;
 
