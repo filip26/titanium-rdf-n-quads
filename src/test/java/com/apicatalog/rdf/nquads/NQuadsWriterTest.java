@@ -1,11 +1,9 @@
 package com.apicatalog.rdf.nquads;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 
 import org.junit.jupiter.api.Test;
@@ -13,107 +11,148 @@ import org.junit.jupiter.api.Test;
 class NQuadsWriterTest {
 
     @Test
-    void testI18NDirection() throws NQuadsReaderException, IOException {
-        try (var reader = new NQuadsReader(new StringReader(
-                """
-                <test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#_rtl> .
-                """))) {
-            reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
-                assertEquals("c", object);
-                assertEquals("https://www.w3.org/ns/i18n#", datatype);
-                assertNull(language);
-                assertEquals("rtl", direction);
-                assertNull(graph);
-            });
+    void testI18NDirection() throws IOException {
+        var output = new StringWriter();
+        try (var writer = new NQuadsWriter(output)) {
+            writer.quad(
+                    "_:s", "_:p",
+                    "a", "https://www.w3.org/ns/i18n#", "cs", "ltr",
+                    "_:g");
         }
+        assertEquals("_:s _:p \"a\"^^<https://www.w3.org/ns/i18n#cs_ltr> _:g .\n", output.toString());
     }
 
     @Test
-    void testI18DirectionWithoutLang() {
-//        try (var reader = new NQuadsReader(new StringReader(
-//                """
-//                <test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#cs_> .
-//                """))) {
-//            reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
-//            });
-//        }
+    void testI18DirectionWithoutLang() throws IOException {
+        var output = new StringWriter();
+        try (var writer = new NQuadsWriter(output)) {
+            writer.quad(
+                    "_:s", "_:p",
+                    "a", "https://www.w3.org/ns/i18n#", null, "ltr",
+                    "_:g");
+        }
+        assertEquals("_:s _:p \"a\"^^<https://www.w3.org/ns/i18n#_ltr> _:g .\n", output.toString());
     }
 
     @Test
-    void testLangTag() throws NQuadsReaderException, IOException {
-        try (var reader = new NQuadsReader(new StringReader("_:a <test:b> \"c\"@cs ."))) {
-            reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
-                assertEquals("c", object);
-                assertEquals("http://www.w3.org/1999/02/22-rdf-syntax-ns#langString", datatype);
-                assertEquals("cs", language);
-                assertNull(direction);
-                assertNull(graph);
-            });
+    void testLangTag() throws IOException {
+        var output = new StringWriter();
+        try (var writer = new NQuadsWriter(output)) {
+            writer.quad(
+                    "_:s", "_:p",
+                    "a", "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString", "cs", null,
+                    "_:g");
         }
+        assertEquals("_:s _:p \"a\"@cs _:g .\n", output.toString());
     }
 
     @Test
-    void testDirLangTag() throws NQuadsReaderException, IOException {
-        try (var reader = new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"@cs--ltr."))) {
-            reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
-                assertEquals("c", object);
-                assertEquals("http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString", datatype);
-                assertEquals("cs", language);
-                assertEquals("ltr", direction);
-                assertNull(graph);
-            });
+    void testDirLangTag() throws IOException {
+        var output = new StringWriter();
+        try (var writer = new NQuadsWriter(output)) {
+            writer.quad(
+                    "_:s", "_:p",
+                    "a", "http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString", "cs", "ltr",
+                    "_:g");
         }
+        assertEquals("_:s _:p \"a\"@cs--ltr _:g .\n", output.toString());
     }
 
     @Test
-    void testComplexDirLangTag() throws NQuadsReaderException, IOException {
-        try (var reader = new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"@en-GB--ltr."))) {
-            reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
-                assertEquals("c", object);
-                assertEquals("http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString", datatype);
-                assertEquals("en-GB", language);
-                assertEquals("ltr", direction);
-                assertNull(graph);
-            });
+    void testDirLangTagWithoutDirection() throws IOException {
+        var output = new StringWriter();
+        try (var writer = new NQuadsWriter(output)) {
+            writer.quad(
+                    "_:s", "_:p",
+                    "a", "http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString", "cs", null,
+                    "_:g");
         }
+        assertEquals("_:s _:p \"a\"@cs _:g .\n", output.toString());
+    }
+
+    @Test
+    void testComplexDirLangTag() throws IOException {
+        var output = new StringWriter();
+        try (var writer = new NQuadsWriter(output)) {
+            writer.quad(
+                    "_:s", "_:p",
+                    "a", "http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString", "en-GB", "ltr",
+                    "_:g");
+        }
+        assertEquals("_:s _:p \"a\"@en-GB--ltr _:g .\n", output.toString());
     }
 
     @Test
     void testInvalidDirection() {
-        assertThrows(NQuadsReaderException.class, () -> {
-            try (var reader = new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"@cs--xtr."))) {
-                reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
-                });
+        assertThrows(IllegalArgumentException.class, () -> {
+            try (var writer = new NQuadsWriter(new StringWriter())) {
+                writer.quad(
+                        "_:s", "_:p",
+                        "a", "http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString", null, "rtr",
+                        "_:g");
             }
             ;
         });
     }
 
     @Test
-    void testXsdString() throws NQuadsReaderException, IOException {
-//        try (var reader = new NQuadsReader(new StringReader("<test:a> <test:b> \"abc\" ."))) {
-//            reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
-//                assertEquals("abc", object);
-//                assertEquals("http://www.w3.org/2001/XMLSchema#string", datatype);
-//                assertNull(language);
-//                assertNull(direction);
-//                assertNull(graph);
-//            });
-//        }
+    void testXsdString() throws IOException {
+        var output = new StringWriter();
+        try (var writer = new NQuadsWriter(output)) {
+            writer.quad(
+                    "_:s", "_:p",
+                    "a", "http://www.w3.org/2001/XMLSchema#string", null, null,
+                    "_:g");
+        }
+        assertEquals("_:s _:p \"a\" _:g .\n", output.toString());
     }
 
     @Test
     void testDirLangTagWithoutLang() throws IOException {
-
         var output = new StringWriter();
-
         try (var writer = new NQuadsWriter(output)) {
             writer.quad(
                     "_:s", "_:p",
                     "a", "http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString", null, "ltr",
                     "_:g");
         }
-
         assertEquals("_:s _:p \"a\"@und--ltr _:g .\n", output.toString());
     }
+
+    @Test
+    void testLanguageWithoutDatatype() throws IOException {
+        var output = new StringWriter();
+        try (var writer = new NQuadsWriter(output)) {
+            writer.quad(
+                    "_:s", "_:p",
+                    "a", null, "cs", null,
+                    "_:g");
+        }
+        assertEquals("_:s _:p \"a\"@cs _:g .\n", output.toString());
+    }
+
+    @Test
+    void testDirectionWithoutDatatype() throws IOException {
+        var output = new StringWriter();
+        try (var writer = new NQuadsWriter(output)) {
+            writer.quad(
+                    "_:s", "_:p",
+                    "a", null, null, "ltr",
+                    "_:g");
+        }
+        assertEquals("_:s _:p \"a\"@und--ltr _:g .\n", output.toString());
+    }
+
+    @Test
+    void testLangDirWithoutDatatype() throws IOException {
+        var output = new StringWriter();
+        try (var writer = new NQuadsWriter(output)) {
+            writer.quad(
+                    "_:s", "_:p",
+                    "a", null, "cs", "ltr",
+                    "_:g");
+        }
+        assertEquals("_:s _:p \"a\"@cs--ltr _:g .\n", output.toString());
+    }
+
 }

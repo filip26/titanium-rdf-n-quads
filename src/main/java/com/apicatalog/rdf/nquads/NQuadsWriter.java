@@ -22,7 +22,6 @@ import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.io.Writer;
 
-import com.apicatalog.rdf.api.Rdf11QuadConsumer;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 
 /**
@@ -40,7 +39,7 @@ import com.apicatalog.rdf.api.RdfQuadConsumer;
  * @see <a href="https://www.w3.org/TR/rdf12-n-quads/">RDF 1.2 N-Quads
  *      Specification</a>
  */
-public final class NQuadsWriter implements Rdf11QuadConsumer, Flushable, Closeable {
+public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable {
 
     private final Writer writer;
 
@@ -188,7 +187,7 @@ public final class NQuadsWriter implements Rdf11QuadConsumer, Flushable, Closeab
         resourceOrBlank(writer, predicate);
         writer.append(' ');
 
-        if (Rdf11QuadConsumer.isLiteral(datatype)) {
+        if (RdfQuadConsumer.isLiteral(datatype, language, direction)) {
             literal(writer, object, datatype, language, direction);
 
         } else {
@@ -214,7 +213,12 @@ public final class NQuadsWriter implements Rdf11QuadConsumer, Flushable, Closeab
                 .append('"');
 
         if (direction != null) {
-            if (NQuadsAlphabet.DIR_LANG_STRING.equals(datatype)) {
+            if (datatype == null || NQuadsAlphabet.DIR_LANG_STRING.equals(datatype)) {
+                
+                if (!"ltr".equals(direction) && !"rtl".equals(direction)) {
+                    throw new IllegalArgumentException();
+                }
+                
                 writer
                         .append('@')
                         .append(language != null ? language : "und")
