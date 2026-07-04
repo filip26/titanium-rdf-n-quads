@@ -54,6 +54,7 @@ public final class NQuadsReader implements Closeable {
      * stream.
      *
      * @param reader the {@link Reader} to read N-Quads data from
+     * @throws IllegalArgumentException if the reader is {@code null}
      */
     public NQuadsReader(final Reader reader) {
         this(new NQuadsTokenizer(reader), NQuadsReader::startsWithScheme);
@@ -61,16 +62,32 @@ public final class NQuadsReader implements Closeable {
 
     /**
      * Creates a new {@code NQuadsReader} instance with the specified character
-     * stream.
+     * stream and IRI validation predicate.
      *
      * @param reader          the {@link Reader} to read N-Quads data from
      * @param testAbsoluteIRI a function to test if an IRI is absolute or not
+     * @throws IllegalArgumentException if the reader or the predicate is
+     *                                  {@code null}
      */
     public NQuadsReader(final Reader reader, Predicate<String> testAbsoluteIRI) {
         this(new NQuadsTokenizer(reader), testAbsoluteIRI);
     }
 
+    /**
+     * Internal constructor initializing the tokenizer and IRI validation predicate.
+     *
+     * @param tokenizer       the tokenizer to read tokens from
+     * @param testAbsoluteIRI a function to test if an IRI is absolute
+     * @throws IllegalArgumentException if the tokenizer or predicate is
+     *                                  {@code null}
+     */
     private NQuadsReader(final NQuadsTokenizer tokenizer, final Predicate<String> testAbsoluteIRI) {
+        if (tokenizer == null) {
+            throw new IllegalArgumentException("The tokenizer cannot be null.");
+        }
+        if (testAbsoluteIRI == null) {
+            throw new IllegalArgumentException("The absolute IRI predicate cannot be null.");
+        }
         this.tokenizer = tokenizer;
         this.testAbsoluteIRI = testAbsoluteIRI;
     }
@@ -79,14 +96,18 @@ public final class NQuadsReader implements Closeable {
      * Reads and processes N-Quads, invoking the provided consumer immediately after
      * each N-Quad statement is deserialized.
      *
-     * @param consumer the {@link RdfQuadConsumer} that processes each
-     *                 deserialized N-Quad statement
-     * @throws NQuadsReaderException    if an error occurs while reading the N-Quads
+     * @param consumer the {@link RdfQuadConsumer} that processes each deserialized
+     *                 N-Quad statement
+     * @throws NQuadsReaderException    if parsing error occurs while reading the
+     *                                  N-Quads
      * @throws IOException              if an I/O error occurs
-     * @throws IllegalArgumentException if the provided consumer encounters an
-     *                                  invalid argument
+     * @throws IllegalArgumentException if the provided consumer is {@code null} or
+     *                                  encounters an invalid argument
      */
     public void provide(RdfQuadConsumer consumer) throws NQuadsReaderException, IOException {
+        if (consumer == null) {
+            throw new IllegalArgumentException("The RdfQuadConsumer cannot be null.");
+        }
         while (tokenizer.hasNext()) {
             // skip EOL and whitespace
             if (tokenizer.accept(NQuadsTokenizer.TokenType.END_OF_LINE)
@@ -98,6 +119,13 @@ public final class NQuadsReader implements Closeable {
         }
     }
 
+    /**
+     * Parses a single N-Quad statement and provides it to the consumer.
+     *
+     * @param consumer the consumer to process the parsed quad
+     * @throws NQuadsReaderException if a parsing error occurs
+     * @throws IOException           if an I/O error occurs
+     */
     private void statement(RdfQuadConsumer consumer) throws NQuadsReaderException, IOException {
 
         String subject = resource("Subject");
@@ -133,7 +161,7 @@ public final class NQuadsReader implements Closeable {
         }
 
         if (TokenType.END_OF_STATEMENT != tokenizer.token().type()) {
-            throw error(tokenizer.token(), TokenType.END_OF_STATEMENT);
+            throw createError(tokenizer.token(), TokenType.END_OF_STATEMENT);
         }
 
         tokenizer.next();
@@ -147,7 +175,7 @@ public final class NQuadsReader implements Closeable {
             // skip end of line
         } else if (TokenType.END_OF_LINE != tokenizer.token().type()
                 && TokenType.END_OF_INPUT != tokenizer.token().type()) {
-            throw error(tokenizer.token(), TokenType.END_OF_LINE, TokenType.END_OF_INPUT);
+            throw createError(tokenizer.token(), TokenType.END_OF_LINE, TokenType.END_OF_INPUT);
         }
 
         consumer.quad(
@@ -160,6 +188,15 @@ public final class NQuadsReader implements Closeable {
                 graphName);
     }
 
+    /**
+     * Parses a resource (IRI or Blank Node) from the tokenizer.
+     *
+     * @param name the descriptive name of the resource (e.g., Subject, Predicate)
+     *             for error reporting
+     * @return the parsed resource string
+     * @throws NQuadsReaderException if the token is not a valid resource
+     * @throws IOException           if an I/O error occurs
+     */
     private String resource(String name) throws NQuadsReaderException, IOException {
 
         final Token token = tokenizer.token();
@@ -182,9 +219,16 @@ public final class NQuadsReader implements Closeable {
             return "_:".concat(token.value());
         }
 
-        throw error(token);
+        throw createError(token);
     }
 
+    /**
+     * Parses the object component of an N-Quad, which can be an IRI, a Blank Node,
+     * or a Literal.
+     *
+     * @throws NQuadsReaderException if a parsing error occurs
+     * @throws IOException           if an I/O error occurs
+     */
     private void objectOrLiteral() throws NQuadsReaderException, IOException {
 
         ltObject = null;
@@ -215,7 +259,7 @@ public final class NQuadsReader implements Closeable {
 
         // read literal
         if (TokenType.LITERAL_STRING_QUOTE != token.type()) {
-            throw error(token);
+            throw createError(token);
         }
 
         tokenizer.next();
@@ -273,20 +317,33 @@ public final class NQuadsReader implements Closeable {
                 return;
             }
 
-            throw error(attr);
+            throw createError(attr);
         }
 
         this.ltObject = token.value();
         this.ltDatatype = NQuadsAlphabet.XSD_STRING;
     }
 
-    private static final NQuadsReaderException error(Token token, TokenType... types) throws NQuadsReaderException {
+    /**
+     * Constructs an exception for unexpected tokens.
+     *
+     * @param token the unexpected token encountered
+     * @param types the expected token types
+     */
+    private static final NQuadsReaderException createError(Token token, TokenType... types) {
         return new NQuadsReaderException(
                 "Unexpected token " + token.type() + (token.value() != null ? "[" + token.value() + "]" : "")
                         + ". "
                         + "Expected one of " + Arrays.toString(types) + ".");
     }
 
+    /**
+     * Skips a specified minimum number of whitespace tokens.
+     *
+     * @param min the minimum number of whitespace tokens required
+     * @throws NQuadsReaderException if the minimum number of whitespaces is not met
+     * @throws IOException           if an I/O error occurs
+     */
     private void skipWhitespace(int min) throws NQuadsReaderException, IOException {
 
         int count = 0;
@@ -296,16 +353,32 @@ public final class NQuadsReader implements Closeable {
         }
 
         if (count < min) {
-            throw error(tokenizer.token());
+            throw createError(tokenizer.token());
         }
     }
 
+    /**
+     * Validates whether the given URI is an absolute IRI.
+     *
+     * @param uri  the URI to validate
+     * @param what the descriptive name of the component being validated
+     * @throws NQuadsReaderException if the URI is not an absolute IRI
+     */
     private final void assertAbsoluteIri(final String uri, final String what) throws NQuadsReaderException {
         if (!testAbsoluteIRI.test(uri)) {
             throw new NQuadsReaderException(what + " must be an absolute URI [" + uri + "]. ");
         }
     }
 
+    /**
+     * Parses and extracts language and direction information from a datatype
+     * string.
+     *
+     * @param datatype the datatype string to parse
+     * @param result   a consumer to accept the base datatype and an array
+     *                 containing language and direction
+     * @throws NQuadsReaderException if the datatype format is malformed
+     */
     private static void datatype(final String datatype, final BiConsumer<String, String[]> result)
             throws NQuadsReaderException {
         if (datatype.startsWith(NQuadsAlphabet.I18N_BASE)) {
@@ -336,6 +409,13 @@ public final class NQuadsReader implements Closeable {
         result.accept(datatype, null);
     }
 
+    /**
+     * Tests whether the given URI starts with a valid scheme according to RFC 3986.
+     *
+     * @param uri the URI to test
+     * @return {@code true} if the URI starts with a valid scheme, {@code false}
+     *         otherwise
+     */
     private static boolean startsWithScheme(final String uri) {
 
         if (uri == null
@@ -360,6 +440,12 @@ public final class NQuadsReader implements Closeable {
         return false;
     }
 
+    /**
+     * Closes the underlying tokenizer and releases any system resources associated
+     * with it.
+     *
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     public void close() throws IOException {
         tokenizer.close();

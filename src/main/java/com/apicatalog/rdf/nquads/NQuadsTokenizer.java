@@ -171,7 +171,7 @@ public final class NQuadsTokenizer implements Closeable {
         case '_' -> readBlankNode();
         case '^' -> {
             if ('^' != nextChar) {
-                throw error(nextChar, "^^");
+                throw createError(nextChar, "^^");
             }
             readChar();
             readChar();
@@ -180,11 +180,11 @@ public final class NQuadsTokenizer implements Closeable {
         case '@' -> readLanguage();
         case '-' -> {
             if ('-' != nextChar) {
-                throw error(nextChar, "--");
+                throw createError(nextChar, "--");
             }
             yield readDirection();
         }
-        default -> throw error(currentChar, "\\t", "\\n", "\\r", "^", "@", "SPACE", ".", "<", "_", "\"", "#");
+        default -> throw createError(currentChar, "\\t", "\\n", "\\r", "^", "@", "SPACE", ".", "<", "_", "\"", "#");
         };
     }
 
@@ -219,7 +219,7 @@ public final class NQuadsTokenizer implements Closeable {
         while (isEOF.negate().and(ch -> ch != '>').test(readChar())) {
 
             if (NQuadsAlphabet.IRIREF_FORBIDDEN.test(currentChar)) {
-                throw error(currentChar, ">");
+                throw createError(currentChar, ">");
             }
 
             if (currentChar == '\\') {
@@ -231,7 +231,7 @@ public final class NQuadsTokenizer implements Closeable {
         }
 
         if (currentChar == EOF) {
-            throw error(currentChar);
+            throw createError(currentChar);
         }
 
         readChar();
@@ -243,14 +243,14 @@ public final class NQuadsTokenizer implements Closeable {
         builder.setLength(0);
 
         if (readChar() != ':') {
-            throw error(currentChar);
+            throw createError(currentChar);
         }
 
         if ((NQuadsAlphabet.PN_CHARS_U.negate()
                 .and(NQuadsAlphabet.ASCII_DIGIT.negate()))
                 .or(isEOF)
                 .test(readChar())) {
-            throw error(currentChar);
+            throw createError(currentChar);
         }
 
         builder.appendCodePoint(currentChar);
@@ -267,7 +267,7 @@ public final class NQuadsTokenizer implements Closeable {
         }
 
         if (currentChar == EOF) {
-            throw error(currentChar);
+            throw createError(currentChar);
         }
 
         return new Token(TokenType.BLANK_NODE_LABEL, builder.toString());
@@ -281,7 +281,7 @@ public final class NQuadsTokenizer implements Closeable {
         while (currentChar != '"' && currentChar != EOF) {
 
             if (currentChar == 0xa || currentChar == 0xd) {
-                throw error(currentChar);
+                throw createError(currentChar);
             }
 
             if (currentChar == '\\') {
@@ -294,7 +294,7 @@ public final class NQuadsTokenizer implements Closeable {
         }
 
         if (currentChar == EOF) {
-            throw error(currentChar);
+            throw createError(currentChar);
         }
 
         readChar();
@@ -306,7 +306,7 @@ public final class NQuadsTokenizer implements Closeable {
         builder.setLength(0);
 
         if (NQuadsAlphabet.ASCII_ALPHA.negate().or(isEOF).test(readChar())) {
-            throw error(currentChar);
+            throw createError(currentChar);
         }
 
         builder.append((char) currentChar);
@@ -317,7 +317,7 @@ public final class NQuadsTokenizer implements Closeable {
         }
 
         if (currentChar == EOF) {
-            throw error(currentChar);
+            throw createError(currentChar);
         }
 
         // ('-' [a-zA-Z0-9]+)*
@@ -332,7 +332,7 @@ public final class NQuadsTokenizer implements Closeable {
                 } while (NQuadsAlphabet.ASCII_ALPHA_NUM.test(readChar()));
 
                 if (currentChar == EOF) {
-                    throw error(currentChar);
+                    throw createError(currentChar);
                 }
             }
         }
@@ -346,7 +346,7 @@ public final class NQuadsTokenizer implements Closeable {
         readChar();
 
         if (NQuadsAlphabet.ASCII_ALPHA.negate().or(isEOF).test(readChar())) {
-            throw error(currentChar, "[a-zA-Z]+");
+            throw createError(currentChar, "[a-zA-Z]+");
         }
 
         builder.setLength(0);
@@ -357,13 +357,13 @@ public final class NQuadsTokenizer implements Closeable {
         } while (NQuadsAlphabet.ASCII_ALPHA.test(readChar()) || builder.length() < 3);
 
         if (currentChar == EOF) {
-            throw error(currentChar);
+            throw createError(currentChar);
         }
 
         var ltDirection = builder.toString();
 
         if (!"ltr".equals(ltDirection) && !"rtl".equals(ltDirection)) {
-            throw error(currentChar, "ltr", "rtl");
+            throw createError(currentChar, "ltr", "rtl");
         }
 
         return new Token(TokenType.LITERAL_DIRECTION, ltDirection);
@@ -381,7 +381,7 @@ public final class NQuadsTokenizer implements Closeable {
             value.append(readUnicode64());
 
         } else {
-            throw error(currentChar);
+            throw createError(currentChar);
         }
     }
 
@@ -401,7 +401,7 @@ public final class NQuadsTokenizer implements Closeable {
             value.append(readUnicode64());
 
         } else {
-            throw error(ch);
+            throw createError(ch);
         }
     }
 
@@ -420,7 +420,7 @@ public final class NQuadsTokenizer implements Closeable {
         int hex = readChar();
 
         if (NQuadsAlphabet.HEX.negate().test(hex)) {
-            throw error(hex, "0-9", "a-f", "A-F");
+            throw createError(hex, "0-9", "a-f", "A-F");
         }
         return (char) hex;
     }
@@ -447,7 +447,7 @@ public final class NQuadsTokenizer implements Closeable {
         };
     }
 
-    private NQuadsReaderException error(int actual, String... expected) throws NQuadsReaderException {
+    private NQuadsReaderException createError(int actual, String... expected) throws NQuadsReaderException {
         return new NQuadsReaderException(
                 actual != EOF
                         ? "Unexpected character [" + (char) actual + "] expected " + Arrays.toString(expected) + "."
