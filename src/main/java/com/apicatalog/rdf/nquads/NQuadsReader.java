@@ -161,7 +161,7 @@ public final class NQuadsReader implements Closeable {
         }
 
         if (TokenType.END_OF_STATEMENT != tokenizer.token().type()) {
-            throw createError(tokenizer.token(), TokenType.END_OF_STATEMENT);
+            throw newError(tokenizer.token(), TokenType.END_OF_STATEMENT);
         }
 
         tokenizer.next();
@@ -175,7 +175,7 @@ public final class NQuadsReader implements Closeable {
             // skip end of line
         } else if (TokenType.END_OF_LINE != tokenizer.token().type()
                 && TokenType.END_OF_INPUT != tokenizer.token().type()) {
-            throw createError(tokenizer.token(), TokenType.END_OF_LINE, TokenType.END_OF_INPUT);
+            throw newError(tokenizer.token(), TokenType.END_OF_LINE, TokenType.END_OF_INPUT);
         }
 
         consumer.quad(
@@ -219,7 +219,7 @@ public final class NQuadsReader implements Closeable {
             return "_:".concat(token.value());
         }
 
-        throw createError(token);
+        throw newError(token);
     }
 
     /**
@@ -259,7 +259,7 @@ public final class NQuadsReader implements Closeable {
 
         // read literal
         if (TokenType.LITERAL_STRING_QUOTE != token.type()) {
-            throw createError(token);
+            throw newError(token);
         }
 
         tokenizer.next();
@@ -317,7 +317,7 @@ public final class NQuadsReader implements Closeable {
                 return;
             }
 
-            throw createError(attr);
+            throw newError(attr);
         }
 
         this.ltObject = token.value();
@@ -330,7 +330,7 @@ public final class NQuadsReader implements Closeable {
      * @param token the unexpected token encountered
      * @param types the expected token types
      */
-    private static final NQuadsReaderException createError(Token token, TokenType... types) {
+    private static final NQuadsReaderException newError(Token token, TokenType... types) {
         return new NQuadsReaderException(
                 "Unexpected token " + token.type() + (token.value() != null ? "[" + token.value() + "]" : "")
                         + ". "
@@ -353,7 +353,7 @@ public final class NQuadsReader implements Closeable {
         }
 
         if (count < min) {
-            throw createError(tokenizer.token());
+            throw newError(tokenizer.token());
         }
     }
 
