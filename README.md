@@ -1,6 +1,6 @@
 # Titanium RDF N-QUADS
 
-An implementation of a streaming RDF N-Quads reader and writer optimized for efficient parsing, serialization, and handling of large RDF datasets. It enables scalable processing of RDF statements in a memory-efficient, streaming fashion, supporting RDF 1.2 `dirLangString` alongside the `i18n` datatype.
+RDF N-Quads reader and writer optimized for efficient parsing, serialization, and handling of large RDF datasets. It enables scalable processing of RDF statements in a memory-efficient, streaming fashion, supporting RDF 1.2 `dirLangString` alongside the `i18n` datatype.
 
 [![Java 21 CI](https://github.com/filip26/titanium-rdf-n-quads/actions/workflows/java21-build.yml/badge.svg)](https://github.com/filip26/titanium-rdf-n-quads/actions/workflows/java21-build.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/9b9b6b24ae1e468f93428c3d70fd59f2)](https://app.codacy.com/gh/filip26/titanium-rdf-n-quads/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
@@ -56,24 +56,14 @@ var encodedLiteral = NQuadsWriter.literal(...);
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please submit a pull request.
+Contributions of all kinds are welcome - whether it’s code, documentation, testing, or community support! Please open PR or issue to get started.
 
-### Building
-
-Fork and clone the repository, then build with Maven:
-
-```bash
-> cd titanium-rdf-n-quads
-> mvn package
-```
-
-## Resources
+## 📚 Resources
 
 * [W3C RDF 1.1 N-Quads](https://www.w3.org/TR/n-quads/)
 * [W3C RDF 1.2 N-Quads](https://www.w3.org/TR/rdf12-n-quads/)
 
 ## 💼 Commercial Support
 
-Commercial support and consulting are available.  
-For inquiries, please contact: filip26@gmail.com
-
+Commercial support and consulting are available.
+For inquiries, please contact: <filip26@gmail.com>

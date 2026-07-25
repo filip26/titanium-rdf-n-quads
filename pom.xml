@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.apicatalog</groupId>
     <artifactId>titanium-rdf-n-quads</artifactId>
-    <version>2.0.0-M1</version>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
     <url>https://github.com/filip26/titanium-rdf-n-quads</url>
     <scm>
@@ -20,18 +20,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <argLine>-Dfile.encoding=UTF-8</argLine>
-                
-        <titanium.rdf.api.version>2.0.0-RC1</titanium.rdf.api.version>
-                
+
+        <titanium.rdf.api.version>2.0.0</titanium.rdf.api.version>
+
         <!--  test resources -->
-        <jakarta.json.version>2.0.1</jakarta.json.version>        
+        <jakarta.json.version>2.0.1</jakarta.json.version>
         <junit.version>6.0.0</junit.version>
     </properties>
 
     <name>Titanium RDF N-QUADS</name>
 
     <description>
-	A Java implementation of a streaming RDF N-Quads reader and writer, optimized for efficient parsing, serialization, and handling of large RDF datasets. It enables scalable processing of RDF statements in a memory-efficient, streaming fashion. Formerly a part of Titanium JSON-LD.
+        RDF N-Quads reader and writer, optimized for efficient parsing, serialization, and handling of large RDF datasets. It enables scalable processing of RDF statements in a memory-efficient, streaming fashion.
     </description>
 
     <licenses>
@@ -64,7 +64,7 @@
             <groupId>com.apicatalog</groupId>
             <artifactId>titanium-rdf-api</artifactId>
             <version>${titanium.rdf.api.version}</version>
-        </dependency>    
+        </dependency>
         <!--  Tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -83,7 +83,7 @@
             <artifactId>jakarta.json</artifactId>
             <version>${jakarta.json.version}</version>
             <scope>test</scope>
-        </dependency>        
+        </dependency>
     </dependencies>
 
     <build>
@@ -165,36 +165,26 @@
                         <version>3.2.8</version>
                         <executions>
                             <execution>
-                              <id>sign-artifacts</id>
-                              <phase>verify</phase>
-                              <goals>
-                                  <goal>sign</goal>
-                              </goals>
-                              <configuration>
-                                <signer>bc</signer>
-                              </configuration>                                
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.7.0</version>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.11.0</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>ossrh</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-                </snapshotRepository>
-            </distributionManagement>
         </profile>
     </profiles>
 </project>
