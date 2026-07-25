@@ -15,16 +15,17 @@
  */
 package com.apicatalog.rdf.nquads;
 
+import java.io.Closeable;
+import java.io.Flushable;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
 import java.io.Writer;
 
-import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 
 /**
- * A writer for serializing RDF data in the
- * <a href="https://www.w3.org/TR/n-quads/">N-Quads format</a>.
+ * A writer for serializing RDF data in the N-Quads format.
  * <p>
  * This class implements the {@link RdfQuadConsumer} interface, allowing RDF
  * quads to be written to an output stream in the standard N-Quads
@@ -34,11 +35,18 @@ import com.apicatalog.rdf.api.RdfQuadConsumer;
  * 
  * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads
  *      Specification</a>
+ * @see <a href="https://www.w3.org/TR/rdf12-n-quads/">RDF 1.2 N-Quads
+ *      Specification</a>
  */
-public class NQuadsWriter implements RdfQuadConsumer {
+public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable {
 
-    protected final Writer writer;
+    private final Writer writer;
 
+    /**
+     * Constructs a new {@code NQuadsWriter} with the specified output writer.
+     *
+     * @param writer the writer to which N-Quads will be written
+     */
     public NQuadsWriter(Writer writer) {
         this.writer = writer;
     }
@@ -53,7 +61,7 @@ public class NQuadsWriter implements RdfQuadConsumer {
      */
     public static final String resourceOrBlank(String value) {
         if (value == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The IRI or blank node value cannot be null.");
         }
 
         if (value.startsWith("_:")) {
@@ -69,9 +77,9 @@ public class NQuadsWriter implements RdfQuadConsumer {
      * @return the IRI wrapped in angle brackets
      * @throws IllegalArgumentException if the input IRI is {@code null}
      */
-    public static final String resource(final String iri) {
+    public static String resource(final String iri) {
         if (iri == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The IRI cannot be null.");
         }
         return "<" + iri + ">";
     }
@@ -81,18 +89,31 @@ public class NQuadsWriter implements RdfQuadConsumer {
      *
      * @param literal   the literal value
      * @param datatype  the optional datatype IRI (may be {@code null})
-     * @param langTag   the optional language tag (may be {@code null})
+     * @param language  the optional language tag (may be {@code null})
      * @param direction the optional text direction (may be {@code null})
      * @return the formatted N-Quads literal representation
-     * @throws IllegalArgumentException if the literal value is {@code null}
+     * @throws IllegalArgumentException if literal is {@code null}, or if the
+     *                                  literal direction or datatype is invalid
      */
-    public static final String literal(final String literal, final String datatype, final String langTag, final String direction) {
+    public static final String literal(
+            final String literal,
+            final String datatype,
+            final String language,
+            final String direction) {
+
         if (literal == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The literal value cannot be null.");
         }
-        final StringWriter writer = new StringWriter();
+
+        final var writer = new StringWriter(
+                literal.length()
+                        + (datatype != null ? datatype.length() : 0)
+                        + (language != null ? language.length() : 0)
+                        + (direction != null ? direction.length() : 0)
+                        + 24);
+
         try {
-            literal(writer, literal, datatype, langTag, direction);
+            literal(writer, literal, datatype, language, direction);
 
         } catch (IOException e) {
             /* ignore */
@@ -109,20 +130,17 @@ public class NQuadsWriter implements RdfQuadConsumer {
      * @param predicate The predicate of the triple, which must be an IRI.
      * @param object    The object of the triple, which can be either an IRI or a
      *                  blank node.
-     * @param graph     The named graph for the triple, or null if no graph is
-     *                  specified.
+     * @param graph     The named graph for the triple, or {@code null} if no graph
+     *                  is specified.
      * 
      * @return The N-Quad representation of the triple as a string.
+     * @throws IllegalArgumentException if the subject, predicate, or object is
+     *                                  {@code null}, or if the literal direction or
+     *                                  datatype is invalid
      */
-    public static final String nquad(final String subject, final String predicate, final String object, final String graph) {
-        final StringWriter writer = new StringWriter();
-        try {
-            nquad(writer, subject, predicate, object, graph);
-
-        } catch (IOException e) {
-            /* ignore */
-        }
-        return writer.toString();
+    public static final String nquad(final String subject, final String predicate, final String object,
+            final String graph) {
+        return nquad(subject, predicate, object, null, null, null, graph);
     }
 
     /**
@@ -137,11 +155,37 @@ public class NQuadsWriter implements RdfQuadConsumer {
      * @param graph     The named graph for the triple, or {@code null} if no graph
      *                  is specified.
      * @return The N-Quad representation of the triple as a string.
+     * @throws IllegalArgumentException if the subject, predicate, or object is
+     *                                  {@code null}, or if the literal direction or
+     *                                  datatype is invalid
      */
     public static final String nquad(String subject, String predicate, String literal, String datatype, String graph) {
+        return nquad(subject, predicate, literal, datatype, null, null, graph);
+    }
+
+    /**
+     * Generates an N-Quad string representation for a quad with a literal object
+     * and a specified datatype, language, and direction.
+     * 
+     * @param subject   The subject of the triple. This can be either an IRI or a
+     *                  blank node.
+     * @param predicate The predicate of the triple, which must be an IRI.
+     * @param literal   The literal value for the object in the triple.
+     * @param datatype  The datatype IRI for the literal, or {@code null}.
+     * @param language  The language tag for the literal, or {@code null}.
+     * @param direction The text direction for the literal, or {@code null}.
+     * @param graph     The named graph for the triple, or {@code null} if no graph
+     *                  is specified.
+     * @return The N-Quad representation of the triple as a string.
+     * @throws IllegalArgumentException if the subject, predicate, or object is
+     *                                  {@code null}, or if the literal direction or
+     *                                  datatype is invalid
+     */
+    public static final String nquad(String subject, String predicate, String literal, String datatype, String language,
+            String direction, String graph) {
         final StringWriter writer = new StringWriter();
         try {
-            nquad(writer, subject, predicate, literal, datatype, null, null, graph);
+            nquad(writer, subject, predicate, literal, datatype, language, direction, graph);
 
         } catch (IOException e) {
             /* ignore */
@@ -150,112 +194,98 @@ public class NQuadsWriter implements RdfQuadConsumer {
     }
 
     /**
-     * Generates an N-Quad string representation for a quad with a lanauge-tagged
-     * literal object and optionally direction.
+     * Consumes and writes a quad to the underlying writer.
      * 
-     * @param subject   The subject of the triple. This can be either an IRI or a
-     *                  blank node.
-     * @param predicate The predicate of the triple, which must be an IRI.
-     * @param literal   The literal value for the object in the triple.
-     * @param language  The language tag for the literal.
-     * @param direction The direction of the literal, or null if not applicable.
-     * @param graph     The named graph for the triple, or null if no graph is
-     *                  specified.
-     * @return The N-Quad representation of the triple as a string.
+     * @param subject   the subject of the quad
+     * @param predicate the predicate of the quad
+     * @param object    the object of the quad
+     * @param datatype  the datatype IRI of the object, if it is a literal
+     * @param language  the language tag of the object, if it is a literal
+     * @param direction the text direction of the object, if it is a literal
+     * @param graph     the named graph, or {@code null} if none
+     * @throws UncheckedIOException     if an underlying I/O error occurs
+     * @throws IllegalArgumentException if the subject, predicate, or object is
+     *                                  {@code null}, or if the literal direction or
+     *                                  datatype is invalid
      */
-    public static final String nquad(String subject, String predicate, String literal, String language, String direction, String graph) {
-        final StringWriter writer = new StringWriter();
-        try {
-            nquad(writer,
-                    subject,
-                    predicate,
-                    literal,
-                    direction != null
-                            ? NQuadsAlphabet.DIR_LANG_STRING
-                            : NQuadsAlphabet.LANG_STRING,
-                    language,
-                    direction,
-                    graph);
-
-        } catch (IOException e) {
-            /* ignore */
-        }
-        return writer.toString();
-    }
-
-    public static final String nquad(String subject, String predicate, String object, String datatype, String language, String direction, String graph) {
-        final StringWriter writer = new StringWriter();
-        try {
-            nquad(writer, subject, predicate, object, datatype, language, direction, graph);
-
-        } catch (IOException e) {
-            /* ignore */
-        }
-        return writer.toString();
-    }
-
     @Override
-    public RdfQuadConsumer quad(String subject, String predicate, String object, String datatype, String language, String direction, String graph) throws RdfConsumerException {
+    public void quad(String subject, String predicate, String object, String datatype, String language,
+            String direction, String graph) {
         try {
             nquad(writer, subject, predicate, object, datatype, language, direction, graph);
-            return this;
 
         } catch (IOException e) {
-            throw new RdfConsumerException(subject, predicate, object, datatype, language, direction, graph, e);
+            throw new UncheckedIOException(e);
         }
     }
 
-    protected static void nquad(Writer writer, String subject, String predicate, String object, String graph) throws IOException {
-        writer.append(resourceOrBlank(subject))
-                .append(' ')
-                .append(resourceOrBlank(predicate))
-                .append(' ')
-                .append(resourceOrBlank(object))
-                .append(' ');
+    private static void nquad(Writer writer, String subject, String predicate, String object, String datatype,
+            String language, String direction, String graph) throws IOException {
 
-        if (graph != null) {
-            writer.append(resourceOrBlank(graph))
-                    .append(' ');
-        }
-
-        writer.append(".\n");
-    }
-
-    protected static void nquad(Writer writer, String subject, String predicate, String object, String datatype, String language, String direction, String graph) throws IOException {
-        writer.append(resourceOrBlank(subject))
-                .append(' ')
-                .append(resourceOrBlank(predicate))
-                .append(' ');
+        resourceOrBlank(writer, subject);
+        writer.append(' ');
+        resourceOrBlank(writer, predicate);
+        writer.append(' ');
 
         if (RdfQuadConsumer.isLiteral(datatype, language, direction)) {
             literal(writer, object, datatype, language, direction);
+
         } else {
-            writer.append(resourceOrBlank(object));
+            resourceOrBlank(writer, object);
         }
 
         writer.append(' ');
 
         if (graph != null) {
-            writer.append(resourceOrBlank(graph)).append(' ');
+            resourceOrBlank(writer, graph);
+            writer.append(' ');
         }
 
         writer.append(".\n");
     }
 
-    protected static final void literal(Writer writer, String object, String datatype, String langTag, String direction) throws IOException {
+    private static void literal(Writer writer, String object, String datatype, String language, String direction)
+            throws IOException {
 
-        writer.append('"').append(NQuadsAlphabet.escape(object)).append('"');
+        writer
+                .append('"')
+                .append(NQuadsAlphabet.escape(object))
+                .append('"');
 
         if (direction != null) {
-            writer.append(NQuadsAlphabet.I18N_BASE);
-            if (langTag != null) {
-                writer.append(langTag);
+            if (datatype == null || NQuadsAlphabet.DIR_LANG_STRING.equals(datatype)) {
+
+                switch (direction) {
+                case "ltr", "rtl" -> {
+                }
+                default -> throw new IllegalArgumentException(
+                        "The direction must be either 'ltr' or 'rtl', but was: " + direction);
+                }
+
+                writer
+                        .append('@')
+                        .append(language != null ? language : "und")
+                        .append("--")
+                        .append(direction);
+
+            } else if (NQuadsAlphabet.I18N_BASE.equals(datatype)) {
+                writer
+                        .append("^^<")
+                        .append(datatype);
+                if (language != null) {
+                    writer.append(language);
+                }
+                writer.append('_')
+                        .append(direction)
+                        .append('>');
+
+            } else {
+                throw new IllegalArgumentException("Invalid datatype for directional literal: " + datatype);
             }
-            writer.append("_").append(direction);
 
-        } else if (langTag != null) {
+        } else if (language != null) {
 
-            writer.append("@").append(langTag);
+            writer.append("@").append(language);
 
         } else if (datatype != null) {
 
@@ -263,7 +293,38 @@ public class NQuadsWriter implements RdfQuadConsumer {
                 return;
             }
 
-            writer.append("^^").append(resource(datatype));
+            writer.append("^^<").append(datatype).append('>');
         }
+    }
+
+    private static void resource(Writer writer, final String iri) throws IOException {
+        if (iri == null) {
+            throw new IllegalArgumentException("The IRI cannot be null.");
+        }
+        writer.append('<');
+        writer.append(iri);
+        writer.append('>');
+    }
+
+    private static void resourceOrBlank(Writer writer, String value) throws IOException {
+        if (value == null) {
+            throw new IllegalArgumentException("The IRI or blank node value cannot be null.");
+        }
+
+        if (value.startsWith("_:")) {
+            writer.write(value);
+            return;
+        }
+        resource(writer, value);
+    }
+
+    @Override
+    public void close() throws IOException {
+        writer.close();
+    }
+
+    @Override
+    public void flush() throws IOException {
+        writer.flush();
     }
 }

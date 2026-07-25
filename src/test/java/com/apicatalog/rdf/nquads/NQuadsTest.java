@@ -17,7 +17,6 @@ package com.apicatalog.rdf.nquads;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -30,7 +29,6 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.apicatalog.rdf.api.RdfConsumerException;
 import com.apicatalog.rdf.nquads.NQuadsTestCase.Type;
 
 import jakarta.json.Json;
@@ -50,22 +48,27 @@ class NQuadsTest {
         assertNotNull(testCase.getName());
         assertNotNull(testCase.getType());
 
-        try (final InputStream is = NQuadsTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
+        try (final InputStream is = NQuadsTest.class
+                .getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".nq")) {
 
             final String input = isToString(is);
             assertNotNull(input);
 
-            final StringWriter writer = new StringWriter();
-            new NQuadsReader(new StringReader(input)).provide((new NQuadsWriter(writer)));
+            final StringWriter output = new StringWriter();
+            try (var reader = new NQuadsReader(new StringReader(input));
+                    var writer = new NQuadsWriter(output)) {
+                reader.provide(writer);
+            }
 
-            final String result = writer.toString();
+            final String result = output.toString();
             assertNotNull(result);
 
             assertEquals(Type.POSITIVE, testCase.getType());
 
             String expected = input;
 
-            try (final InputStream out = NQuadsTest.class.getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
+            try (final InputStream out = NQuadsTest.class
+                    .getResourceAsStream(TEST_CASE_BASE_PATH + testCase.getName() + ".out.nq")) {
                 if (out != null) {
                     expected = isToString(out);
                 }
@@ -81,10 +84,10 @@ class NQuadsTest {
                 System.out.println(result);
             }
 
-            assertTrue(match);
+            assertEquals(expected, result);
 
-        } catch (IllegalArgumentException | NQuadsReaderException | RdfConsumerException e) {
-            assertEquals(Type.NEGATIVE, testCase.getType());
+        } catch (IllegalArgumentException | NQuadsReaderException e) {
+            assertEquals(testCase.getType(), Type.NEGATIVE);
         }
     }
 
