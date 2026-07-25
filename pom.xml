@@ -9,10 +9,13 @@
     <packaging>jar</packaging>
     <url>https://github.com/filip26/titanium-rdf-n-quads</url>
     <scm>
-        <connection>scm:git:git://github.com/filip26/titanium-rdf-n-quads.git</connection>
+        <connection>
+            scm:git:https://github.com/filip26/titanium-rdf-n-quads.git
+        </connection>
         <developerConnection>
-            scm:git:git://github.com/filip26/titanium-rdf-n-quads.git</developerConnection>
-        <url>https://github.com/filip26/titanium-rdf-n-quads/tree/main</url>
+            scm:git:ssh://git@github.com/filip26/titanium-rdf-n-quads.git
+        </developerConnection>
+        <url>https://github.com/filip26/titanium-rdf-n-quads</url>
     </scm>
     <properties>
         <maven.compiler.release>21</maven.compiler.release>
@@ -37,7 +40,7 @@
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
-            <url>http://apache.org/licenses/LICENSE-2.0</url>
+            <url>https://apache.org/licenses/LICENSE-2.0</url>
         </license>
     </licenses>
 
