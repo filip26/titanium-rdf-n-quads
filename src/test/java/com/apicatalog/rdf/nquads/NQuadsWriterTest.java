@@ -154,5 +154,4 @@ class NQuadsWriterTest {
         }
         assertEquals("_:s _:p \"a\"@cs--ltr _:g .\n", output.toString());
     }
-
 }
