@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.apicatalog</groupId>
     <artifactId>titanium-rdf-n-quads</artifactId>
-    <version>2.0.1</version>
+    <version>2.1.0</version>
     <packaging>jar</packaging>
     <url>https://github.com/filip26/titanium-rdf-n-quads</url>
     <scm>
@@ -24,7 +24,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <argLine>-Dfile.encoding=UTF-8</argLine>
 
-        <rdf.api.version>2.0.1</rdf.api.version>
+        <rdf.api.version>2.1.0</rdf.api.version>
 
         <!--  test resources -->
         <jakarta.json.version>2.0.1</jakarta.json.version>

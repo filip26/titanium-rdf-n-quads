@@ -26,12 +26,11 @@ class NQuadsWriterTest {
     void testI18DirectionWithoutLang() throws IOException {
         var output = new StringWriter();
         try (var writer = new NQuadsWriter(output)) {
-            writer.quad(
+            assertThrows(IllegalArgumentException.class, () -> writer.quad(
                     "_:s", "_:p",
                     "a", "https://www.w3.org/ns/i18n#", null, "ltr",
-                    "_:g");
+                    "_:g"));
         }
-        assertEquals("_:s _:p \"a\"^^<https://www.w3.org/ns/i18n#_ltr> _:g .\n", output.toString());
     }
 
     @Test
@@ -62,12 +61,11 @@ class NQuadsWriterTest {
     void testDirLangTagWithoutDirection() throws IOException {
         var output = new StringWriter();
         try (var writer = new NQuadsWriter(output)) {
-            writer.quad(
+            assertThrows(IllegalArgumentException.class, () -> writer.quad(
                     "_:s", "_:p",
                     "a", "http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString", "cs", null,
-                    "_:g");
+                    "_:g"));
         }
-        assertEquals("_:s _:p \"a\"@cs _:g .\n", output.toString());
     }
 
     @Test
@@ -144,7 +142,7 @@ class NQuadsWriterTest {
     }
 
     @Test
-    void testLangDirWithoutDatatype() throws IOException {
+    void testDirLangWithoutDatatype() throws IOException {
         var output = new StringWriter();
         try (var writer = new NQuadsWriter(output)) {
             writer.quad(

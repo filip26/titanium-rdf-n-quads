@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.io.Writer;
+import java.util.Objects;
 
 import com.apicatalog.rdf.api.RdfQuadConsumer;
 
@@ -138,8 +139,11 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
      *                                  {@code null}, or if the literal direction or
      *                                  datatype is invalid
      */
-    public static final String nquad(final String subject, final String predicate, final String object,
-            final String graph) {
+    public static final String nquad(
+            String subject,
+            String predicate,
+            String object,
+            String graph) {
         return nquad(subject, predicate, object, null, null, null, graph);
     }
 
@@ -159,7 +163,12 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
      *                                  {@code null}, or if the literal direction or
      *                                  datatype is invalid
      */
-    public static final String nquad(String subject, String predicate, String literal, String datatype, String graph) {
+    public static final String nquad(
+            String subject,
+            String predicate,
+            String literal,
+            String datatype,
+            String graph) {
         return nquad(subject, predicate, literal, datatype, null, null, graph);
     }
 
@@ -171,9 +180,9 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
      *                  blank node.
      * @param predicate The predicate of the triple, which must be an IRI.
      * @param literal   The literal value for the object in the triple.
-     * @param datatype  The datatype IRI for the literal, or {@code null}.
-     * @param language  The language tag for the literal, or {@code null}.
-     * @param direction The text direction for the literal, or {@code null}.
+     * @param datatype  The datatype IRI for the literal (may be {@code null})
+     * @param language  The language tag for the literal (may be {@code null})
+     * @param direction The text direction for the literal (may be {@code null})
      * @param graph     The named graph for the triple, or {@code null} if no graph
      *                  is specified.
      * @return The N-Quad representation of the triple as a string.
@@ -181,11 +190,24 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
      *                                  {@code null}, or if the literal direction or
      *                                  datatype is invalid
      */
-    public static final String nquad(String subject, String predicate, String literal, String datatype, String language,
-            String direction, String graph) {
+    public static final String nquad(
+            String subject,
+            String predicate,
+            String literal,
+            String datatype,
+            String language,
+            String direction,
+            String graph) {
         final StringWriter writer = new StringWriter();
         try {
-            nquad(writer, subject, predicate, literal, datatype, language, direction, graph);
+            nquad(writer,
+                    Objects.requireNonNull(subject),
+                    Objects.requireNonNull(predicate),
+                    Objects.requireNonNull(literal),
+                    datatype,
+                    language,
+                    direction,
+                    graph);
 
         } catch (IOException e) {
             /* ignore */
@@ -196,12 +218,12 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
     /**
      * Consumes and writes a quad to the underlying writer.
      * 
-     * @param subject   the subject of the quad
-     * @param predicate the predicate of the quad
-     * @param object    the object of the quad
-     * @param datatype  the datatype IRI of the object, if it is a literal
-     * @param language  the language tag of the object, if it is a literal
-     * @param direction the text direction of the object, if it is a literal
+     * @param subject   the subject of the quad, never @{code null}
+     * @param predicate the predicate of the quad, never @{code null}
+     * @param object    the object of the quad, never @{code null}
+     * @param datatype  the datatype IRI of the object (may be {@code null})
+     * @param language  the language tag of the object (may be {@code null})
+     * @param direction the text direction of the object (may be {@code null})
      * @param graph     the named graph, or {@code null} if none
      * @throws UncheckedIOException     if an underlying I/O error occurs
      * @throws IllegalArgumentException if the subject, predicate, or object is
@@ -209,29 +231,50 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
      *                                  datatype is invalid
      */
     @Override
-    public void quad(String subject, String predicate, String object, String datatype, String language,
-            String direction, String graph) {
+    public void quad(
+            String subject,
+            String predicate,
+            String object,
+            String datatype,
+            String language,
+            String direction,
+            String graph) {
         try {
-            nquad(writer, subject, predicate, object, datatype, language, direction, graph);
-
+            nquad(
+                    writer,
+                    Objects.requireNonNull(subject),
+                    Objects.requireNonNull(predicate),
+                    Objects.requireNonNull(object),
+                    datatype,
+                    language,
+                    direction,
+                    graph);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    private static void nquad(Writer writer, String subject, String predicate, String object, String datatype,
-            String language, String direction, String graph) throws IOException {
+    private static void nquad(
+            Writer writer,
+            String subject,
+            String predicate,
+            String object,
+            String datatype,
+            String language,
+            String direction,
+            String graph) throws IOException {
 
         resourceOrBlank(writer, subject);
         writer.append(' ');
         resourceOrBlank(writer, predicate);
         writer.append(' ');
 
-        if (RdfQuadConsumer.isLiteral(datatype, language, direction)) {
-            literal(writer, object, datatype, language, direction);
+        if (RdfQuadConsumer.isObject(datatype, language, direction)) {
+            resourceOrBlank(writer, object);
 
         } else {
-            resourceOrBlank(writer, object);
+            literal(writer, object, datatype, language, direction);
+
         }
 
         writer.append(' ');
@@ -259,7 +302,9 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
                 case "ltr", "rtl" -> {
                 }
                 default -> throw new IllegalArgumentException(
-                        "The direction must be either 'ltr' or 'rtl', but was: " + direction);
+                        """
+                        The direction must be either 'ltr' or 'rtl', but was %s
+                        """.formatted(direction));
                 }
 
                 writer
@@ -269,26 +314,55 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
                         .append(direction);
 
             } else if (NQuadsAlphabet.I18N_BASE.equals(datatype)) {
+
+                if (language == null) {
+                    throw new IllegalArgumentException(
+                            """
+                            Language tag is required for i18n datatype but is missing.
+                            """);
+                }
+
                 writer
                         .append("^^<")
-                        .append(datatype);
-                if (language != null) {
-                    writer.append(language);
-                }
-                writer.append('_')
+                        .append(NQuadsAlphabet.I18N_BASE)
+                        .append(language)
+                        .append('_')
                         .append(direction)
                         .append('>');
 
             } else {
-                throw new IllegalArgumentException("Invalid datatype for directional literal: " + datatype);
+                throw new IllegalArgumentException(
+                        """
+                        Unsupported datatype for directional literal %s
+                        """.formatted(datatype));
             }
 
         } else if (language != null) {
 
-            writer.append("@").append(language);
+            if (datatype == null || NQuadsAlphabet.LANG_STRING.equals(datatype)) {
+                writer.append("@").append(language);
+
+            } else {
+                throw new IllegalArgumentException(
+                        """
+                        Unsupported datatype for language tagged literal %s
+                        """.formatted(datatype));
+            }
 
         } else if (datatype != null) {
 
+            if (NQuadsAlphabet.LANG_STRING.equals(datatype)) {
+                throw new IllegalArgumentException(
+                        """
+                        Missing required language tag for datatype %s
+                        """.formatted(datatype));
+            }
+            if (NQuadsAlphabet.DIR_LANG_STRING.equals(datatype)) {
+                throw new IllegalArgumentException(
+                        """
+                        Missing required direction for datatype %s
+                        """.formatted(datatype));
+            }
             if (NQuadsAlphabet.XSD_STRING.equals(datatype)) {
                 return;
             }
@@ -297,25 +371,14 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
         }
     }
 
-    private static void resource(Writer writer, final String iri) throws IOException {
-        if (iri == null) {
-            throw new IllegalArgumentException("The IRI cannot be null.");
-        }
-        writer.append('<');
-        writer.append(iri);
-        writer.append('>');
-    }
-
     private static void resourceOrBlank(Writer writer, String value) throws IOException {
-        if (value == null) {
-            throw new IllegalArgumentException("The IRI or blank node value cannot be null.");
-        }
-
         if (value.startsWith("_:")) {
             writer.write(value);
             return;
         }
-        resource(writer, value);
+        writer.append('<');
+        writer.append(value);
+        writer.append('>');
     }
 
     @Override
