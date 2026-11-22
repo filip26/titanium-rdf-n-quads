@@ -161,7 +161,7 @@ public final class NQuadsReader implements Closeable {
         }
 
         if (TokenType.END_OF_STATEMENT != tokenizer.token().type()) {
-            throw newError(tokenizer.token(), TokenType.END_OF_STATEMENT);
+            throw fireError(tokenizer.token(), TokenType.END_OF_STATEMENT);
         }
 
         tokenizer.next();
@@ -175,7 +175,7 @@ public final class NQuadsReader implements Closeable {
             // skip end of line
         } else if (TokenType.END_OF_LINE != tokenizer.token().type()
                 && TokenType.END_OF_INPUT != tokenizer.token().type()) {
-            throw newError(tokenizer.token(), TokenType.END_OF_LINE, TokenType.END_OF_INPUT);
+            throw fireError(tokenizer.token(), TokenType.END_OF_LINE, TokenType.END_OF_INPUT);
         }
 
         consumer.quad(
@@ -219,7 +219,7 @@ public final class NQuadsReader implements Closeable {
             return "_:".concat(token.value());
         }
 
-        throw newError(token);
+        throw fireError(token);
     }
 
     /**
@@ -253,13 +253,13 @@ public final class NQuadsReader implements Closeable {
 
             tokenizer.next();
 
-            ltObject = "_:".concat(token.value());
+            ltObject = "_:" + token.value();
             return;
         }
 
         // read literal
         if (TokenType.LITERAL_STRING_QUOTE != token.type()) {
-            throw newError(token);
+            throw fireError(token);
         }
 
         tokenizer.next();
@@ -317,7 +317,7 @@ public final class NQuadsReader implements Closeable {
                 return;
             }
 
-            throw newError(attr);
+            throw fireError(attr);
         }
 
         this.ltObject = token.value();
@@ -330,7 +330,7 @@ public final class NQuadsReader implements Closeable {
      * @param token the unexpected token encountered
      * @param types the expected token types
      */
-    private static final NQuadsReaderException newError(Token token, TokenType... types) {
+    private static final NQuadsReaderException fireError(Token token, TokenType... types) {
         return new NQuadsReaderException(
                 "Unexpected token " + token.type() + (token.value() != null ? "[" + token.value() + "]" : "")
                         + ". "
@@ -353,7 +353,7 @@ public final class NQuadsReader implements Closeable {
         }
 
         if (count < min) {
-            throw newError(tokenizer.token());
+            throw fireError(tokenizer.token());
         }
     }
 
@@ -379,8 +379,10 @@ public final class NQuadsReader implements Closeable {
      *                 containing language and direction
      * @throws NQuadsReaderException if the datatype format is malformed
      */
-    private static void datatype(final String datatype, final BiConsumer<String, String[]> result)
-            throws NQuadsReaderException {
+    private static void datatype(
+            final String datatype,
+            final BiConsumer<String, String[]> result) throws NQuadsReaderException {
+        
         if (datatype.startsWith(NQuadsAlphabet.I18N_BASE)) {
 
             var i18n = datatype.substring(NQuadsAlphabet.I18N_BASE.length());
