@@ -26,11 +26,24 @@ class NQuadsWriterTest {
     void testI18DirectionWithoutLang() throws IOException {
         var output = new StringWriter();
         try (var writer = new NQuadsWriter(output)) {
-            assertThrows(IllegalArgumentException.class, () -> writer.quad(
+            writer.quad(
                     "_:s", "_:p",
                     "a", "https://www.w3.org/ns/i18n#", null, "ltr",
-                    "_:g"));
+                    "_:g");
         }
+        assertEquals("_:s _:p \"a\"^^<https://www.w3.org/ns/i18n#_ltr> _:g .\n", output.toString());        
+    }
+
+    @Test
+    void testI18DirectionWithEmptyLang() throws IOException {
+        var output = new StringWriter();
+        try (var writer = new NQuadsWriter(output)) {
+            writer.quad(
+                    "_:s", "_:p",
+                    "a", "https://www.w3.org/ns/i18n#", "", "ltr",
+                    "_:g");
+        }
+        assertEquals("_:s _:p \"a\"^^<https://www.w3.org/ns/i18n#_ltr> _:g .\n", output.toString());
     }
 
     @Test

@@ -63,7 +63,7 @@ class NQuadsTest {
             final String result = output.toString();
             assertNotNull(result);
 
-            assertEquals(Type.POSITIVE, testCase.getType());
+            assertEquals(testCase.getType(), Type.POSITIVE);
 
             String expected = input;
 
@@ -87,6 +87,9 @@ class NQuadsTest {
             assertEquals(expected, result);
 
         } catch (IllegalArgumentException | NQuadsReaderException e) {
+            if (Type.NEGATIVE != testCase.getType()) {
+                e.printStackTrace();
+            }
             assertEquals(testCase.getType(), Type.NEGATIVE);
         }
     }
