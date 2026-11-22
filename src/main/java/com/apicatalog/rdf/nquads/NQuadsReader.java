@@ -306,10 +306,10 @@ public final class NQuadsReader implements Closeable {
                 datatype(datatype, (a, b) -> {
                     this.ltDatatype = a;
                     if (b != null) {
-                        if (b.length > 0 && b[0] != null) {
+                        if (b.length > 0 && b[0] != null && !b[0].trim().isEmpty()) {
                             this.ltLangTag = b[0];
                         }
-                        if (b.length > 1 && b[1] != null) {
+                        if (b.length > 1 && b[1] != null && !b[1].trim().isEmpty()) {
                             this.ltDirection = b[1];
                         }
                     }
@@ -387,12 +387,16 @@ public final class NQuadsReader implements Closeable {
 
             var i18n = datatype.substring(NQuadsAlphabet.I18N_BASE.length());
 
+            if (i18n.length() < 4) {
+                throw new NQuadsReaderException("Malformed i18n datatype, got [" + datatype + "]. ");
+            }
+
             if (i18n.startsWith("_") && i18n.length() > 1) {
-                result.accept(NQuadsAlphabet.I18N_BASE, new String[] { "", i18n.substring(1) });
+                result.accept(NQuadsAlphabet.I18N_BASE, new String[] { null, i18n.substring(1) });
                 return;
             }
 
-            var index = i18n.indexOf('_');
+            var index = i18n.indexOf('_', 1);
             if (index == -1 || (index + 2) >= i18n.length()) {
                 throw new NQuadsReaderException("Malformed i18n datatype, got [" + datatype + "]. ");
             }

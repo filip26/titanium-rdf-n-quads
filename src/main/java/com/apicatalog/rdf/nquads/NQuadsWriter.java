@@ -314,18 +314,10 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
                         .append(direction);
 
             } else if (NQuadsAlphabet.I18N_BASE.equals(datatype)) {
-
-                if (language == null) {
-                    throw new IllegalArgumentException(
-                            """
-                            Language tag is required for i18n datatype but is missing.
-                            """);
-                }
-
                 writer
                         .append("^^<")
                         .append(NQuadsAlphabet.I18N_BASE)
-                        .append(language)
+                        .append(language != null ? language : "")
                         .append('_')
                         .append(direction)
                         .append('>');
