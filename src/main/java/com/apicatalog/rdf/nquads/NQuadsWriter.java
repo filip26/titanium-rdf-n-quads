@@ -325,6 +325,12 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
 
         } else if (datatype != null) {
 
+            if (NQuadsAlphabet.LANG_STRING.equals(datatype)
+                    || NQuadsAlphabet.DIR_LANG_STRING.equals(datatype)) {
+
+                throw new IllegalArgumentException("Unsupported datatype for xsd:string literal: " + datatype);
+            }
+
             if (NQuadsAlphabet.XSD_STRING.equals(datatype)) {
                 return;
             }
