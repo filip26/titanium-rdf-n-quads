@@ -142,7 +142,7 @@ class NQuadsWriterTest {
     }
 
     @Test
-    void testLangDirWithoutDatatype() throws IOException {
+    void testDirLangWithoutDatatype() throws IOException {
         var output = new StringWriter();
         try (var writer = new NQuadsWriter(output)) {
             writer.quad(

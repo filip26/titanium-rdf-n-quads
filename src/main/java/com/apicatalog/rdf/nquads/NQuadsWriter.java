@@ -139,8 +139,11 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
      *                                  {@code null}, or if the literal direction or
      *                                  datatype is invalid
      */
-    public static final String nquad(final String subject, final String predicate, final String object,
-            final String graph) {
+    public static final String nquad(
+            String subject,
+            String predicate,
+            String object,
+            String graph) {
         return nquad(subject, predicate, object, null, null, null, graph);
     }
 
@@ -160,7 +163,12 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
      *                                  {@code null}, or if the literal direction or
      *                                  datatype is invalid
      */
-    public static final String nquad(String subject, String predicate, String literal, String datatype, String graph) {
+    public static final String nquad(
+            String subject,
+            String predicate,
+            String literal,
+            String datatype,
+            String graph) {
         return nquad(subject, predicate, literal, datatype, null, null, graph);
     }
 
@@ -182,8 +190,14 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
      *                                  {@code null}, or if the literal direction or
      *                                  datatype is invalid
      */
-    public static final String nquad(String subject, String predicate, String literal, String datatype, String language,
-            String direction, String graph) {
+    public static final String nquad(
+            String subject,
+            String predicate,
+            String literal,
+            String datatype,
+            String language,
+            String direction,
+            String graph) {
         final StringWriter writer = new StringWriter();
         try {
             nquad(writer,
@@ -255,11 +269,12 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
         resourceOrBlank(writer, predicate);
         writer.append(' ');
 
-        if (RdfQuadConsumer.isLiteral(datatype, language, direction)) {
-            literal(writer, object, datatype, language, direction);
+        if (RdfQuadConsumer.isObject(datatype, language, direction)) {
+            resourceOrBlank(writer, object);
 
         } else {
-            resourceOrBlank(writer, object);
+            literal(writer, object, datatype, language, direction);
+
         }
 
         writer.append(' ');
@@ -287,7 +302,9 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
                 case "ltr", "rtl" -> {
                 }
                 default -> throw new IllegalArgumentException(
-                        "The direction must be either 'ltr' or 'rtl', but was: " + direction);
+                        """
+                        The direction must be either 'ltr' or 'rtl', but was %s
+                        """.formatted(direction));
                 }
 
                 writer
@@ -299,7 +316,10 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
             } else if (NQuadsAlphabet.I18N_BASE.equals(datatype)) {
 
                 if (language == null) {
-                    throw new IllegalArgumentException("Language tag is required for i18n datatype but is missing.");
+                    throw new IllegalArgumentException(
+                            """
+                            Language tag is required for i18n datatype but is missing.
+                            """);
                 }
 
                 writer
@@ -311,7 +331,10 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
                         .append('>');
 
             } else {
-                throw new IllegalArgumentException("Unsupported datatype for directional literal: " + datatype);
+                throw new IllegalArgumentException(
+                        """
+                        Unsupported datatype for directional literal %s
+                        """.formatted(datatype));
             }
 
         } else if (language != null) {
@@ -320,17 +343,26 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
                 writer.append("@").append(language);
 
             } else {
-                throw new IllegalArgumentException("Unsupported datatype for language tagged literal: " + datatype);
+                throw new IllegalArgumentException(
+                        """
+                        Unsupported datatype for language tagged literal %s
+                        """.formatted(datatype));
             }
 
         } else if (datatype != null) {
 
-            if (NQuadsAlphabet.LANG_STRING.equals(datatype)
-                    || NQuadsAlphabet.DIR_LANG_STRING.equals(datatype)) {
-
-                throw new IllegalArgumentException("Unsupported datatype for xsd:string literal: " + datatype);
+            if (NQuadsAlphabet.LANG_STRING.equals(datatype)) {
+                throw new IllegalArgumentException(
+                        """
+                        Missing required language tag for datatype %s
+                        """.formatted(datatype));
             }
-
+            if (NQuadsAlphabet.DIR_LANG_STRING.equals(datatype)) {
+                throw new IllegalArgumentException(
+                        """
+                        Missing required direction for datatype %s
+                        """.formatted(datatype));
+            }
             if (NQuadsAlphabet.XSD_STRING.equals(datatype)) {
                 return;
             }
