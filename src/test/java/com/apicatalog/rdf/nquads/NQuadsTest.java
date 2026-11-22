@@ -63,7 +63,7 @@ class NQuadsTest {
             final String result = output.toString();
             assertNotNull(result);
 
-            assertEquals(Type.POSITIVE, testCase.getType());
+            assertEquals(testCase.getType(), Type.POSITIVE);
 
             String expected = input;
 
