@@ -306,11 +306,11 @@ public final class NQuadsReader implements Closeable {
                 datatype(datatype, (a, b) -> {
                     this.ltDatatype = a;
                     if (b != null) {
-                        if (b.length > 1 && b[1] != null && !b[1].trim().isEmpty()) {
-                            this.ltDirection = b[1];
-                        }
-                        if (b.length > 0 && b[0] != null && !b[0].trim().isEmpty()) {
+                        if (b.length > 0 && b[0] != null) {
                             this.ltLangTag = b[0];
+                        }
+                        if (b.length > 1 && b[1] != null) {
+                            this.ltDirection = b[1];
                         }
                     }
                 });
@@ -382,13 +382,13 @@ public final class NQuadsReader implements Closeable {
     private static void datatype(
             final String datatype,
             final BiConsumer<String, String[]> result) throws NQuadsReaderException {
-        
+
         if (datatype.startsWith(NQuadsAlphabet.I18N_BASE)) {
 
             var i18n = datatype.substring(NQuadsAlphabet.I18N_BASE.length());
 
             if (i18n.startsWith("_") && i18n.length() > 1) {
-                result.accept(NQuadsAlphabet.I18N_BASE, new String[] { null, i18n.substring(1) });
+                result.accept(NQuadsAlphabet.I18N_BASE, new String[] { "", i18n.substring(1) });
                 return;
             }
 

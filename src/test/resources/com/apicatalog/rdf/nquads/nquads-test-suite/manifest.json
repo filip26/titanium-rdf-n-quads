@@ -2208,5 +2208,69 @@
         "@id": "https://www.w3.org/2013/N-QuadsTests/nt-syntax-uri-04.nq"
       }
     ]
-  }
+  },
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#i18n-syntax-01",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "i18n-string-01"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "i18n with lang and dir"
+      }
+    ]
+  },
+    {
+      "@id": "https://www.w3.org/2013/N-QuadsTests/#i18n-syntax-02",
+      "@type": [
+        "http://www.w3.org/ns/rdftest#TestNQuadsPositiveSyntax"
+      ],
+      "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+        {
+          "@value": "i18n-string-02"
+        }
+      ],
+      "http://www.w3.org/2000/01/rdf-schema#comment": [
+        {
+          "@value": "i18n with dir only"
+        }
+      ]
+    }  ,
+  {
+    "@id": "https://www.w3.org/2013/N-QuadsTests/#i18n-syntax-03",
+    "@type": [
+      "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+    ],
+    "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+      {
+        "@value": "i18n-string-03"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#comment": [
+      {
+        "@value": "i18n with lang only"
+      }
+    ]
+  },
+    {
+      "@id": "https://www.w3.org/2013/N-QuadsTests/#i18n-syntax-04",
+      "@type": [
+        "http://www.w3.org/ns/rdftest#TestNQuadsNegativeSyntax"
+      ],
+      "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#name": [
+        {
+          "@value": "i18n-string-04"
+        }
+      ],
+      "http://www.w3.org/2000/01/rdf-schema#comment": [
+        {
+          "@value": "i18n with no lang and no dir"
+        }
+      ]
+    }    
 ]

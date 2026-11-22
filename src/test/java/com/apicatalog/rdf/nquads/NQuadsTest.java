@@ -87,6 +87,9 @@ class NQuadsTest {
             assertEquals(expected, result);
 
         } catch (IllegalArgumentException | NQuadsReaderException e) {
+            if (Type.NEGATIVE != testCase.getType()) {
+                e.printStackTrace();
+            }
             assertEquals(testCase.getType(), Type.NEGATIVE);
         }
     }
