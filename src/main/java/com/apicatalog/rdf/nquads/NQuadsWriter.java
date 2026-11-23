@@ -88,23 +88,21 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
     /**
      * Formats an RDF literal with optional datatype, language tag, or direction.
      *
-     * @param literal   the literal value
+     * @param literal   the literal value; must not be {@code null}
      * @param datatype  the optional datatype IRI (may be {@code null})
      * @param language  the optional language tag (may be {@code null})
      * @param direction the optional text direction (may be {@code null})
      * @return the formatted N-Quads literal representation
-     * @throws IllegalArgumentException if literal is {@code null}, or if the
-     *                                  literal direction or datatype is invalid
+     * @throws IllegalArgumentException if the literal direction or datatype is
+     *                                  invalid
      */
-    public static final String literal(
-            final String literal,
-            final String datatype,
-            final String language,
-            final String direction) {
+    public static String literal(
+            String literal,
+            String datatype,
+            String language,
+            String direction) {
 
-        if (literal == null) {
-            throw new IllegalArgumentException("The literal value cannot be null.");
-        }
+        Objects.requireNonNull(literal, "The literal value cannot be null.");
 
         final var writer = new StringWriter(
                 literal.length()
@@ -139,7 +137,7 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
      *                                  {@code null}, or if the literal direction or
      *                                  datatype is invalid
      */
-    public static final String nquad(
+    public static String nquad(
             String subject,
             String predicate,
             String object,
@@ -163,7 +161,7 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
      *                                  {@code null}, or if the literal direction or
      *                                  datatype is invalid
      */
-    public static final String nquad(
+    public static String nquad(
             String subject,
             String predicate,
             String literal,
@@ -190,7 +188,7 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
      *                                  {@code null}, or if the literal direction or
      *                                  datatype is invalid
      */
-    public static final String nquad(
+    public static String nquad(
             String subject,
             String predicate,
             String literal,
@@ -213,6 +211,46 @@ public final class NQuadsWriter implements RdfQuadConsumer, Flushable, Closeable
             /* ignore */
         }
         return writer.toString();
+    }
+
+    /**
+     * Consumes and writes a quad to the underlying writer.
+     * 
+     * @param subject   the subject of the quad, never @{code null}
+     * @param predicate the predicate of the quad, never @{code null}
+     * @param object    the object of the quad, never @{code null}
+     * @param graph     the named graph, or {@code null} if none
+     * @throws UncheckedIOException     if an underlying I/O error occurs
+     * @throws IllegalArgumentException if the subject, predicate, or object is
+     *                                  {@code null}
+     */
+    public void quad(
+            String subject,
+            String predicate,
+            String object,
+            String graph) {
+        quad(subject, predicate, object, null, null, null, graph);
+    }
+
+    /**
+     * Consumes and writes a quad to the underlying writer.
+     * 
+     * @param subject   the subject of the quad, never @{code null}
+     * @param predicate the predicate of the quad, never @{code null}
+     * @param literal   the object of the quad, never @{code null}
+     * @param datatype  the datatype IRI of the object (may be {@code null})
+     * @param graph     the named graph, or {@code null} if none
+     * @throws UncheckedIOException     if an underlying I/O error occurs
+     * @throws IllegalArgumentException if the subject, predicate, or object is
+     *                                  {@code null}
+     */
+    public void quad(
+            String subject,
+            String predicate,
+            String literal,
+            String datatype,
+            String graph) {
+        quad(subject, predicate, literal, datatype, null, null, graph);
     }
 
     /**

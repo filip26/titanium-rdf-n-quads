@@ -11,6 +11,34 @@ import org.junit.jupiter.api.Test;
 class NQuadsWriterTest {
 
     @Test
+    void testResourceObject() throws IOException {
+        var output = new StringWriter();
+        try (var writer = new NQuadsWriter(output)) {
+            writer.quad("_:s", "_:p", "_:o", null);
+        }
+        assertEquals("_:s _:p _:o .\n", output.toString());
+    }
+
+    @Test
+    void testTypedString() throws IOException {
+        var output = new StringWriter();
+        try (var writer = new NQuadsWriter(output)) {
+            writer.quad("_:s", "_:p", "s", NQuadsAlphabet.XSD_STRING, null);
+        }
+        assertEquals("_:s _:p \"s\" .\n", output.toString());
+    }
+
+    @Test
+    void testTypedLiteral() throws IOException {
+        var output = new StringWriter();
+        try (var writer = new NQuadsWriter(output)) {
+            writer.quad("_:s", "_:p", "s", "urn:test", null);
+        }
+        assertEquals("_:s _:p \"s\"^^<urn:test> .\n", output.toString());
+    }
+
+    
+    @Test
     void testI18NDirection() throws IOException {
         var output = new StringWriter();
         try (var writer = new NQuadsWriter(output)) {

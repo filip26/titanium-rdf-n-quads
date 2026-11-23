@@ -57,7 +57,7 @@ class NQuadsTest {
             final StringWriter output = new StringWriter();
             try (var reader = new NQuadsReader(new StringReader(input));
                     var writer = new NQuadsWriter(output)) {
-                reader.provide(writer);
+                reader.read(writer);
             }
 
             final String result = output.toString();
