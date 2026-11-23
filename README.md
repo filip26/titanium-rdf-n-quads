@@ -15,9 +15,15 @@ RDF N-Quads reader and writer optimized for efficient parsing, serialization, an
 
 // Reading N-Quads
 try (var reader = new NQuadsReader(input)) {
-    reader.provide((...) -> {
+    reader.read((...) -> {
       // N-Quad processing
     );
+    // or parse a single N-Quad statement
+    while (reader.hasNext()) {
+      reader.readLine((...) -> {
+        // N-Quad processing
+      });
+    }
 }
 
 // Writing N-Quads
@@ -33,7 +39,7 @@ try (var writer = new NQuadsWriter(output)) {
 // it can be directly used as a consumer, e.g. with JsonLd.toRdf.
 try (var reader = new NQuadsReader(input);
      var writer = new NQuadsWriter(output)) {
-    reader.provide(writer);
+    reader.read(writer);
 }
 
 // Static access to NQuadsWriter methods

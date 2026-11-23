@@ -21,7 +21,7 @@ class NQuadsReaderTest {
                     """
                     <test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#de> .
                     """))) {
-                reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
+                reader.read((subject, predicate, object, datatype, language, direction, graph) -> {
                 });
             }
         });
@@ -33,7 +33,7 @@ class NQuadsReaderTest {
                 """
                 <test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#_rtl> .
                 """))) {
-            reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
+            reader.read((subject, predicate, object, datatype, language, direction, graph) -> {
                 assertEquals("c", object);
                 assertEquals("https://www.w3.org/ns/i18n#", datatype);
                 assertNull(language);
@@ -50,7 +50,7 @@ class NQuadsReaderTest {
                     """
                     <test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#cs_> .
                     """))) {
-                reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
+                reader.read((subject, predicate, object, datatype, language, direction, graph) -> {
                 });
             }
         });
@@ -60,7 +60,7 @@ class NQuadsReaderTest {
     void testI18NEmptyLang() throws NQuadsReaderException, IOException {
         try (var reader = new NQuadsReader(
                 new StringReader("<test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#_ltr> ."))) {
-            reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
+            reader.read((subject, predicate, object, datatype, language, direction, graph) -> {
                 assertEquals("c", object);
                 assertEquals("https://www.w3.org/ns/i18n#", datatype);
                 assertNull(language);
@@ -75,7 +75,7 @@ class NQuadsReaderTest {
         assertThrows(NQuadsReaderException.class, () -> {
             try (var reader = new NQuadsReader(
                     new StringReader("<test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#> ."))) {
-                reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
+                reader.read((subject, predicate, object, datatype, language, direction, graph) -> {
                 });
             }
         });
@@ -86,7 +86,7 @@ class NQuadsReaderTest {
         assertThrows(NQuadsReaderException.class, () -> {
             try (var reader = new NQuadsReader(
                     new StringReader("<test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#_> ."))) {
-                reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
+                reader.read((subject, predicate, object, datatype, language, direction, graph) -> {
                 });
             }
         });
@@ -96,7 +96,7 @@ class NQuadsReaderTest {
     void testI18NDirLangTag() throws NQuadsReaderException, IOException {
         try (var reader = new NQuadsReader(
                 new StringReader("<test:a> <test:b> \"c\"^^<https://www.w3.org/ns/i18n#cs_ltr> ."))) {
-            reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
+            reader.read((subject, predicate, object, datatype, language, direction, graph) -> {
                 assertEquals("c", object);
                 assertEquals("https://www.w3.org/ns/i18n#", datatype);
                 assertEquals("cs", language);
@@ -109,7 +109,7 @@ class NQuadsReaderTest {
     @Test
     void testLangTag() throws NQuadsReaderException, IOException {
         try (var reader = new NQuadsReader(new StringReader("_:a <test:b> \"c\"@cs ."))) {
-            reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
+            reader.read((subject, predicate, object, datatype, language, direction, graph) -> {
                 assertEquals("c", object);
                 assertEquals("http://www.w3.org/1999/02/22-rdf-syntax-ns#langString", datatype);
                 assertEquals("cs", language);
@@ -122,7 +122,7 @@ class NQuadsReaderTest {
     @Test
     void testDirLangTag() throws NQuadsReaderException, IOException {
         try (var reader = new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"@cs--ltr."))) {
-            reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
+            reader.read((subject, predicate, object, datatype, language, direction, graph) -> {
                 assertEquals("c", object);
                 assertEquals("http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString", datatype);
                 assertEquals("cs", language);
@@ -136,7 +136,7 @@ class NQuadsReaderTest {
     void testComplexDirLangTag() throws NQuadsReaderException, IOException {
         try (var reader = new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"@en-GB--ltr."))) {
             assertTrue(reader.hasNext());
-            reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
+            reader.read((subject, predicate, object, datatype, language, direction, graph) -> {
                 assertEquals("c", object);
                 assertEquals("http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString", datatype);
                 assertEquals("en-GB", language);

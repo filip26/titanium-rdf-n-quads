@@ -30,8 +30,9 @@ import com.apicatalog.rdf.nquads.NQuadsTokenizer.TokenType;
 /**
  * A simple and efficient streaming N-Quads reader.
  * <p>
- * Use the {@link #provide(RdfQuadConsumer)} method to parse input and process
- * N-Quads statements.
+ * Use the {@link #read(RdfQuadConsumer)} method to parse input and process
+ * N-Quads statements or {@link #readLine(RdfQuadConsumer)} to process a single
+ * statement.
  * </p>
  * 
  * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads
@@ -94,6 +95,23 @@ public final class NQuadsReader implements Closeable {
     }
 
     /**
+     * @deprecated Use {@link #read(RdfQuadConsumer)} instead.
+     * 
+     *             Reads and processes N-Quads, invoking the provided consumer
+     *             immediately after each N-Quad statement is deserialized.
+     *
+     * @param consumer the {@link RdfQuadConsumer} that processes each deserialized
+     *                 N-Quad statement
+     * @throws NQuadsReaderException if parsing error occurs while reading the
+     *                               N-Quads
+     * @throws IOException           if an I/O error occurs
+     */
+    @Deprecated
+    public void provide(RdfQuadConsumer consumer) throws NQuadsReaderException, IOException {
+        read(consumer);
+    }
+
+    /**
      * Reads and processes N-Quads, invoking the provided consumer immediately after
      * each N-Quad statement is deserialized.
      *
@@ -103,7 +121,7 @@ public final class NQuadsReader implements Closeable {
      *                               N-Quads
      * @throws IOException           if an I/O error occurs
      */
-    public void provide(RdfQuadConsumer consumer) throws NQuadsReaderException, IOException {
+    public void read(RdfQuadConsumer consumer) throws NQuadsReaderException, IOException {
 
         Objects.requireNonNull(consumer, "The RdfQuadConsumer cannot be null.");
 
