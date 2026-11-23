@@ -19,6 +19,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
@@ -98,16 +99,14 @@ public final class NQuadsReader implements Closeable {
      *
      * @param consumer the {@link RdfQuadConsumer} that processes each deserialized
      *                 N-Quad statement
-     * @throws NQuadsReaderException    if parsing error occurs while reading the
-     *                                  N-Quads
-     * @throws IOException              if an I/O error occurs
-     * @throws IllegalArgumentException if the provided consumer is {@code null} or
-     *                                  encounters an invalid argument
+     * @throws NQuadsReaderException if parsing error occurs while reading the
+     *                               N-Quads
+     * @throws IOException           if an I/O error occurs
      */
     public void provide(RdfQuadConsumer consumer) throws NQuadsReaderException, IOException {
-        if (consumer == null) {
-            throw new IllegalArgumentException("The RdfQuadConsumer cannot be null.");
-        }
+
+        Objects.requireNonNull(consumer, "The RdfQuadConsumer cannot be null.");
+
         while (tokenizer.hasNext()) {
             // skip EOL and whitespace
             if (tokenizer.accept(NQuadsTokenizer.TokenType.END_OF_LINE)
@@ -117,6 +116,52 @@ public final class NQuadsReader implements Closeable {
             }
             statement(consumer);
         }
+    }
+
+    /**
+     * Parses a single N-Quad statement invoking the provided consumer immediately
+     * after a single N-Quad statement is deserialized.
+     *
+     * @param consumer the {@link RdfQuadConsumer} that processes the deserialized
+     *                 N-Quad statement
+     * @return {@code true} if a single statement has been deserialized and consumer
+     *         fired
+     * @throws NQuadsReaderException if parsing error occurs while reading the
+     *                               N-Quads
+     * @throws IOException           if an I/O error occurs
+     */
+    public boolean readLine(RdfQuadConsumer consumer) throws NQuadsReaderException, IOException {
+
+        Objects.requireNonNull(consumer, "The RdfQuadConsumer cannot be null.");
+
+        // skip EOL and whitespace
+        while (tokenizer.hasNext()
+                && (tokenizer.accept(NQuadsTokenizer.TokenType.END_OF_LINE)
+                        || tokenizer.accept(NQuadsTokenizer.TokenType.WHITE_SPACE)
+                        || tokenizer.accept(NQuadsTokenizer.TokenType.COMMENT))) {
+            continue;
+        }
+
+        if (tokenizer.hasNext()) {
+            statement(consumer);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Indicates whether there is more input available to process.
+     *
+     * @return {@code true} if there is another element available to read;
+     *         {@code false} if the end of the input has been reached.
+     * @throws NQuadsReaderException if an error occurs while checking for the
+     *                               availability of the next element.
+     * @throws IOException           if an I/O error occurs while accessing the
+     *                               input.
+     */
+    public boolean hasNext() throws NQuadsReaderException, IOException {
+        return tokenizer.hasNext();
     }
 
     /**

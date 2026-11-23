@@ -1,8 +1,11 @@
 package com.apicatalog.rdf.nquads;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -132,6 +135,7 @@ class NQuadsReaderTest {
     @Test
     void testComplexDirLangTag() throws NQuadsReaderException, IOException {
         try (var reader = new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"@en-GB--ltr."))) {
+            assertTrue(reader.hasNext());
             reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
                 assertEquals("c", object);
                 assertEquals("http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString", datatype);
@@ -139,6 +143,7 @@ class NQuadsReaderTest {
                 assertEquals("ltr", direction);
                 assertNull(graph);
             });
+            assertFalse(reader.hasNext());
         }
     }
 
@@ -146,7 +151,7 @@ class NQuadsReaderTest {
     void testInvalidDirection() {
         assertThrows(NQuadsReaderException.class, () -> {
             try (var reader = new NQuadsReader(new StringReader("<test:a> <test:b> \"c\"@cs--xtr."))) {
-                reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
+                reader.readLine((subject, predicate, object, datatype, language, direction, graph) -> {
                 });
             }
             ;
@@ -155,14 +160,45 @@ class NQuadsReaderTest {
 
     @Test
     void testXsdString() throws NQuadsReaderException, IOException {
-        try (var reader = new NQuadsReader(new StringReader("<test:a> <test:b> \"abc\" ."))) {
-            reader.provide((subject, predicate, object, datatype, language, direction, graph) -> {
+        try (var reader = new NQuadsReader(new StringReader("<test:a> <test:b> \"abc\" .\n"))) {
+            assertTrue(reader.hasNext());
+            assertTrue(reader.readLine((subject, predicate, object, datatype, language, direction, graph) -> {
                 assertEquals("abc", object);
                 assertEquals("http://www.w3.org/2001/XMLSchema#string", datatype);
                 assertNull(language);
                 assertNull(direction);
                 assertNull(graph);
-            });
+            }));
+            assertFalse(reader.readLine((subject, predicate, object, datatype, language, direction, graph) -> {
+                fail();
+            }));
+            assertFalse(reader.hasNext());
+        }
+    }
+
+    @Test
+    void testTwoLines() throws NQuadsReaderException, IOException {
+        try (var reader = new NQuadsReader(
+                new StringReader("<test:a> <test:b> \"abc\" .\n<test:a> <test:b> \"bcd\" ."))) {
+            assertTrue(reader.readLine((subject, predicate, object, datatype, language, direction, graph) -> {
+                assertEquals("abc", object);
+                assertEquals("http://www.w3.org/2001/XMLSchema#string", datatype);
+                assertNull(language);
+                assertNull(direction);
+                assertNull(graph);
+            }));
+            assertTrue(reader.hasNext());
+            assertTrue(reader.readLine((subject, predicate, object, datatype, language, direction, graph) -> {
+                assertEquals("bcd", object);
+                assertEquals("http://www.w3.org/2001/XMLSchema#string", datatype);
+                assertNull(language);
+                assertNull(direction);
+                assertNull(graph);
+            }));
+            assertFalse(reader.readLine((subject, predicate, object, datatype, language, direction, graph) -> {
+                fail();
+            }));
+            assertFalse(reader.hasNext());
         }
     }
 }
