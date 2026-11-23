@@ -24,7 +24,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <argLine>-Dfile.encoding=UTF-8</argLine>
 
-        <rdf.api.version>2.1.0</rdf.api.version>
+        <rdf.api.version>2.1.1</rdf.api.version>
 
         <!--  test resources -->
         <jakarta.json.version>2.0.1</jakarta.json.version>
